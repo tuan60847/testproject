@@ -14,6 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property int $MaTP
  * @property string $TenTP
+ * @property string|null $mota
  * 
  * @property Collection|Diadiemdulich[] $diadiemduliches
  * @property Collection|Hinhanhtp[] $hinhanhtps
@@ -27,7 +28,8 @@ class Thanhpho extends Model
 	public $timestamps = false;
 
 	protected $fillable = [
-		'TenTP'
+		'TenTP',
+		'mota'
 	];
 
 	public function diadiemduliches()

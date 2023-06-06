@@ -19,7 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property Carbon $NgaySinh
  * @property string $SDT
  * @property string $cmnd
- * @property int $isDatPhong
+ * @property bool $isDatPhong
  * 
  * @property Collection|Dondatphong[] $dondatphongs
  *
@@ -33,7 +33,7 @@ class Khachhang extends Model
 	public $timestamps = false;
 
 	protected $casts = [
-		'isDatPhong' => 'int'
+		'isDatPhong' => 'bool'
 	];
 
 	protected $dates = [
