@@ -15,7 +15,7 @@ class KhachSanController extends Controller
      */
     public function index()
     {
-        //
+        return view('khachsan.hotel');
 
         $Khachsans = Khachsan::all();
 
