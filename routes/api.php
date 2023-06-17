@@ -58,6 +58,7 @@ Route::resource('hinhanhkhachsan', ImageKSController::class);
 Route::resource('khachsan', KhachSanController::class);
 Route::delete('khachsan/{id}', [KhachSanController::class,'destroy']);
 Route::get('khachsan/{id}', [KhachSanController::class,'show']);
+Route::get('khachsan/findbyMaDDDL/{id}', [KhachSanController::class,'findbyMaDDDL']);
 Route::post('khachsan', [KhachSanController::class,'store']);
 Route::put('khachsan/{id}', [KhachSanController::class,'update'])->middleware('auth:sanctum');
 
@@ -128,7 +129,7 @@ Route::resource('hinhanhdddl', HinhAnhDiaDiemDuLichController::class);
 
 
 Route::get('sukien/{id}', [SuKienController::class,'show']);
-Route::get('sukien/ma/{id}', [SuKienController::class,'findbyMaDDL']);
+Route::get('sukien/findbyMaDDL/{id}', [SuKienController::class,'findbyMaDDL']);
 Route::post('sukien', [SuKienController::class,'store']);
 Route::put('sukien/{id}', [SuKienController::class,'update']);
 Route::resource('sukien', SuKienController::class);
@@ -136,7 +137,6 @@ Route::resource('sukien', SuKienController::class);
 
 
 Route::get('chukhachsan/{id}', [ChuKhachSanController::class,'show']);
-
 Route::post('chukhachsan', [ChuKhachSanController::class,'store']);
 Route::put('chukhachsan/{id}', [ChuKhachSanController::class,'update']);
 Route::resource('chukhachsan', ChuKhachSanController::class);

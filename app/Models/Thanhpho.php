@@ -14,7 +14,7 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property int $MaTP
  * @property string $TenTP
- * @property string|null $mota
+ * @property string $mota
  * 
  * @property Collection|Diadiemdulich[] $diadiemduliches
  * @property Collection|Hinhanhtp[] $hinhanhtps
