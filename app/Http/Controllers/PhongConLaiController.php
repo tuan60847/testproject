@@ -33,33 +33,31 @@ class PhongConLaiController extends Controller
     {
         //
         $this->validate($request, [
-           
+
             'Ngay' => 'required|date_format:Y-m-d',
             'UIDLoaiPhong' => 'required',
-            
-            
+
+
         ]);
-        
+
         // $image_path =(string) $request->file('image')->store('image/khachsan', 'public');
-       
+
         $Ngay = $request->input("Ngay");
         $UIDLoaiPhong = $request->input("UIDLoaiPhong");
-       
-        
-     
+
         if (!empty($Ngay)) {
-           
+
             $phongconlai = new Phongconlai();
             $phongconlai->Ngay = $Ngay;
             $phongconlai->UIDLoaiPhong = $UIDLoaiPhong;
             $loaiphong = Loaiphong::findOrFail($UIDLoaiPhong);
-            $phongconlai->SoLuong = $loaiphong->soLuongPhong;           
+            $phongconlai->SoLuong = $loaiphong->soLuongPhong;
             $phongconlai->save();
             return response($phongconlai, Response::HTTP_CREATED);
         } else {
             // handle the case where the image upload fails
             // e.g. return an error response or redirect back to the form with an error message
-            return response()->json(["message"=>"eror"],404);
+            return response()->json(["message" => "eror"], 404);
         }
     }
 
@@ -70,7 +68,6 @@ class PhongConLaiController extends Controller
     {
         //
         return Phongconlai::findOrFail($id);
-         
     }
 
     /**
@@ -89,34 +86,18 @@ class PhongConLaiController extends Controller
         //
         $phongconlai = Phongconlai::findOrFail($id);
         $this->validate($request, [
-           
             'SoLuongPhongDat' => 'required',
-            
-            
-            
         ]);
-        
-        // $image_path =(string) $request->file('image')->store('image/khachsan', 'public');
-       
-        
         $SoLuongPhongDat = intval($request->input("SoLuongPhongDat"));
 
-       
-        
-        // $dateNgaySinh = Carbon::parse("2001-07-21")->format('Y-m-d');
-        
-        
-        // $isAdminKH ="isAdminKH";
-        
         if (!empty($phongconlai)) {
-           
-            $phongconlai->SoLuong = $phongconlai->soLuong+$SoLuongPhongDat;           
+            $phongconlai->SoLuong = $phongconlai->soLuong + $SoLuongPhongDat;
             $phongconlai->save();
             return response($phongconlai, Response::HTTP_CREATED);
         } else {
             // handle the case where the image upload fails
             // e.g. return an error response or redirect back to the form with an error message
-            return response()->json(["message"=>"eror"],404);
+            return response()->json(["message" => "eror"], 404);
         }
     }
 
@@ -126,5 +107,84 @@ class PhongConLaiController extends Controller
     public function destroy(string $id)
     {
         //
+    }
+
+    public function BookingRoom(Request $request)
+    {
+        //
+        $this->validate($request, [
+
+            'Ngay' => 'required|date_format:Y-m-d',
+            'UIDLoaiPhong' => 'required',
+            'SoLuongPhong' => 'required'
+
+        ]);
+
+
+        $Ngay = $request->input("Ngay");
+        $UIDLoaiPhong = $request->input("UIDLoaiPhong");
+        $SoLuongPhong = $request->input("SoLuongPhong");
+        $phongconlai = Phongconlai::where('Ngay', $Ngay)
+            ->where('UIDLoaiPhong', $UIDLoaiPhong)
+            ->get();
+        
+
+        if (empty($phongconlai)) {
+
+            $phongconlai = new Phongconlai();
+            $phongconlai->Ngay = $Ngay;
+            $phongconlai->UIDLoaiPhong = $UIDLoaiPhong;
+            $loaiphong = Loaiphong::findOrFail($UIDLoaiPhong);
+
+            if ($loaiphong->soLuongPhong >= $SoLuongPhong) {
+                $phongconlai->SoLuong = $loaiphong->soLuongPhong - $SoLuongPhong;
+                return $phongconlai->save();
+                 
+            } else {
+                return response()->json(["message" => "eror"], 404);
+            }
+        } else {
+           
+            if ($phongconlai[0]->SoLuong >= $SoLuongPhong) {
+                
+                $phongconlai[0]->SoLuong = $phongconlai[0]->SoLuong - $SoLuongPhong;
+                return $phongconlai[0]->update();
+            } else {
+                
+                return response()->json(["message" => "eror"], 404);
+            }
+        }
+    }
+
+    public function CheckoutRoom(Request $request)
+    {
+        //
+        $this->validate($request, [
+
+            'Ngay' => 'required|date_format:Y-m-d',
+            'UIDLoaiPhong' => 'required',
+            'SoLuongPhong' => 'required'
+
+        ]);
+
+
+        $Ngay = $request->input("Ngay");
+        $UIDLoaiPhong = $request->input("UIDLoaiPhong");
+        $SoLuongPhong = $request->input("SoLuongPhong");
+        $phongconlai = Phongconlai::where('Ngay', $Ngay)
+            ->where('UIDLoaiPhong', $UIDLoaiPhong)
+            ->get();
+        $loaiphong = Loaiphong::findOrFail($UIDLoaiPhong);
+
+        if (!empty($phongconlai)&&!empty($loaiphong)) {
+            $phongconlai[0]->SoLuong = $phongconlai[0]->SoLuong + $SoLuongPhong;
+            if ($phongconlai[0]->SoLuong <= $loaiphong->soLuongPhong) {
+                return $phongconlai[0]->update();
+            } else {
+                return response()->json(["message" => "eror"], 404);
+            }
+        } else {
+            return response()->json(["message" => "eror"], 404);
+        }
     }
 }

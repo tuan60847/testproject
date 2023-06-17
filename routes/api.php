@@ -18,7 +18,7 @@ use App\Http\Controllers\LoaiPhongController;
 use App\Http\Controllers\PhongConLaiController;
 use App\Http\Controllers\SuKienController;
 use App\Http\Controllers\ThanhPhoController;
-use App\Models\Hinhanhdddl;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -149,27 +149,8 @@ Route::resource('hinhanhSK', HinhAnhSuKienController::class);
 
 Route::get('phongconlai/{id}', [PhongConLaiController::class,'show']);
 Route::post('phongconlai', [PhongConLaiController::class,'store']);
+Route::post('bookingroom', [PhongConLaiController::class,'BookingRoom']);
+Route::post('checkoutroom', [PhongConLaiController::class,'CheckoutRoom']);
 Route::put('phongconlai/{id}', [PhongConLaiController::class,'update']);
 Route::resource('phongconlai', PhongConLaiController::class);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
