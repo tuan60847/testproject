@@ -1,4 +1,4 @@
-<?php
+ <?php
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -101,10 +101,15 @@ Route::delete('hinhanhloaiphong/image/loaiphong/{src}', [ImageLoaiPhongControlle
 Route::get('hinhanhloaiphong/UIDLoaiPhong/{UIDLoaiPhong}', [ImageLoaiPhongController::class,'getImageByUIDLoaiPhong']);
 Route::resource('hinhanhloaiphong', ImageLoaiPhongController::class);
 
+//Thành phố
 
-Route::get('thanhpho/{id}', [ThanhPhoController::class,'show']);
+Route::get('thanhpho/{id}', [ThanhPhoController::class,'create']);
 Route::post('thanhpho/getbyname/{name}',[ThanhPhoController::class, 'getThanhPhoByName']);
 Route::resource('thanhpho', ThanhPhoController::class);
+Route::post('thanhpho', [ThanhPhoController::class,'store']);
+Route::get('thanhpho/{thanhpho}/edit',[ThanhPhoController::class,'edit']);
+Route::delete('thanhpho/{thanhpho}/delete',[ThanhPhoController::class,'destroy']);
+Route::put('thanhpho/{id}', [ThanhPhoController::class,'update']);
 
 
 Route::post('image/hinhanhtp/upload',[HinhAnhThanhPhoController::class, 'imageStore']);
@@ -112,6 +117,7 @@ Route::delete('hinhanhtp/image/thanhpho/{src}', [HinhAnhThanhPhoController::clas
 Route::get('hinhanhtp/UIDThanhPho/{MaTP}', [HinhAnhThanhPhoController::class,'getImageByUIDThanhPho']);
 Route::resource('hinhanhtp', HinhAnhThanhPhoController::class);
 
+//địa điểm du lịch
 
 Route::get('diadiemdulich/{id}', [DiaDiemDuLichController::class,'show']);
 Route::get('diadiemdulich/findbymatp/{id}', [DiaDiemDuLichController::class,'findbyMaTP']);
@@ -123,9 +129,7 @@ Route::delete('hinhanhdddl/image/diadiemdulich/{src}', [HinhAnhDiaDiemDuLichCont
 Route::get('hinhanhdddl/UIDDDDL/{MaDDDL}', [HinhAnhDiaDiemDuLichController::class,'getImageByUIDDDDL']);
 Route::resource('hinhanhdddl', HinhAnhDiaDiemDuLichController::class);
 
-
-
-
+//Sự kiện
 
 Route::get('sukien/{id}', [SuKienController::class,'show']);
 Route::get('sukien/ma/{id}', [SuKienController::class,'findbyMaDDL']);
@@ -136,7 +140,6 @@ Route::resource('sukien', SuKienController::class);
 
 
 Route::get('chukhachsan/{id}', [ChuKhachSanController::class,'show']);
-
 Route::post('chukhachsan', [ChuKhachSanController::class,'store']);
 Route::put('chukhachsan/{id}', [ChuKhachSanController::class,'update']);
 Route::resource('chukhachsan', ChuKhachSanController::class);
@@ -150,26 +153,4 @@ Route::resource('hinhanhSK', HinhAnhSuKienController::class);
 Route::get('phongconlai/{id}', [PhongConLaiController::class,'show']);
 Route::post('phongconlai', [PhongConLaiController::class,'store']);
 Route::put('phongconlai/{id}', [PhongConLaiController::class,'update']);
-Route::resource('phongconlai', PhongConLaiController::class);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+Route::resource('phongconlai', PhongConLaiController::class); 

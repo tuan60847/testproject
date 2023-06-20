@@ -7,7 +7,7 @@ use App\Models\Thanhpho;
 use Illuminate\Http\Request;
 
 use Symfony\Component\HttpFoundation\Response;
-
+use DB;
 class ThanhPhoController extends Controller
 {
     /**
@@ -15,8 +15,8 @@ class ThanhPhoController extends Controller
      */
     public function index()
     {
-        //
-        return Thanhpho::all();
+        $data =Thanhpho::all();
+       return view('thanhpho.city',['data'=>$data]);
     }
 
     /**
@@ -24,7 +24,7 @@ class ThanhPhoController extends Controller
      */
     public function create()
     {
-        //
+       return view('thanhpho.createTP');
     }
 
     /**
@@ -32,8 +32,11 @@ class ThanhPhoController extends Controller
      */
     public function store(Request $request)
     {
-        //
-        
+       $data =new Thanhpho();
+       $data->TenTP=$request->TenTP;
+       $data->mota=$request->mota;
+       $data->save();
+       return redirect('createTP')->route('thanhpho.createTP')->with('success','data has been');
     }
 
     /**
@@ -41,38 +44,49 @@ class ThanhPhoController extends Controller
      */
     public function show(string $id)
     {
-        //
-        return Thanhpho::findOrFail($id);
-    }
-    public function getThanhPhoByName(string $name){
+    //     //
+    //     return Thanhpho::findOrFail($id);
+    // }
+    // public function getThanhPhoByName(string $name){
         
-        return Thanhpho::where('TenTP', $name)->first();
-        
-
-        
+    //     return Thanhpho::where('TenTP', $name)->first();
+        $data= Thanhpho::find($id);
+        return view('thanhpho.showTP',['data'=>$data]);
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit($id)
     {
-        //
+        $data= Thanhpho::find($id);
+        return view('thanhpho.editTP',['data'=>$data]);
+
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request,$id)
     {
-        //
+    //     $data->update($request->all());
+    //    return redirect('city/'.$id.'/edit')->route('thanhpho.city')->with('success','thành công');
+      
+    $data= Thanhpho::find($id);
+    $data->TenTP=$request->TenTP;
+    $data->mota=$request->mota;
+    $data->save();
+    return redirect('city/'.$id.'/edit')->with('success','Thành phố đã được cập nhật');
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy($id)
     {
-        //
+        // $data->delete();
+        // return redirect('city/'.$id.'/delete')->route('thanhpho.city')->with('success','xóa thành công');
+        $data= Thanhpho::where('MaTP',$id)->delete();
+        return redirect('city/')->with('success','Thành phố đã được xóa');
     }
 }

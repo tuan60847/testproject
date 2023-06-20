@@ -9,15 +9,20 @@
         <h6 class="m-0 font-weight-bold text-primary">Thêm thành phố</h6>
     </div>
     <div class="card-body">
+      @if(Session::has('success'))
+     <div class="alert alert-success">{{Session::get('success')}}</div>
+      @endif
         <div class="table-responsive">
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+          <form action="{{url('/city/create')}}" method="POST">
+            @csrf
+                      <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
               <tr>
                 <th>Tên thành phố</th>
-                <td><input type="text" name="title" class="form-control"></td>
+                <td><input type="text" name="TenTP" class="form-control"></td>
               </tr>
               <tr>
                 <th>Mô tả</th>
-                <td><textarea name="detail" id="" cols="30" rows="10" class="form-control"></textarea></td>
+                <td><textarea name="mota" id="" cols="30" rows="10" class="form-control"></textarea></td>
               </tr>
               <tr>
                 <td>
@@ -25,6 +30,7 @@
                 </td>
               </tr>
             </table>
+            </form>
         </div>
     </div>
 </div>

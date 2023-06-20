@@ -7,6 +7,7 @@ use GuzzleHttp\Promise\Create;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Log;
+use DB;
 
 class KhachSanController extends Controller
 {
@@ -15,26 +16,25 @@ class KhachSanController extends Controller
      */
     public function index()
     {
-        return view('khachsan.hotel');
-
         $Khachsans = Khachsan::all();
+        return view('khachsan.hotel',['Khachsans'=>$Khachsans]);
 
-    $responseData = [];
-    foreach ($Khachsans as $Khachsan) {
-        $responseData[] = [
-            'UIDKS' => $Khachsan->UIDKS,
-            'TenKS' => $Khachsan->TenKS,
-            'DiaChi' => $Khachsan->DiaChi,
-            'SDT' => $Khachsan->SDT,
-            'MaDDDL' => $Khachsan->MaDDDL,
-            'Wifi' => boolval($Khachsan->Wifi),
-            'Buffet' => boolval($Khachsan->Buffet),
-            'isActive' => boolval($Khachsan->isActive),
+    // $responseData = [];
+    // foreach ($Khachsans as $Khachsan) {
+    //     $responseData[] = [
+    //         'UIDKS' => $Khachsan->UIDKS,
+    //         'TenKS' => $Khachsan->TenKS,
+    //         'DiaChi' => $Khachsan->DiaChi,
+    //         'SDT' => $Khachsan->SDT,
+    //         'MaDDDL' => $Khachsan->MaDDDL,
+    //         'Wifi' => boolval($Khachsan->Wifi),
+    //         'Buffet' => boolval($Khachsan->Buffet),
+    //         'isActive' => boolval($Khachsan->isActive),
             
-        ];
-    }
+    //     ];
+    // }
 
-    return response()->json($responseData);
+    // return response()->json($responseData);
     }
 
     /**
@@ -52,53 +52,61 @@ class KhachSanController extends Controller
     public function store(Request $request)
     {
         //
-        $this->validate($request, [
-            'UIDKS' => 'required',
-            'TenKS' => 'required',
-            'DiaChi' => 'required',
-            'SDT' => 'required',
-            'MaDDDL' =>'required',
+    //     $this->validate($request, [
+    //         'UIDKS' => 'required',
+    //         'TenKS' => 'required',
+    //         'DiaChi' => 'required',
+    //         'SDT' => 'required',
+    //         'MaDDDL' =>'required',
             
             
             
-        ]);
+    //     ]);
         
-        // $image_path =(string) $request->file('image')->store('image/khachsan', 'public');
-        $UIDKS = $request->input("UIDKS");
-        $TenKS = $request->input("TenKS");
-        $DiaChi =$request->input("DiaChi");
+    //     // $image_path =(string) $request->file('image')->store('image/khachsan', 'public');
+    //     $UIDKS = $request->input("UIDKS");
+    //     $TenKS = $request->input("TenKS");
+    //     $DiaChi =$request->input("DiaChi");
 
-        // $dateNgaySinh = Carbon::parse("2001-07-21")->format('Y-m-d');
-        $SDT = $request->input("SDT");
-        $MaDDDL=$request->input("MaDDDL");
-        $isActive=$request->input("isActive")=="false"||$request->input("isActive")==null?false:true;
-        $Buffet=$request->input("Buffet")=="false"||$request->input("Buffet")==null?false:true;
-        $wifi=$request->input("Wifi")=="false"||$request->input("Wifi")==null?false:true;
+    //     // $dateNgaySinh = Carbon::parse("2001-07-21")->format('Y-m-d');
+    //     $SDT = $request->input("SDT");
+    //     $MaDDDL=$request->input("MaDDDL");
+    //     $isActive=$request->input("isActive")=="false"||$request->input("isActive")==null?false:true;
+    //     $Buffet=$request->input("Buffet")=="false"||$request->input("Buffet")==null?false:true;
+    //     $wifi=$request->input("Wifi")=="false"||$request->input("Wifi")==null?false:true;
         
-        // $isAdminKH ="isAdminKH";
+    //     // $isAdminKH ="isAdminKH";
         
-        if (!empty($UIDKS)) {
+    //     if (!empty($UIDKS)) {
            
-            $khachsan = new Khachsan();
-            $khachsan->UIDKS = $UIDKS;
-            $khachsan->TenKS = $TenKS;
-            $khachsan->DiaChi = $DiaChi;
-            $khachsan->SDT = $SDT;     
-            $khachsan->isActive=$isActive;
-            $khachsan->Buffet=$Buffet;
-            $khachsan->Wifi=$wifi;
-            $khachsan->MaDDDL=$MaDDDL;
-            $khachsan->save();
+    //         $khachsan = new Khachsan();
+    //         $khachsan->UIDKS = $UIDKS;
+    //         $khachsan->TenKS = $TenKS;
+    //         $khachsan->DiaChi = $DiaChi;
+    //         $khachsan->SDT = $SDT;     
+    //         $khachsan->isActive=$isActive;
+    //         $khachsan->Buffet=$Buffet;
+    //         $khachsan->Wifi=$wifi;
+    //         $khachsan->MaDDDL=$MaDDDL;
+    //         $khachsan->save();
         
             
            
-            return response($khachsan, Response::HTTP_CREATED);
-        } else {
-            // handle the case where the image upload fails
-            // e.g. return an error response or redirect back to the form with an error message
-            return response()->json(["message"=>"eror"],404);
-        }
-        Khachsan::create($request->all());
+    //         return response($khachsan, Response::HTTP_CREATED);
+    //     } else {
+    //         // handle the case where the image upload fails
+    //         // e.g. return an error response or redirect back to the form with an error message
+    //         return response()->json(["message"=>"eror"],404);
+    //     }
+    //     Khachsan::create($request->all());
+    $Khachsans= new Khachsan();
+    $Khachsans->TenKS=$request->TenKS;
+    $Khachsans->DiaChi=$request->DiaChi;
+    $Khachsans->Buffet=$request->Buffet;
+    $Khachsans->Wifi=$request->Wifi;
+    $Khachsans->isActive=$request->isActive;
+    $Khachsans->MaDDDL=$request->MaDDDL;
+
     }
 
     /**

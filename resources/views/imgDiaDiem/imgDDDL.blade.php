@@ -4,50 +4,47 @@
   <div class="container-fluid">
 
 <!-- Page Heading -->
-<h1 class="h3 mb-2 text-gray-800">Thành phố</h1>
+<h1 class="h3 mb-2 text-gray-800">Hình ảnh địa điểm du lịch</h1>
 
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
     <div class="card-header py-3">
-        <h6 class="m-0 font-weight-bold text-primary">Thành phố</h6>
-        <a href="{{url('city/create/')}}" class="float-right btn-primary btn-sm">Thêm Mới</a>
+        <h6 class="m-0 font-weight-bold text-primary">Hình ảnh địa điểm du lịch</h6>
+        <a href="{{url('/createDDDL')}}" class="float-right btn-primary btn-sm">Thêm Mới</a>
         </div>
     <div class="card-body">
         <div class="table-responsive">
-
             <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <tr>
-                        <th>Mã thành phố</th>
-                        <th>Tên thành phố</th>
-                        <th>Mô tả</th>
+                         <th>src</th>
+                        <th>Mã địa điểm du lịch</th>
+                       
                         <th>Action</th>
                     </tr>
                 </thead>
                 <tfoot>
                 <tr>
-                        <th>Mã thành phố</th>
-                        <th>Tên thành phố</th>
-                        <th>Mô tả</th>
+                        <th>src</th>
+                        <th>Mã địa điểm du lịch</th>
                         <th>Action</th>
                     </tr>
                 </tfoot>
                 <tbody>
-                   @if($data)
-                   @foreach($data as $d)
+                    @if($data)
+                    @foreach($data as $d)
                     <tr>
-                        <td>{{$d->MaTP}}</td>
-                        <td>{{$d->TenTP}}</td>
-                        <td>{{$d->mota0}}</td>
+                        <td>{{$d->src}}</td>
+                        <td>{{$d->MaDDDL}}</td>
                         <td>
-                            <a href="{{url('city/'.$d->MaTP)}}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i>
-                            <a href="{{url('city/'.$d->MaTP.'/edit')}}" method="POST" class="btn btn-success btn-sm"><i class="fa fa-edit"></i>
-                            <a onclick="confirm('Bạn có muốn xóa thành phố này không?')" href="{{url('city/'.$d->MaTP.'/delete')}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>
+                            <a href="" class="btn btn-info btn-sm"><i class="fa fa-eye"></i>
+                            <a href="" class="btn btn-success btn-sm"><i class="fa fa-edit"></i>
+                            <a href="" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>
                         </td>
                     </tr>
                     @endforeach
                     @endif
-                </tbody>
+               </tbody>
             </table>
         </div>
     </div>

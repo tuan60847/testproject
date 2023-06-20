@@ -5,15 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\Diadiemdulich;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
+use DB;
 
 class DiaDiemDuLichController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
     public function index()
     {
-        return Diadiemdulich::all();
+        $data= Diadiemdulich::all();
+        return view('diadiemdulich.tourist',['data'=>$data]);
     }
 
     /**
@@ -21,7 +20,7 @@ class DiaDiemDuLichController extends Controller
      */
     public function create()
     {
-        //
+        return view('diadiemdulich.createDDDL');
     }
 
     /**
@@ -29,50 +28,59 @@ class DiaDiemDuLichController extends Controller
      */
     public function store(Request $request)
     {
-        $this->validate($request, [
+        // $this->validate($request, [
             
-            'TenDiaDiemDuLich' => 'required',
-            'MoTa' => 'required',
-            'MaTP' => 'required',
-            'DiaChi' => 'required',
+        //     'TenDiaDiemDuLich' => 'required',
+        //     'MoTa' => 'required',
+        //     'MaTP' => 'required',
+        //     'DiaChi' => 'required',
             
             
-        ]);
+        // ]);
         
-        // $image_path =(string) $request->file('image')->store('image/khachsan', 'public');
-        $TenDiaDiemDuLich = $request->input("TenDiaDiemDuLich");
-        $MoTa = $request->input("MoTa");
-        $ThoiGianHoatDong =$request->input("ThoiGianHoatDong");
-        $DiaChi =$request->input("DiaChi");
-        // $dateNgaySinh = Carbon::parse("2001-07-21")->format('Y-m-d');
-        $GiaTien = $request->input("GiaTien");
-        $MaTP =$request->input("MaTP");
+        // // $image_path =(string) $request->file('image')->store('image/khachsan', 'public');
+        // $TenDiaDiemDuLich = $request->input("TenDiaDiemDuLich");
+        // $MoTa = $request->input("MoTa");
+        // $ThoiGianHoatDong =$request->input("ThoiGianHoatDong");
+        // $DiaChi =$request->input("DiaChi");
+        // // $dateNgaySinh = Carbon::parse("2001-07-21")->format('Y-m-d');
+        // $GiaTien = $request->input("GiaTien");
+        // $MaTP =$request->input("MaTP");
         
         
-        // $isAdminKH ="isAdminKH";
+        // // $isAdminKH ="isAdminKH";
         
-        if (!empty($TenDiaDiemDuLich)) {
+        // if (!empty($TenDiaDiemDuLich)) {
            
-            $diadiemdulich = new Diadiemdulich();
+        //     $diadiemdulich = new Diadiemdulich();
             
-            $diadiemdulich->TenDiaDiemDuLich = $TenDiaDiemDuLich;
-            $diadiemdulich->MoTa = $MoTa;
-            $diadiemdulich->ThoiGianHoatDong = $ThoiGianHoatDong;
-            $diadiemdulich->GiaTien = $GiaTien;
-            $diadiemdulich->MaTP= $MaTP;
-            
-           
-            
-            $diadiemdulich->save();
-            
+        //     $diadiemdulich->TenDiaDiemDuLich = $TenDiaDiemDuLich;
+        //     $diadiemdulich->MoTa = $MoTa;
+        //     $diadiemdulich->ThoiGianHoatDong = $ThoiGianHoatDong;
+        //     $diadiemdulich->GiaTien = $GiaTien;
+        //     $diadiemdulich->MaTP= $MaTP;
             
            
-            return response($diadiemdulich, Response::HTTP_CREATED);
-        } else {
-            // handle the case where the image upload fails
-            // e.g. return an error response or redirect back to the form with an error message
-            return response()->json(["message"=>"eror"],404);
-        }
+            
+        //     $diadiemdulich->save();
+            
+            
+           
+        //     return response($diadiemdulich, Response::HTTP_CREATED);
+        // } else {
+        //     // handle the case where the image upload fails
+        //     // e.g. return an error response or redirect back to the form with an error message
+        //     return response()->json(["message"=>"eror"],404);
+        // }
+        $data =new Diadiemdulich();
+        $data->TenDiaDiemDuLich=$request->DiaDiemDuLich;
+        $data->DiaChi=$request->DiaChi;
+        $data->MoTa=$request->MoTa;
+        $data->GiaTien=$request->GiaTien;
+        $data->MaTP=$request->MaTP;
+        $data->ThoiGianHoatDong=$request->ThoiGianHoatDong;
+        $data->save();
+        return redirect('createDDDl')->with('success','data has been');
     }
 
     /**

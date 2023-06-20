@@ -1,8 +1,14 @@
 <?php
-
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\LoaiPhongController;
 use App\Http\Controllers\KhachSanController;
+use App\Http\Controllers\ThanhphoController;
+use App\Http\Controllers\DiaDiemDuLichController;
+use App\Http\Controllers\SuKienController;
+use App\Http\Controllers\Api\HinhAnhThanhPhoController;
+use App\Http\Controllers\Api\HinhAnhDiaDiemDuLichController;
+use App\Http\Controllers\Api\HinhAnhSuKienController;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,35 +28,6 @@ use App\Http\Controllers\KhachSanController;
 Route::get('/admin', function () {
     return view('deshbord');
 });
-// khách sạn
-Route::get('/hotel', function () {
-    return view('khachsan.hotel');
-});
-Route::get('/create', function () {
-    return view('khachsan.create');
-});
-// Thành phố
-Route::get('/city', function () {
-    return view('thanhpho.city');
-});
-
-Route::get('/createTP', function () {
-    return view('thanhpho.create');
-});
-//Sự Kiện
-Route::get('/event', function () {
-    return view('sukien.event');
-});
-Route::get('/createSK', function () {
-    return view('sukien.create');
-});
-//Địa điểm du lịch
-Route::get('/tourist', function () {
-    return view('diadiemdulich.tourist');
-});
-Route::get('/createDDDL', function () {
-    return view('diadiemdulich.createDDDL');
-});
 //khách hàng thân thiết (chủ khách sạn)
 Route::get('/chuKS', function () {
     return view('chukhachsan.hotelier');
@@ -59,12 +36,6 @@ Route::get('/chuKS', function () {
 Route::get('/user', function () {
     return view('khachhang.user');
 });
-//kh
-// Route::resource('/admin/loaiphong',LoaiPhongController::class);
-//    // return view('loaiphong.index');
-
-//  Route::resource('/admin/khachsan',KhachSanController::class);
-
 // Route::middleware([
 //     'auth:sanctum',
 //     config('jetstream.auth_session'),
@@ -74,3 +45,18 @@ Route::get('/user', function () {
 //         return view('dashboard');
 //     })->name('dashboard');
 // });
+//Thành phố
+
+Route:: resource('/city',ThanhPhoController::class);
+//Địa điểm du lịchs
+Route:: resource('/tourist',DiaDiemDuLichController::class);
+//Khách sạn
+Route:: resource('/hotel',KhachSanController::class);
+//Sự kiện
+Route:: resource('/event',SuKienController::class);
+//Hình thành phố
+Route:: resource('/imgcity',HinhAnhThanhPhoController::class);
+//Hình ảnh địa điểm du lịch
+Route:: resource('/imgtourist',HinhAnhDiaDiemDuLichController::class);
+//Hình ảnh sự kiện
+Route:: resource('/imgevent',HinhAnhSuKienController::class);

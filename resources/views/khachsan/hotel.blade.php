@@ -35,24 +35,30 @@
                         <th>Buffet</th>
                         <th>Wifi</th>
                         <th>isActive</th>
+                        <th>Mã DDDL</th>
                         <th>Action</th>
                     </tr>
                 </tfoot>
                 <tbody>
+                    @if($Khachsans)
+                    @foreach($Khachsans as $ks)
                     <tr>
-                        <td>Tiger Nixon</td>
-                        <td>System Architect</td>
-                        <td>Edinburgh</td>
-                        <td>61</td>
-                        <td>2011/04/25</td>
-                        <td>$320,800</td>
-                        <td>2011/04/25</td>
+                        <td{{$ks->UIDKS}}</td>
+                        <td>{{$ks->TenKS}}</td>
+                        <td>{{$ks->DiaChi}}</td>
+                        <td>{{$ks->SDT}}</td>
+                        <td>{{$ks->Buffet}}</td>
+                        <td>{{$ks->Wifi}}</td>
+                        <td>{{$ks->isActive}}</td>
+                        <td>{{$ks->MaDDDL}}</td>
                         <td>
                             <a href="" class="btn btn-info btn-sm"><i class="fa fa-eye"></i>
                             <a href="" class="btn btn-success btn-sm"><i class="fa fa-edit"></i>
                             <a href="" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>
                         </td>
                     </tr>
+                    @endforeach
+                    @endif
                 </tbody>
             </table>
         </div>

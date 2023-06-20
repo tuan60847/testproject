@@ -40,20 +40,24 @@
                     </tr>
                 </tfoot>
                 <tbody>
+                    @if($data)
+                    @foreach($data as $d)
                     <tr>
-                        <td>Tiger Nixon</td>
-                        <td>System Architect</td>
-                        <td>System Architect</td>
-                        <td>Tiger Nixon</td>
-                        <td>System Architect</td>
-                        <td>System Architect</td>
-                        <td>Tiger Nixon</td>
+                        <td>{{$d->MaDDDL}}</td>
+                        <td>{{$d->TenDiaDiemDuLich}}</td>
+                        <td>{{$d->DiaChi}}</td>
+                        <td>{{$d->MoTa}}</td>
+                        <td>{{$d->GiaTien}}</td>
+                        <td>{{$d->MaTP}}</td>
+                        <td>{{$d->ThoiGianHoatDong}}</td>
                         <td>
                             <a href="" class="btn btn-info btn-sm"><i class="fa fa-eye"></i>
                             <a href="" class="btn btn-success btn-sm"><i class="fa fa-edit"></i>
                             <a href="" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>
                         </td>
                     </tr>
+                    @endforeach
+                    @endif
                 </tbody>
             </table>
         </div>

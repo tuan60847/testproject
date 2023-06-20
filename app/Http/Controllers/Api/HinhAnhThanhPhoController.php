@@ -10,6 +10,11 @@ use Symfony\Component\HttpFoundation\Response;
 
 class HinhAnhThanhPhoController extends Controller
 {
+    public function index()
+    {
+       $data=Hinhanhtp::all();
+       return view('imgthanhpho.imgTP',['data'=>$data]);
+    }
     public function imageStore(Request $request)
     {
 
@@ -47,10 +52,6 @@ class HinhAnhThanhPhoController extends Controller
         $hinhanhtps = Hinhanhtp::where('MaTP', $MaTP)->get();
 
         return response()->json($hinhanhtps, Response::HTTP_OK);
-    }
-    public function index()
-    {
-        return Hinhanhtp::all();
     }
     public function destroy($src)
     {

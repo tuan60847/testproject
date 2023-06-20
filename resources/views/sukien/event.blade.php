@@ -32,25 +32,30 @@
                         <th>Tên sự kiện</th>
                         <th>Ngày bắt đầu</th>
                         <th>Ngày kết thúc</th>
-                        <th>Mã DDDL</th>
                         <th>Mô tả</th>
+                        <th>Mã DDDL</th>
                         <th>Action</th>
                     </tr>
                 </tfoot>
                 <tbody>
+                    @if($data)
+                    @foreach($data as $d)
                     <tr>
-                        <td>Tiger Nixon</td>
-                        <td>System Architect</td>
-                        <td>Edinburgh</td>
-                        <td>61</td>
-                        <td>2011/04/25</td>
-                        <td>2011/04/25</td>
+                        <td>{{$d->maSuKien}}</td>
+                        <td>{{$d->TenSuKien}}</td>
+                        <td>{{$d->NgayBatDau}}</td>
+                        <td>{{$d->NgayKetThuc}}</td>
+                        <td>{{$d->MoTa}}</td>
+                        <td>{{$d->MaDDDL}}</td>
+                        
                         <td>
                             <a href="" class="btn btn-info btn-sm"><i class="fa fa-eye"></i>
                             <a href="" class="btn btn-success btn-sm"><i class="fa fa-edit"></i>
                             <a href="" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>
                         </td>
                     </tr>
+                    @endforeach
+                    @endif
                 </tbody>
             </table>
         </div>
