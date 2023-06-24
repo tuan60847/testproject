@@ -78,6 +78,7 @@ Route::delete('dondatphong/{id}', [DonDatPhongController::class,'destroy']);
 Route::get('dondatphong/{id}', [DonDatPhongController::class,'show']);
 Route::get('dondatphong/findlastbyEmail/{EmailKH}', [DonDatPhongController::class,'lastItemByEmail']);
 Route::get('dondatphong/processing/dondatphong', [DonDatPhongController::class,'findDDPprocess']);
+Route::post('acceptdondatphong', [DonDatPhongController::class,'AcceptDonDatPhong']);
 Route::post('dondatphong', [DonDatPhongController::class,'store']);
 Route::put('dondatphong/{id}', [DonDatPhongController::class,'update']);
 
@@ -89,6 +90,7 @@ Route::delete('ctddp/{id}', [CTDDPController::class,'destroy']);
 Route::get('ctddp/{id}', [CTDDPController::class,'show']);
 Route::get('ctddp/findbyMaDDP/{MaDDP}', [CTDDPController::class,'findbyMaDDP']);
 Route::post('ctddp', [CTDDPController::class,'store']);
+Route::post('findtontaictddp', [CTDDPController::class,'FindTonTaiCTTDDP']);
 Route::put('ctddp/{id}', [CTDDPController::class,'update']);
 Route::resource('ctddp', CTDDPController::class);
 
@@ -151,6 +153,8 @@ Route::get('phongconlai/{id}', [PhongConLaiController::class,'show']);
 Route::post('phongconlai', [PhongConLaiController::class,'store']);
 Route::post('bookingroom', [PhongConLaiController::class,'BookingRoom']);
 Route::post('checkoutroom', [PhongConLaiController::class,'CheckoutRoom']);
+Route::post('getdateroom', [PhongConLaiController::class,'GetDateRoom']);
+Route::post('getroomdatenow', [PhongConLaiController::class,'GetRoomDateNow']);
 Route::put('phongconlai/{id}', [PhongConLaiController::class,'update']);
 Route::resource('phongconlai', PhongConLaiController::class);
 
