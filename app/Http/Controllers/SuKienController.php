@@ -108,10 +108,7 @@ class SuKienController extends Controller
     public function findbyMaDDL(string $id)
     {
         //
-        return Sukien::where('MaTP', '=', $id)
-                ->latest() 
-                ->limit(10) 
-                ->get();
+        return Sukien::where('MaDDDL', '=', $id)->orderByDesc('maSuKien')->get();
 
     }
 

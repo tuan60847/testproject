@@ -18,7 +18,7 @@ use App\Http\Controllers\LoaiPhongController;
 use App\Http\Controllers\PhongConLaiController;
 use App\Http\Controllers\SuKienController;
 use App\Http\Controllers\ThanhPhoController;
-use App\Models\Hinhanhdddl;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -58,6 +58,7 @@ Route::resource('hinhanhkhachsan', ImageKSController::class);
 Route::resource('khachsan', KhachSanController::class);
 Route::delete('khachsan/{id}', [KhachSanController::class,'destroy']);
 Route::get('khachsan/{id}', [KhachSanController::class,'show']);
+Route::get('khachsan/findbyMaDDDL/{id}', [KhachSanController::class,'findbyMaDDDL']);
 Route::post('khachsan', [KhachSanController::class,'store']);
 Route::put('khachsan/{id}', [KhachSanController::class,'update'])->middleware('auth:sanctum');
 
@@ -77,6 +78,9 @@ Route::delete('dondatphong/{id}', [DonDatPhongController::class,'destroy']);
 Route::get('dondatphong/{id}', [DonDatPhongController::class,'show']);
 Route::get('dondatphong/findlastbyEmail/{EmailKH}', [DonDatPhongController::class,'lastItemByEmail']);
 Route::get('dondatphong/processing/dondatphong', [DonDatPhongController::class,'findDDPprocess']);
+Route::post('acceptdondatphong', [DonDatPhongController::class,'AcceptDonDatPhong']);
+Route::post('canceldondatphongbyuser', [DonDatPhongController::class,'CancelDonDatPhongByUser']);
+Route::post('canceldondatphongbychukhachsan', [DonDatPhongController::class,'CancelDonDatPhongByChukhachSan']);
 Route::post('dondatphong', [DonDatPhongController::class,'store']);
 Route::put('dondatphong/{id}', [DonDatPhongController::class,'update']);
 
@@ -88,6 +92,7 @@ Route::delete('ctddp/{id}', [CTDDPController::class,'destroy']);
 Route::get('ctddp/{id}', [CTDDPController::class,'show']);
 Route::get('ctddp/findbyMaDDP/{MaDDP}', [CTDDPController::class,'findbyMaDDP']);
 Route::post('ctddp', [CTDDPController::class,'store']);
+Route::post('findtontaictddp', [CTDDPController::class,'FindTonTaiCTTDDP']);
 Route::put('ctddp/{id}', [CTDDPController::class,'update']);
 Route::resource('ctddp', CTDDPController::class);
 
@@ -132,7 +137,7 @@ Route::resource('hinhanhdddl', HinhAnhDiaDiemDuLichController::class);
 //Sự kiện
 
 Route::get('sukien/{id}', [SuKienController::class,'show']);
-Route::get('sukien/ma/{id}', [SuKienController::class,'findbyMaDDL']);
+Route::get('sukien/findbyMaDDL/{id}', [SuKienController::class,'findbyMaDDL']);
 Route::post('sukien', [SuKienController::class,'store']);
 Route::put('sukien/{id}', [SuKienController::class,'update']);
 Route::resource('sukien', SuKienController::class);
@@ -152,5 +157,9 @@ Route::resource('hinhanhSK', HinhAnhSuKienController::class);
 
 Route::get('phongconlai/{id}', [PhongConLaiController::class,'show']);
 Route::post('phongconlai', [PhongConLaiController::class,'store']);
+Route::post('bookingroom', [PhongConLaiController::class,'BookingRoom']);
+Route::post('checkoutroom', [PhongConLaiController::class,'CheckoutRoom']);
+Route::post('getdateroom', [PhongConLaiController::class,'GetDateRoom']);
+Route::post('getroomdatenow', [PhongConLaiController::class,'GetRoomDateNow']);
 Route::put('phongconlai/{id}', [PhongConLaiController::class,'update']);
 Route::resource('phongconlai', PhongConLaiController::class); 

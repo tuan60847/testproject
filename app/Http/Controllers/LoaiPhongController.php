@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Loaiphong;
+use App\Models\Phongconlai;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -131,7 +132,7 @@ class LoaiPhongController extends Controller
         //
         $loaiphongs = Loaiphong::where('UIDKS', $UIDKS)->get();
         $loaiphong= $loaiphongs->last();
-        $responseData[] = [
+        $responseData = [
             'UIDKS' => $loaiphong->UIDKS,
             'UIDLoaiPhong' => $loaiphong->UIDLoaiPhong,
             'TenLoaiPhong' => $loaiphong->TenLoaiPhong,
@@ -139,8 +140,6 @@ class LoaiPhongController extends Controller
             'soGiuong' => $loaiphong->soGiuong,
             'soLuongPhong' => $loaiphong->soLuongPhong,
             'isMayLanh' => boolval($loaiphong->isMayLanh),
-
-
         ];
         return response()->json($responseData);
     }
@@ -150,7 +149,7 @@ class LoaiPhongController extends Controller
     {
         //
         $loaiphong= Loaiphong::findOrFail($id);
-        $responseData[] = [
+        $responseData = [
             'UIDKS' => $loaiphong->UIDKS,
             'UIDLoaiPhong' => $loaiphong->UIDLoaiPhong,
             'TenLoaiPhong' => $loaiphong->TenLoaiPhong,
@@ -224,54 +223,29 @@ class LoaiPhongController extends Controller
         $soGiuong = $request->input("soGiuong");
         $soLuongPhong = $request->input("soLuongPhong");
         $isMayLanh = $request->input("isMayLanh") == false || $request->input("isMayLanh") == null ? false : true;
-        // $phongConLai = $request->input("phongConLai");
+     
 
 
+        if (!empty($loaiphong)) {
 
-        if (!empty($loaiphong) && empty($phongConLai)) {
-
-            // $loaiphong->UIDLoaiPhong = $UIDLoaiPhong;
+       
             $loaiphong->TenLoaiPhong = $TenLoaiPhong;
             $loaiphong->Gia = floatval($Gia);
             $loaiphong->UIDKS = $UIDKS;
             $loaiphong->soGiuong = $soGiuong;
-            // if($loaiphong->soLuongPhong <= intval($soLuongPhong)){
-            //     $loaiphong->phongConLai += (intval($soLuongPhong)-$loaiphong->soLuongPhong);
-
-            // }else{
-            //     if($loaiphong->phongConLai>=intval($soLuongPhong)){
-            //         $loaiphong->phongConLai=intval($soLuongPhong);
-            //     }
-            // }
+            $number= $loaiphong->soLuongPhong-intval($soLuongPhong);
             $loaiphong->soLuongPhong = intval($soLuongPhong);
             $loaiphong->isMayLanh = $isMayLanh;
+            $phongConLais = Phongconlai::where('UIDLoaiPhong', $loaiphong->UIDLoaiPhong)->get();
+            foreach ($phongConLais as $phongConLai){
+                $phongConLai->SoLuong-=$number;
+                $phongConLai->update();
+            }
 
 
 
             return $loaiphong->update();
-        } else if (!empty($loaiphong) && !empty($phongConLai)) {
-            $loaiphong->TenLoaiPhong = $TenLoaiPhong;
-            $loaiphong->Gia = floatval($Gia);
-            $loaiphong->UIDKS = $UIDKS;
-            $loaiphong->soGiuong = $soGiuong;
-
-            // if($loaiphong->soLuongPhong < intval($soLuongPhong)){
-            //     $loaiphong->phongConLai = (intval($soLuongPhong)-$loaiphong->soLuongPhong)+ $loaiphong->phongConLai ;
-
-            // }else{
-            //     if($loaiphong->soLuongPhong>intval($soLuongPhong)){
-            //         $loaiphong->phongConLai=intval($soLuongPhong);
-            //     }else{
-            //         $loaiphong->phongConLai = intval($phongConLai);
-            //     }
-            // }
-
-            $loaiphong->soLuongPhong = intval($soLuongPhong);
-
-
-            $loaiphong->isMayLanh = $isMayLanh;
-            return $loaiphong->update();
-        } else {
+        }  else {
             // handle the case where the image upload fails
             // e.g. return an error response or redirect back to the form with an error message
             return response()->json(["message" => "eror"], 404);

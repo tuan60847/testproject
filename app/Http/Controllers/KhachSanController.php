@@ -46,6 +46,29 @@ class KhachSanController extends Controller
         
     }
 
+    public function findbyMaDDDL(string $id)
+    {
+        //
+        $Khachsans =  Khachsan::where('MaDDDL', '=', $id)->orderByDesc('UIDKS')->get();
+        $responseData = [];
+        foreach ($Khachsans as $Khachsan) {
+        $responseData[] = [
+            'UIDKS' => $Khachsan->UIDKS,
+            'TenKS' => $Khachsan->TenKS,
+            'DiaChi' => $Khachsan->DiaChi,
+            'SDT' => $Khachsan->SDT,
+            'MaDDDL' => $Khachsan->MaDDDL,
+            'Wifi' => boolval($Khachsan->Wifi),
+            'Buffet' => boolval($Khachsan->Buffet),
+            'isActive' => boolval($Khachsan->isActive),
+            
+        ];
+    }
+
+    return response()->json($responseData);
+
+    }
+
     /**
      * Store a newly created resource in storage.
      */
