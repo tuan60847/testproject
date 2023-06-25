@@ -79,6 +79,8 @@ Route::get('dondatphong/{id}', [DonDatPhongController::class,'show']);
 Route::get('dondatphong/findlastbyEmail/{EmailKH}', [DonDatPhongController::class,'lastItemByEmail']);
 Route::get('dondatphong/processing/dondatphong', [DonDatPhongController::class,'findDDPprocess']);
 Route::post('acceptdondatphong', [DonDatPhongController::class,'AcceptDonDatPhong']);
+Route::post('canceldondatphongbyuser', [DonDatPhongController::class,'CancelDonDatPhongByUser']);
+Route::post('canceldondatphongbychukhachsan', [DonDatPhongController::class,'CancelDonDatPhongByChukhachSan']);
 Route::post('dondatphong', [DonDatPhongController::class,'store']);
 Route::put('dondatphong/{id}', [DonDatPhongController::class,'update']);
 
