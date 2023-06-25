@@ -48,6 +48,7 @@ Route::get('/user', function () {
 //Thành phố
 
 Route:: resource('/city',ThanhPhoController::class);
+Route::get('thanhpho/{id}', [ThanhPhoController::class,'create']);
 //Địa điểm du lịchs
 Route:: resource('/tourist',DiaDiemDuLichController::class);
 //Khách sạn

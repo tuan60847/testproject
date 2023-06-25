@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('./layout')
 @section('content')
   <!-- Begin Page Content -->
   <div class="container-fluid">
@@ -10,7 +10,7 @@
     </div>
     <div class="card-body">
         <div class="table-responsive">
-          <form action="{{url('/city/')}}" method="POST">
+          <form action="{{url('/city/')}}" method="GET">
             @csrf
                       <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
               <tr>
@@ -33,12 +33,12 @@
 <!-- /.container-fluid -->
 @section('script')
  <!-- Custom styles for this page -->
- <link href="vendor/datatables/dataTables.bootstrap4.min.css" rel="stylesheet">
- <!-- Page level plugins -->
- <script src="vendor/datatables/jquery.dataTables.min.js"></script>
-    <script src="vendor/datatables/dataTables.bootstrap4.min.js"></script>
+ <link href="{{ asset('../public/vendor/datatables/dataTables.bootstrap4.min.css') }}" rel="stylesheet">
+    <!-- Page level plugins -->
+    <script src="{{ asset('../public/vendor/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ asset('../public/vendor/datatables/dataTables.bootstrap4.min.js') }}"></script>
 
     <!-- Page level custom scripts -->
-    <script src="js/demo/datatables-demo.js"></script>
+    <script src="{{ asset('../public/js/demo/datatables-demo.js') }}"></script>
     @endsection
 @endsection
