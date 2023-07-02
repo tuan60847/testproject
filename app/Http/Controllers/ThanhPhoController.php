@@ -52,6 +52,35 @@ class ThanhPhoController extends Controller
         
     }
 
+    public function TimThanhPho(Request $request)
+    {
+        //
+    
+        $this->validate($request, [
+            'Search' => 'required',
+        ]);
+        
+        
+        $Search = $request->input("Search");   
+        $thanhphos = Thanhpho::where('TenTP', 'LIKE', '%' . $Search . '%')
+                    ->get();
+        
+        // $isAdminKH ="isAdminKH";
+        
+        if (!empty($thanhphos)) {
+
+            return $thanhphos;
+
+            // return response($khachsan, Response::HTTP_CREATED);
+        } else {
+            // handle the case where the image upload fails
+            // e.g. return an error response or redirect back to the form with an error message
+            return response()->json(["message"=>"eror"],404);
+        }
+       
+
+    }
+
     /**
      * Show the form for editing the specified resource.
      */

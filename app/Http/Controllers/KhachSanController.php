@@ -202,6 +202,37 @@ class KhachSanController extends Controller
 
     }
 
+    public function TimKhachSan(Request $request)
+    {
+        //
+    
+        $this->validate($request, [
+            'Search' => 'required',
+        ]);
+        
+        
+        $Search = $request->input("Search");   
+        $khachSans = Khachsan::where('TenKS', 'LIKE', '%' . $Search . '%')
+                    ->orWhere('DiaChi', 'LIKE', '%' . $Search . '%')
+                    ->where('isActive',true)
+                    ->get();
+        
+        // $isAdminKH ="isAdminKH";
+        
+        if (!empty($khachSans)) {
+
+            return $khachSans;
+
+            // return response($khachsan, Response::HTTP_CREATED);
+        } else {
+            // handle the case where the image upload fails
+            // e.g. return an error response or redirect back to the form with an error message
+            return response()->json(["message"=>"eror"],404);
+        }
+       
+
+    }
+
     /**
      * Remove the specified resource from storage.
      */

@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Loaiphong;
 use App\Models\Phongconlai;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -16,7 +17,8 @@ class LoaiPhongController extends Controller
     {
         //
 
-        $loaiphongs = Loaiphong::all();
+        $loaiphongs = Loaiphong::where('isActive', '!=', 0)->get();
+
         $responseData = [];
         foreach ($loaiphongs as $loaiphong) {
             $responseData[] = [
@@ -64,13 +66,13 @@ class LoaiPhongController extends Controller
 
         ]);
 
-        
+
 
         $TenLoaiPhong = $request->input("TenLoaiPhong");
         $UIDKS = $request->input("UIDKS");
         $Gia = $request->input("Gia");
 
-        
+
         $soGiuong = $request->input("soGiuong");
         $soLuongPhong = $request->input("soLuongPhong");
         $isMayLanh = $request->input("isMayLanh") == false || $request->input("isMayLanh") == null ? false : true;
@@ -130,8 +132,8 @@ class LoaiPhongController extends Controller
     public function findlast(string $UIDKS)
     {
         //
-        $loaiphongs = Loaiphong::where('UIDKS', $UIDKS)->get();
-        $loaiphong= $loaiphongs->last();
+        $loaiphongs = Loaiphong::where('UIDKS', $UIDKS)->where('isActive', '!=', 0)->get();
+        $loaiphong = $loaiphongs->last();
         $responseData = [
             'UIDKS' => $loaiphong->UIDKS,
             'UIDLoaiPhong' => $loaiphong->UIDLoaiPhong,
@@ -148,7 +150,7 @@ class LoaiPhongController extends Controller
     public function show(string $id)
     {
         //
-        $loaiphong= Loaiphong::findOrFail($id);
+        $loaiphong = Loaiphong::findOrFail($id);
         $responseData = [
             'UIDKS' => $loaiphong->UIDKS,
             'UIDLoaiPhong' => $loaiphong->UIDLoaiPhong,
@@ -176,7 +178,7 @@ class LoaiPhongController extends Controller
      */
     public function getloaiphongbyks(string $id)
     {
-        $loaiphongs = Loaiphong::where('UIDKS', $id)->get();
+        $loaiphongs = Loaiphong::where('UIDKS', $id)->where('isActive', '!=', 0)->get();
         $responseData = [];
         foreach ($loaiphongs as $loaiphong) {
             $responseData[] = [
@@ -213,39 +215,43 @@ class LoaiPhongController extends Controller
 
         ]);
 
-        
+
 
         $TenLoaiPhong = $request->input("TenLoaiPhong");
         $UIDKS = $request->input("UIDKS");
         $Gia = $request->input("Gia");
 
-        
+
         $soGiuong = $request->input("soGiuong");
         $soLuongPhong = $request->input("soLuongPhong");
-        $isMayLanh = $request->input("isMayLanh") == false || $request->input("isMayLanh") == null ? false : true;
-     
+        $isMayLanh = $request->input("isMayLanh") == false || $request->input("isMayLanh") == "false" || $request->input("isMayLanh") == null ? false : true;
+
 
 
         if (!empty($loaiphong)) {
 
-       
+
             $loaiphong->TenLoaiPhong = $TenLoaiPhong;
             $loaiphong->Gia = floatval($Gia);
             $loaiphong->UIDKS = $UIDKS;
             $loaiphong->soGiuong = $soGiuong;
-            $number= $loaiphong->soLuongPhong-intval($soLuongPhong);
+            $number = $loaiphong->soLuongPhong - intval($soLuongPhong);
             $loaiphong->soLuongPhong = intval($soLuongPhong);
             $loaiphong->isMayLanh = $isMayLanh;
-            $phongConLais = Phongconlai::where('UIDLoaiPhong', $loaiphong->UIDLoaiPhong)->get();
-            foreach ($phongConLais as $phongConLai){
-                $phongConLai->SoLuong-=$number;
+            $currentDate = Carbon::now();
+            $currentDate->format('Y-m-d');
+
+            $phongConLais = Phongconlai::where('UIDLoaiPhong', $loaiphong->UIDLoaiPhong)->whereDate('Ngay', '>', $currentDate)
+                ->get();
+            foreach ($phongConLais as $phongConLai) {
+                $phongConLai->SoLuong -= $number;
                 $phongConLai->update();
             }
 
 
 
             return $loaiphong->update();
-        }  else {
+        } else {
             // handle the case where the image upload fails
             // e.g. return an error response or redirect back to the form with an error message
             return response()->json(["message" => "eror"], 404);
@@ -256,8 +262,13 @@ class LoaiPhongController extends Controller
      * Remove the specified resource from storage.
      */
     public function destroy(string $id)
-    {
-        //
-        return Loaiphong::destroy($id);
+{
+    $loaiphong = Loaiphong::findOrFail($id);
+    if (!empty($loaiphong)) {
+        $loaiphong->isActive = 0;
+        return $loaiphong->update();
+    } else {
+        return response()->json(["message" => "error"], 404);
     }
+}
 }

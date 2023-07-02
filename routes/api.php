@@ -16,6 +16,7 @@ use App\Http\Controllers\DonDatPhongController;
 use App\Http\Controllers\KhachSanController;
 use App\Http\Controllers\LoaiPhongController;
 use App\Http\Controllers\PhongConLaiController;
+use App\Http\Controllers\searchController;
 use App\Http\Controllers\SuKienController;
 use App\Http\Controllers\ThanhPhoController;
 
@@ -60,6 +61,7 @@ Route::delete('khachsan/{id}', [KhachSanController::class,'destroy']);
 Route::get('khachsan/{id}', [KhachSanController::class,'show']);
 Route::get('khachsan/findbyMaDDDL/{id}', [KhachSanController::class,'findbyMaDDDL']);
 Route::post('khachsan', [KhachSanController::class,'store']);
+Route::post('timkhachsan', [KhachSanController::class,'TimKhachSan']);
 Route::put('khachsan/{id}', [KhachSanController::class,'update'])->middleware('auth:sanctum');
 
 
@@ -78,6 +80,8 @@ Route::delete('dondatphong/{id}', [DonDatPhongController::class,'destroy']);
 Route::get('dondatphong/{id}', [DonDatPhongController::class,'show']);
 Route::get('dondatphong/findlastbyEmail/{EmailKH}', [DonDatPhongController::class,'lastItemByEmail']);
 Route::get('dondatphong/processing/dondatphong', [DonDatPhongController::class,'findDDPprocess']);
+Route::post('findhistoryddpbykh', [DonDatPhongController::class,'findHistoryDDPByKH']);
+Route::post('findhistoryddpbycks', [DonDatPhongController::class,'findHistoryDDPByCKS']);
 Route::post('acceptdondatphong', [DonDatPhongController::class,'AcceptDonDatPhong']);
 Route::post('canceldondatphongbyuser', [DonDatPhongController::class,'CancelDonDatPhongByUser']);
 Route::post('canceldondatphongbychukhachsan', [DonDatPhongController::class,'CancelDonDatPhongByChukhachSan']);
@@ -109,6 +113,7 @@ Route::resource('hinhanhloaiphong', ImageLoaiPhongController::class);
 
 Route::get('thanhpho/{id}', [ThanhPhoController::class,'show']);
 Route::post('thanhpho/getbyname/{name}',[ThanhPhoController::class, 'getThanhPhoByName']);
+Route::post('timthanhpho',[ThanhPhoController::class, 'TimThanhPho']);
 Route::resource('thanhpho', ThanhPhoController::class);
 
 
@@ -120,6 +125,7 @@ Route::resource('hinhanhtp', HinhAnhThanhPhoController::class);
 
 Route::get('diadiemdulich/{id}', [DiaDiemDuLichController::class,'show']);
 Route::get('diadiemdulich/findbymatp/{id}', [DiaDiemDuLichController::class,'findbyMaTP']);
+Route::post('timdiadiemdulich',[DiaDiemDuLichController::class, 'TimDiaDiemDuLich']);
 Route::resource('diadiemdulich', DiaDiemDuLichController::class);
 
 
@@ -159,4 +165,7 @@ Route::post('getdateroom', [PhongConLaiController::class,'GetDateRoom']);
 Route::post('getroomdatenow', [PhongConLaiController::class,'GetRoomDateNow']);
 Route::put('phongconlai/{id}', [PhongConLaiController::class,'update']);
 Route::resource('phongconlai', PhongConLaiController::class);
+
+
+Route::post('timkiem',[searchController::class, 'TimKiem']);
 

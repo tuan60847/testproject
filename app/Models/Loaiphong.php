@@ -19,6 +19,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $soGiuong
  * @property int $soLuongPhong
  * @property bool $isMayLanh
+ * @property bool $isActive
  * 
  * @property Khachsan $khachsan
  * @property Collection|Ctddp[] $ctddps
@@ -36,7 +37,8 @@ class Loaiphong extends Model
 	protected $casts = [
 		'Gia' => 'float',
 		'soLuongPhong' => 'int',
-		'isMayLanh' => 'bool'
+		'isMayLanh' => 'bool',
+		'isActive' => 'bool'
 	];
 
 	protected $fillable = [
@@ -45,7 +47,8 @@ class Loaiphong extends Model
 		'UIDKS',
 		'soGiuong',
 		'soLuongPhong',
-		'isMayLanh'
+		'isMayLanh',
+		'isActive'
 	];
 
 	public function khachsan()
