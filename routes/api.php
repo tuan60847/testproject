@@ -16,6 +16,7 @@
     use App\Http\Controllers\KhachSanController;
     use App\Http\Controllers\LoaiPhongController;
     use App\Http\Controllers\PhongConLaiController;
+    use App\Http\Controllers\searchController;
     use App\Http\Controllers\SuKienController;
     use App\Http\Controllers\ThanhPhoController;
 
@@ -78,6 +79,8 @@
     Route::get('dondatphong/{id}', [DonDatPhongController::class, 'show']);
     Route::get('dondatphong/findlastbyEmail/{EmailKH}', [DonDatPhongController::class, 'lastItemByEmail']);
     Route::get('dondatphong/processing/dondatphong', [DonDatPhongController::class, 'findDDPprocess']);
+    Route::post('findhistoryddpbykh', [DonDatPhongController::class, 'findHistoryDDPByKH']);
+    Route::post('findhistoryddpbycks', [DonDatPhongController::class, 'findHistoryDDPByCKS']);
     Route::post('acceptdondatphong', [DonDatPhongController::class, 'AcceptDonDatPhong']);
     Route::post('canceldondatphongbyuser', [DonDatPhongController::class, 'CancelDonDatPhongByUser']);
     Route::post('canceldondatphongbychukhachsan', [DonDatPhongController::class, 'CancelDonDatPhongByChukhachSan']);
@@ -117,16 +120,10 @@
     Route::put('thanhpho/{id}', [ThanhPhoController::class, 'update']);
 
 
-    Route::post('image/hinhanhtp/upload', [HinhAnhThanhPhoController::class, 'imageStore']);
-    Route::delete('hinhanhtp/image/thanhpho/{src}', [HinhAnhThanhPhoController::class, 'destroy']);
-    Route::get('hinhanhtp/UIDThanhPho/{MaTP}', [HinhAnhThanhPhoController::class, 'getImageByUIDThanhPho']);
-    Route::resource('hinhanhtp', HinhAnhThanhPhoController::class);
-
-    //địa điểm du lịch
-
-    Route::get('diadiemdulich/{id}', [DiaDiemDuLichController::class, 'show']);
-    Route::get('diadiemdulich/findbymatp/{id}', [DiaDiemDuLichController::class, 'findbyMaTP']);
-    Route::resource('diadiemdulich', DiaDiemDuLichController::class);
+    Route::get('thanhpho/{id}', [ThanhPhoController::class, 'show']);
+    Route::post('thanhpho/getbyname/{name}', [ThanhPhoController::class, 'getThanhPhoByName']);
+    Route::post('timthanhpho', [ThanhPhoController::class, 'TimThanhPho']);
+    Route::resource('thanhpho', ThanhPhoController::class);
 
 
     Route::post('image/hinhanhdddl/upload', [HinhAnhDiaDiemDuLichController::class, 'imageStore']);
@@ -136,11 +133,16 @@
 
     //Sự kiện
 
-    Route::get('sukien/{id}', [SuKienController::class, 'show']);
-    Route::get('sukien/findbyMaDDL/{id}', [SuKienController::class, 'findbyMaDDL']);
-    Route::post('sukien', [SuKienController::class, 'store']);
-    Route::put('sukien/{id}', [SuKienController::class, 'update']);
-    Route::resource('sukien', SuKienController::class);
+    Route::get('diadiemdulich/{id}', [DiaDiemDuLichController::class, 'show']);
+    Route::get('diadiemdulich/findbymatp/{id}', [DiaDiemDuLichController::class, 'findbyMaTP']);
+    Route::post('timdiadiemdulich', [DiaDiemDuLichController::class, 'TimDiaDiemDuLich']);
+    Route::resource('diadiemdulich', DiaDiemDuLichController::class);
+
+
+    Route::post('image/hinhanhdddl/upload', [HinhAnhDiaDiemDuLichController::class, 'imageStore']);
+    Route::delete('hinhanhdddl/image/diadiemdulich/{src}', [HinhAnhDiaDiemDuLichController::class, 'destroy']);
+    Route::get('hinhanhdddl/UIDDDDL/{MaDDDL}', [HinhAnhDiaDiemDuLichController::class, 'getImageByUIDDDDL']);
+    Route::resource('hinhanhdddl', HinhAnhDiaDiemDuLichController::class);
 
 
 
@@ -157,11 +159,5 @@
     Route::get('hinhanhSK/UIDSK/{MaSuKien}', [HinhAnhSuKienController::class, 'getImageByUIDMaSukien']);
     Route::resource('hinhanhSK', HinhAnhSuKienController::class);
 
-    Route::get('phongconlai/{id}', [PhongConLaiController::class, 'show']);
-    Route::post('phongconlai', [PhongConLaiController::class, 'store']);
-    Route::post('bookingroom', [PhongConLaiController::class, 'BookingRoom']);
-    Route::post('checkoutroom', [PhongConLaiController::class, 'CheckoutRoom']);
-    Route::post('getdateroom', [PhongConLaiController::class, 'GetDateRoom']);
-    Route::post('getroomdatenow', [PhongConLaiController::class, 'GetRoomDateNow']);
-    Route::put('phongconlai/{id}', [PhongConLaiController::class, 'update']);
-    Route::resource('phongconlai', PhongConLaiController::class);
+
+    Route::post('timkiem', [searchController::class, 'TimKiem']);

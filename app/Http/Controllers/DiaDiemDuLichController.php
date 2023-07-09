@@ -57,6 +57,8 @@ class DiaDiemDuLichController extends Controller
         }
     }
 
+    
+
     /**
      * Display the specified resource.
      */
@@ -149,6 +151,36 @@ class DiaDiemDuLichController extends Controller
     public function findbyMaTP(string $MaTP)
     {
         return Diadiemdulich::where('MaTP', '=', $MaTP)->get();
+    }
+
+    public function TimDiaDiemDuLich(Request $request)
+    {
+        //
+    
+        $this->validate($request, [
+            'Search' => 'required',
+        ]);
+        
+        
+        $Search = $request->input("Search");   
+        $diadiemdulichs = Diadiemdulich::where('TenDiaDiemDuLich', 'LIKE', '%' . $Search . '%')
+                    ->orWhere('DiaChi', 'LIKE', '%' . $Search . '%')
+                    ->get();
+        
+        // $isAdminKH ="isAdminKH";
+        
+        if (!empty($diadiemdulichs)) {
+
+            return $diadiemdulichs;
+
+            // return response($khachsan, Response::HTTP_CREATED);
+        } else {
+            // handle the case where the image upload fails
+            // e.g. return an error response or redirect back to the form with an error message
+            return response()->json(["message"=>"eror"],404);
+        }
+       
+
     }
 
 
