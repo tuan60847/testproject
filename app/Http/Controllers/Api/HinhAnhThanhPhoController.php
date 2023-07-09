@@ -12,8 +12,12 @@ class HinhAnhThanhPhoController extends Controller
 {
     public function index()
     {
-       $data=Hinhanhtp::all();
-       return view('imgthanhpho.imgTP',['data'=>$data]);
+        $data = Hinhanhtp::all();
+        return view('imgthanhpho.index', ['data' => $data]);
+    }
+    public function create(Hinhanhtp $data)
+    {
+        return view('imgthanhpho.create', ['data' => $data]);
     }
     public function imageStore(Request $request)
     {
@@ -33,11 +37,6 @@ class HinhAnhThanhPhoController extends Controller
             $hinhanhtp->src = $image_path;
             $hinhanhtp->MaTP = $MaTP;
             $hinhanhtp->save();
-            // print("$hinhanhk");
-            // $data = HinhanhK::create([
-            //     'src' => $image_path,
-            //     'UIDKS' => $UIDKS,
-            // ]);
 
 
             return response($hinhanhtp, Response::HTTP_CREATED);
@@ -45,6 +44,15 @@ class HinhAnhThanhPhoController extends Controller
             // handle the case where the image upload fails
             // e.g. return an error response or redirect back to the form with an error message
         }
+    }
+    public function show(string $id)
+    {
+        $data = Hinhanhtp::find($id);
+        return view('imgthanhpho.show', ['data' => $data]);
+    }
+    public function edit($id)
+    {
+        
     }
 
     public function getImageByUIDThanhPho($MaTP)

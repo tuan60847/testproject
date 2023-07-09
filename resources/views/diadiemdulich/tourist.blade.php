@@ -10,7 +10,7 @@
 <div class="card shadow mb-4">
     <div class="card-header py-3">
         <h6 class="m-0 font-weight-bold text-primary">Địa điểm du lịch</h6>
-        <a href="{{url('/createDDDL')}}" class="float-right btn-primary btn-sm">Thêm Mới</a>
+        <a href="{{url('tourist/create')}}" class="float-right btn-primary btn-sm">Thêm Mới</a>
         </div>
     <div class="card-body">
         <div class="table-responsive">

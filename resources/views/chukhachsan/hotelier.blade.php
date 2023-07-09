@@ -41,18 +41,24 @@
                 </tfoot>
                 <tbody>
                     <tr>
-                        <td>Tiger Nixon</td>
-                        <td>System Architect</td>
-                        <td>System Architect</td>
-                        <td>Tiger Nixon</td>
-                        <td>System Architect</td>
-                        <td>System Architect</td>
-                        <td>Tiger Nixon</td>
+                    @if($data)
+                   @foreach($data as $d)
+                    <tr>
+                        <td>{{$d->ADMINKS}}</td>
+                        <td>{{$d->HoTen}}</td>
+                        <td>{{$d->NgaySinh}}</td>
+                        <td>{{$d->SDT}}</td>
+                        <td>{{$d->cmnd}}</td>
+                        <td>{{$d->Email}}</td>
+                        <td>{{$d->Password}}</td>
                         <td>
                             <a href="" class="btn btn-info btn-sm"><i class="fa fa-eye"></i>
-                            <a href="" class="btn btn-success btn-sm"><i class="fa fa-edit"></i>
-                            <a href="" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>
+                            <a href="" method="POST" class="btn btn-success btn-sm"><i class="fa fa-edit"></i>
+                            <a onclick="confirm('Bạn có muốn xóa thành phố này không?')" href="" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i>
                         </td>
+                    </tr>
+                    @endforeach
+                    @endif
                     </tr>
                 </tbody>
             </table>
