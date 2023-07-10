@@ -105,11 +105,10 @@ class ChuKhachSanController extends Controller
         //
         $chukhachsan=Chukhachsan::findOrFail($id);
         $this->validate($request, [
-            'Email' => 'required',
+            
             'Password' => 'required',
             'HoTen' => 'required',
             'NgaySinh' => 'required|date_format:Y-m-d',
-            
             'cmnd' => 'required',
             'SDT' => 'required',
             
@@ -117,7 +116,7 @@ class ChuKhachSanController extends Controller
         ]);
         
         
-        $Email = $request->input("Email");
+       
         $Password = $request->input("Password");
         $NgaySinh =$request->input("NgaySinh");
 
@@ -129,19 +128,15 @@ class ChuKhachSanController extends Controller
         
         
         if (!empty($chukhachsan)) {
-           
-            
-            $chukhachsan->Email = $Email;
+
             $chukhachsan->Password = $Password;
             $chukhachsan->NgaySinh = $NgaySinh;
             $chukhachsan->HoTen = $HoTen;
             $chukhachsan->SDT = $SDT;
             $chukhachsan->cmnd= $cmnd;      
             $chukhachsan->save();
-            
-            
-           
-            return response($chukhachsan, Response::HTTP_CREATED);
+
+            return response($chukhachsan);
         } else {
             // handle the case where the image upload fails
             // e.g. return an error response or redirect back to the form with an error message
