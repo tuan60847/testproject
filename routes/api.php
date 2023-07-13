@@ -13,6 +13,7 @@ use App\Http\Controllers\ChuKhachSanController;
 use App\Http\Controllers\CTDDPController;
 use App\Http\Controllers\DiaDiemDuLichController;
 use App\Http\Controllers\DonDatPhongController;
+use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\KhachSanController;
 use App\Http\Controllers\LoaiPhongController;
 use App\Http\Controllers\PhongConLaiController;
@@ -168,4 +169,10 @@ Route::resource('phongconlai', PhongConLaiController::class);
 
 
 Route::post('timkiem',[searchController::class, 'TimKiem']);
+
+
+Route::get('favorite/{id}', [FavoriteController::class,'show']);
+Route::post('setfavorite', [FavoriteController::class,'SetFavorite']);
+Route::post('getkhachsanfavoritebykh', [FavoriteController::class,'getKhachSanFavoriteByKH']);
+Route::resource('favorite', FavoriteController::class);
 

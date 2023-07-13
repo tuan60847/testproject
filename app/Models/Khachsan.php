@@ -23,6 +23,7 @@ use Illuminate\Database\Eloquent\Model;
  * 
  * @property Chukhachsan $chukhachsan
  * @property Diadiemdulich $diadiemdulich
+ * @property Collection|Favorite[] $favorites
  * @property Collection|Hinhanhk[] $hinhanhks
  * @property Collection|Loaiphong[] $loaiphongs
  *
@@ -60,6 +61,11 @@ class Khachsan extends Model
 	public function diadiemdulich()
 	{
 		return $this->belongsTo(Diadiemdulich::class, 'MaDDDL');
+	}
+
+	public function favorites()
+	{
+		return $this->hasMany(Favorite::class, 'UIDKS');
 	}
 
 	public function hinhanhks()

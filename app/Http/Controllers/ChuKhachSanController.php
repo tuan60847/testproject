@@ -37,7 +37,6 @@ class ChuKhachSanController extends Controller
             'Password' => 'required',
             'HoTen' => 'required',
             'NgaySinh' => 'required|date_format:Y-m-d',
-            
             'cmnd' => 'required',
             'SDT' => 'required',
             

@@ -117,8 +117,8 @@ class DonDatPhongController extends Controller
 
     public function lastItemByEmail(string $EmailKH)
     {
-        $DonDatPhong = Dondatphong::where('EmailKH', $EmailKH)->get();
-        return $DonDatPhong->last();
+        $DonDatPhong = Dondatphong::where('EmailKH', $EmailKH)->orderBy('isChecked', 'asc')->get();
+        return $DonDatPhong->first();
     }
 
     /**
