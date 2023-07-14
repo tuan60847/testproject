@@ -64,6 +64,31 @@ class FavoriteController extends Controller
         
     }
 
+    public function getBoolenFavorite(Request $request)
+    {
+        //
+        $this->validate($request, [
+            'Email' => 'required',
+            'UIDKS' => 'required',
+        ]);
+
+
+        $Email = $request->input("Email");
+        $UIDKS = $request->input("UIDKS");
+        
+        $favorite = Favorite::where('Email', '=', $Email)->where('UIDKS', '=', $UIDKS)->first();
+        // return $favorite;
+        
+        if(!$favorite||$favorite->isActive==false){
+            return response()->json(["message" => "eror"], 404);
+        }else{
+            return true;
+           
+        }
+        
+    }
+
+
     public function getKhachSanFavoriteByKH(Request $request)
     {
         //

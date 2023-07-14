@@ -174,5 +174,6 @@ Route::post('timkiem',[searchController::class, 'TimKiem']);
 Route::get('favorite/{id}', [FavoriteController::class,'show']);
 Route::post('setfavorite', [FavoriteController::class,'SetFavorite']);
 Route::post('getkhachsanfavoritebykh', [FavoriteController::class,'getKhachSanFavoriteByKH']);
+Route::post('getboolenfavorite', [FavoriteController::class,'getBoolenFavorite']);
 Route::resource('favorite', FavoriteController::class);
 
