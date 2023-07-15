@@ -53,33 +53,20 @@ class LoaiPhongController extends Controller
     public function store(Request $request)
     {
         //
-
         $this->validate($request, [
-
             'TenLoaiPhong' => 'required',
             'Gia' => 'required',
             'UIDKS' => 'required',
             'soGiuong' => 'required',
             'soLuongPhong' => 'required',
             'isMayLanh' => 'required',
-
-
         ]);
-
-
-
         $TenLoaiPhong = $request->input("TenLoaiPhong");
         $UIDKS = $request->input("UIDKS");
         $Gia = $request->input("Gia");
-
-
         $soGiuong = $request->input("soGiuong");
         $soLuongPhong = $request->input("soLuongPhong");
         $isMayLanh = $request->input("isMayLanh") == false || $request->input("isMayLanh") == null ? false : true;
-
-
-
-
         if (!empty($TenLoaiPhong)) {
 
             $loaiphong = new Loaiphong();
@@ -101,6 +88,8 @@ class LoaiPhongController extends Controller
             return response()->json(["message" => "eror"], 404);
         }
     }
+
+   
 
     // public function UpdateSLLoaiPhong(Request $request, string $UIDLoaiPhong)
     // {

@@ -20,6 +20,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool $Wifi
  * @property bool $isActive
  * @property int $MaDDDL
+ * @property string $taxcode
  * 
  * @property Chukhachsan $chukhachsan
  * @property Diadiemdulich $diadiemdulich
@@ -50,7 +51,8 @@ class Khachsan extends Model
 		'Buffet',
 		'Wifi',
 		'isActive',
-		'MaDDDL'
+		'MaDDDL',
+		'taxcode'
 	];
 
 	public function chukhachsan()

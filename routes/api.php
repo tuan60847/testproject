@@ -80,7 +80,7 @@ Route::resource('dondatphong', DonDatPhongController::class);
 Route::delete('dondatphong/{id}', [DonDatPhongController::class,'destroy']);
 Route::get('dondatphong/{id}', [DonDatPhongController::class,'show']);
 Route::get('dondatphong/findlastbyEmail/{EmailKH}', [DonDatPhongController::class,'lastItemByEmail']);
-Route::get('dondatphong/processing/dondatphong', [DonDatPhongController::class,'findDDPprocess']);
+Route::get('dondatphong/processing/dondatphong/{UIDKS}', [DonDatPhongController::class,'findDDPprocess']);
 Route::post('findhistoryddpbykh', [DonDatPhongController::class,'findHistoryDDPByKH']);
 Route::post('findhistoryddpbycks', [DonDatPhongController::class,'findHistoryDDPByCKS']);
 Route::post('acceptdondatphong', [DonDatPhongController::class,'AcceptDonDatPhong']);

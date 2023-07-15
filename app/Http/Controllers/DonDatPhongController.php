@@ -84,9 +84,10 @@ class DonDatPhongController extends Controller
         }
     }
 
-    public function findDDPprocess()
+    public function findDDPprocess(string $UIDKS)
     {
-        return Dondatphong::whereNotIn('isChecked', [0, 5])->get();
+
+        return Dondatphong::whereNotIn('isChecked', [0, 5, 6, 7, 8])->Where('UIDDatPhong', 'LIKE', '%' . $UIDKS . '%')->get();
     }
 
     public function findHistoryDDPByCKS(Request $request)
@@ -96,7 +97,7 @@ class DonDatPhongController extends Controller
         ]);
         $UIDKS = $request->input("UIDKS");
         return Dondatphong::where('isChecked', 5)
-            ->orWhereIn('isChecked', [6,7,8])
+            ->orWhereIn('isChecked', [6, 7, 8])
             ->where('UIDDatPhong', 'LIKE', '%' . $UIDKS . '%')
             ->get();
     }
@@ -108,7 +109,7 @@ class DonDatPhongController extends Controller
         ]);
         $EmailKH = $request->input("EmailKH");
         return Dondatphong::where('isChecked', 5)
-            ->orWhereIn('isChecked', [6,7,8])
+            ->orWhereIn('isChecked', [6, 7, 8])
             ->where('EmailKH', $EmailKH)
             ->get();
     }

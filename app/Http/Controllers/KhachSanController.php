@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Khachsan;
+use App\Models\Loaiphong;
+use App\Models\Phongconlai;
 use GuzzleHttp\Promise\Create;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -30,6 +32,7 @@ class KhachSanController extends Controller
                 'Wifi' => boolval($Khachsan->Wifi),
                 'Buffet' => boolval($Khachsan->Buffet),
                 'isActive' => boolval($Khachsan->isActive),
+                'taxCode' => $Khachsan->taxcode,
             ];
         }
 
@@ -60,7 +63,7 @@ class KhachSanController extends Controller
                 'Wifi' => boolval($Khachsan->Wifi),
                 'Buffet' => boolval($Khachsan->Buffet),
                 'isActive' => boolval($Khachsan->isActive),
-
+                'taxCode' => $Khachsan->taxcode,
             ];
         }
 
@@ -79,8 +82,7 @@ class KhachSanController extends Controller
             'DiaChi' => 'required',
             'SDT' => 'required',
             'MaDDDL' => 'required',
-
-
+            'taxCode' => 'required',
 
         ]);
 
@@ -92,6 +94,7 @@ class KhachSanController extends Controller
         // $dateNgaySinh = Carbon::parse("2001-07-21")->format('Y-m-d');
         $SDT = $request->input("SDT");
         $MaDDDL = $request->input("MaDDDL");
+        $Taxcode = $request->input("taxCode");
         $isActive = $request->input("isActive") == "false" || $request->input("isActive") == null ? false : true;
         $Buffet = $request->input("Buffet") == "false" || $request->input("Buffet") == null ? false : true;
         $wifi = $request->input("Wifi") == "false" || $request->input("Wifi") == null ? false : true;
@@ -109,6 +112,7 @@ class KhachSanController extends Controller
             $khachsan->Buffet = $Buffet;
             $khachsan->Wifi = $wifi;
             $khachsan->MaDDDL = $MaDDDL;
+            $khachsan->taxcode = $Taxcode;
             $khachsan->save();
 
 
@@ -128,7 +132,23 @@ class KhachSanController extends Controller
     public function show(string $id)
     {
         //
-        return Khachsan::findOrFail($id);
+    
+        $Khachsan = Khachsan::findOrFail($id);
+
+        $responseData = [
+            'UIDKS' => $Khachsan->UIDKS,
+            'TenKS' => $Khachsan->TenKS,
+            'DiaChi' => $Khachsan->DiaChi,
+            'SDT' => $Khachsan->SDT,
+            'MaDDDL' => $Khachsan->MaDDDL,
+            'Wifi' => boolval($Khachsan->Wifi),
+            'Buffet' => boolval($Khachsan->Buffet),
+            'isActive' => boolval($Khachsan->isActive),
+            'taxCode' => $Khachsan->taxcode
+        ];
+        
+
+        return response()->json($responseData);
     }
 
     /**
@@ -155,7 +175,7 @@ class KhachSanController extends Controller
             'SDT' => 'required',
             'isActive' => 'required',
             'MaDDDL' => 'required',
-
+            'taxCode' => 'required',
         ]);
 
 
@@ -166,6 +186,7 @@ class KhachSanController extends Controller
         $isActive = $request->input("isActive") == "false" || $request->input("isActive") == null ? false : true;
         $buffet = $request->input("Buffet") == "false" || $request->input("Buffet") == null ? false : true;
         $Wifi = $request->input("Wifi") == "false" || $request->input("Wifi") == null ? false : true;
+        $Taxcode = $request->input("taxCode");
 
 
         // $isAdminKH ="isAdminKH";
@@ -183,6 +204,7 @@ class KhachSanController extends Controller
             $khachsan->Buffet = $buffet;
             $khachsan->Wifi = $Wifi;
             $khachsan->MaDDDL = $MaDDDL;
+            $khachsan->taxcode = $Taxcode;
             return $khachsan->update();
 
 
@@ -201,27 +223,60 @@ class KhachSanController extends Controller
 
         $this->validate($request, [
             'Search' => 'required',
+            'NgayDatPhong' => 'required|date_format:Y-m-d',
+            'NgayTraPhong' => 'date_format:Y-m-d',
+            // 'soGiuong'=> 'required',
+            'SoLuongPhong'=>'required'
         ]);
 
 
         $Search = $request->input("Search");
-        $khachSans = Khachsan::where('TenKS', 'LIKE', '%' . $Search . '%')
-            ->orWhere('DiaChi', 'LIKE', '%' . $Search . '%')
+        $NgayDatPhong = $request->input("NgayDatPhong");
+        $NgayTraPhong = $request->input("NgayTraPhong");
+        $soGiuong = $request->input("soGiuong");
+        $SoLuongPhong = $request->input("SoLuongPhong");
+        $khachSans = Khachsan::Where('DiaChi', 'LIKE', '%' . $Search . '%')
             ->where('isActive', true)
             ->get();
+        $khachsantam = [];
+        foreach($khachSans as $khachsan){
+            $loaiphongs = Loaiphong::Where('UIDKS','=',$khachsan->UIDKS)->get();
 
-        // $isAdminKH ="isAdminKH";
-
-        if (!empty($khachSans)) {
-
-            return $khachSans;
-
-            // return response($khachsan, Response::HTTP_CREATED);
-        } else {
-            // handle the case where the image upload fails
-            // e.g. return an error response or redirect back to the form with an error message
-            return response()->json(["message" => "eror"], 404);
+            foreach ($loaiphongs as $loaiphong){
+                if($loaiphong->soGiuong==$soGiuong||$soGiuong==""){
+                    $phongconlai = Phongconlai::Where('UIDLoaiPhong','=',$loaiphong->UIDLoaiPhong)->Where('Ngay','=',$NgayDatPhong)->first();
+                    if(!$phongconlai){
+                        if($loaiphong->soLuongPhong>intval($SoLuongPhong)){
+                            $khachsantam[]=$khachsan;
+                            break;
+                        }     
+                    }else if($phongconlai->SoLuong > intval($SoLuongPhong)){
+                        $khachsantam[]=$khachsan;
+                        break;
+                    }
+                }
+                
+            }
+            
         }
+        $responseData = [];
+        foreach ($khachsantam as $Khachsan) {
+            $responseData[] = [
+                'UIDKS' => $Khachsan->UIDKS,
+                'TenKS' => $Khachsan->TenKS,
+                'DiaChi' => $Khachsan->DiaChi,
+                'SDT' => $Khachsan->SDT,
+                'MaDDDL' => $Khachsan->MaDDDL,
+                'Wifi' => boolval($Khachsan->Wifi),
+                'Buffet' => boolval($Khachsan->Buffet),
+                'isActive' => boolval($Khachsan->isActive),
+                'taxCode' => $Khachsan->taxcode,
+            ];
+        }
+
+        return response()->json($responseData);
+        
+        // $isAdminKH ="isAdminKH";
     }
 
     /**

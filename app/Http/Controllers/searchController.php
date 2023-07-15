@@ -50,4 +50,7 @@ class searchController extends Controller
             return response()->json(["message" => "eror"], 404);
         }
     }
+
+
+    
 }
