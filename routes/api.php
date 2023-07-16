@@ -10,6 +10,7 @@ use App\Http\Controllers\Api\HinhAnhThanhPhoController;
 use App\Http\Controllers\Api\ImageKSController;
 use App\Http\Controllers\Api\ImageLoaiPhongController;
 use App\Http\Controllers\ChuKhachSanController;
+use App\Http\Controllers\commonControl;
 use App\Http\Controllers\CTDDPController;
 use App\Http\Controllers\DiaDiemDuLichController;
 use App\Http\Controllers\DonDatPhongController;
@@ -170,6 +171,14 @@ Route::resource('phongconlai', PhongConLaiController::class);
 
 Route::post('timkiem',[searchController::class, 'TimKiem']);
 
+
+Route::get('sendmailthanksuser/{email}',[commonControl::class, 'SendMailThanksUser']);
+Route::get('sendmailthankscks/{email}',[commonControl::class, 'SendMailThanksCKS']);
+Route::get('sendmailfogetpassworduser/{email}',[commonControl::class, 'SendMailFogetPasswordUser']);
+Route::post('reset-password-user',[commonControl::class, 'ResetPasswordUser']);
+Route::get('reset-password-user/{email}&&{newpassword}',[commonControl::class, 'ResetPasswordUserGet']);
+Route::get('sendmailfogetpasswordcks/{email}',[commonControl::class, 'SendMailFogetPasswordCKS']);
+Route::get('reset-password-cks/{email}&&{newpassword}',[commonControl::class, 'ResetPasswordCKSGet']);
 
 Route::get('favorite/{id}', [FavoriteController::class,'show']);
 Route::post('setfavorite', [FavoriteController::class,'SetFavorite']);

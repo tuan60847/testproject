@@ -36,11 +36,11 @@ return [
     'mailers' => [
         'smtp' => [
             'transport' => 'smtp',
-            'host' =>  'smtp.mailgun.org',
+            'host' =>  'smtp.gmail.com',
             'port' =>  587,
             'encryption' =>  'tls',
             'username' => "tuanhoang60847@gmail.com",
-            'password' => "wyolaqidotrojywq",
+            'password' => "qfbsjgraaymrvkxf",
             'timeout' => null,
             'local_domain' => env('MAIL_EHLO_DOMAIN'),
         ],
