@@ -1,15 +1,15 @@
-@extends('layout')
+@extends('layoutKS')
 @section('content')
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Thành phố</h1>
+    <h1 class="h3 mb-2 text-gray-800">Loại phòng</h1>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Thành phố
-                <a href="{{url('/adminKS/loaiphong/create')}}" class="float-right btn-primary btn-sm">Thêm mới</a>
+            <h6 class="m-0 font-weight-bold text-primary">Loại phòng
+                <a @if(Session::has('cksData')) href="{{url('/adminKS/loaiphong/findbyKS/'.Session::get('cksData')->ADMINKS.'/create')}}" @endif class="float-right btn-primary btn-sm">Thêm mới</a>
             </h6>
         </div>
         <div class="card-body">
@@ -40,8 +40,9 @@
                         </tr>
                     </tfoot>
                     <tbody>
-                        @if($data )
-                        @foreach($data as $d)
+
+                        @if($loaiphong)
+                        @foreach($loaiphong as $d)
                         <tr>
                             <td>{{$d->UIDLoaiPhong}}</td>
                             <td>{{$d->TenLoaiPhong}}</td>
@@ -49,11 +50,12 @@
                             <td>{{$d->soGiuong}}</td>
                             <td>{{$d->Gia}}</td>
                             <td>{{$d->soLuongPhong}}</td>
-                            <td>{{count($d->hinhanhtps)}}</td>
+                            <td>{{count($d->hinhanhloaiphongs)}}</td>
                             <td>
-                                <a href="{{url('adminKS/loaiphong/'.$d->UIDLoaiPhong)}}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
-                                <a href="{{url('adminKS/loaiphong/'.$d->UIDLoaiPhong.'/edit')}}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
-                                <a onclick="confirm('Bạn có chắc muốn xóa loại phòng này?')" href="{{url('admin/loaiphong/'.$d->UIDLoaiPhong.'/delete')}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                <a href="{{url('adminKS/loaiphong/findbyKS/'.$d->UIDKS.'/show/'.$d->UIDLoaiPhong)}}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
+                                <a href="{{url('adminKS/loaiphong/findbyKS/'.$d->UIDLoaiPhong.'/edit')}}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
+
+                                <a onclick="confirm('Bạn có chắc muốn xóa loại phòng này?')" href="{{url('adminKS/loaiphong/findbyKS/'.$d->UIDKS.'/'.$d->UIDLoaiPhong.'/delete')}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>
                         @endforeach

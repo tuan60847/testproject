@@ -37,8 +37,9 @@
                         </tr>
                     </tfoot>
                     <tbody>
-                        @if($data )
+                        @if($data)
                         @foreach($data as $d)
+                        @if($d->ADMINKS != '1')
                         <tr>
                             <td>{{$d->ADMINKS}}</td>
                             <td>{{$d->HoTen}}</td>
@@ -53,6 +54,7 @@
                                 <a onclick="confirm('Bạn có chắc muốn xóa thành phố này?')" href="{{url('admin/sukien/'.$d->maSuKien.'/delete')}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a> -->
                             </td>
                         </tr>
+                        @endif
                         @endforeach
                         @endif
                     </tbody>

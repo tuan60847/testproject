@@ -2,12 +2,15 @@
 
 use App\Http\Controllers\Api\HinhAnhThanhPhoController;
 use App\Http\Controllers\ChuKhachSanController;
+use App\Http\Controllers\CTDDPController;
 use App\Http\Controllers\DiaDiemDuLichController;
 use App\Http\Controllers\DonDatPhongController;
 use App\Http\Controllers\KhachHangController;
 use App\Http\Controllers\KhachSanController;
+use App\Http\Controllers\LoaiPhongController;
 use App\Http\Controllers\SuKienController;
 use App\Http\Controllers\ThanhPhoController;
+use App\Models\Dondatphong;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -57,17 +60,33 @@ Route::get('/admin/imgthanhpho/delete/{MaTP}', [ThanhPhoController::class, 'dest
 Route::get('/admin/seach');
 
 //admin khách sạn
-Route::get('adminKS/', function () {
+Route::get('adminKS/{ADMINKS}', function () {
     return view('deshbord');
 });
 //Đăng nhập 
 
-Route::get('login', [ChuKhachSanController::class, 'login']);
-Route::post('login', [ChuKhachSanController::class, 'check_loginWeb']);
+Route::get('login/', [ChuKhachSanController::class, 'login']);
+Route::post('login/', [ChuKhachSanController::class, 'check_loginWeb']);
 Route::get('logout', [ChuKhachSanController::class, 'logout']);
 
-//Đơn đặt hàng
-Route::resource('/adminKS/dondatphong', DonDatPhongController::class); 
 
 
-//Đăng nhập
+
+//loại phòng
+
+Route::get('adminKS/loaiphong/findbyKS/{UIDKS}', [LoaiPhongController::class, 'getloaiphongbyks']);
+Route::resource('adminKS/loaiphong/findbyKS', LoaiPhongController::class);
+Route::get('adminKS/loaiphong/findbyKS/{UIDKS}/show/{UIDLoaiPhong}', [LoaiPhongController::class, 'show']);
+Route::post('adminKS/loaiphong/findbyKS/{UIDKS}', [LoaiPhongController::class, 'store']);
+Route::get('adminKS/loaiphong/findbyKS/{UIDKS}/{UIDLoaiPhong}/delete', [LoaiPhongController::class, 'destroy']);
+Route::put('adminKS/loaiphong/findbyKS/{UIDKS}/{UIDLoaiPhong}', [LoaiPhongController::class, 'update']);
+//Đơn đặt phòng
+Route::resource('adminKS/dondatphong', DonDatPhongController::class);
+// Route::post('adminKS/dondadat/findbyKS', [DonDatPhongController::class, 'checkDonDatPhong']);
+// Route::post('adminKS/dondahoanthanh/findbyKS', [DonDatPhongController::class, 'checkDonDatPhong']);
+Route::post('adminKS/dondadat/findbyKS', [DonDatPhongController::class, 'checkDonDatPhong'])->name('adminKS.dondadat.findbyKS');
+Route::post('adminKS/dondangdienra/findbyKS', [DonDatPhongController::class, 'dondangdienra']);
+Route::post('adminKS/dondahuy/findbyKS', [DonDatPhongController::class, 'dondahuy']);
+Route::post('adminKS/lichsu/findbyKS', [DonDatPhongController::class, 'lichsu']);
+// Chi thiết đơn đặt phòng
+Route::get('adminKS/dondadat/findbyKS/{MaDDP}', [CTDDPController::class, 'show']);

@@ -147,9 +147,9 @@ class ChuKhachSanController extends Controller
                 Cookie::queue('adminpwd', $request->Password, 1440);
             }
             if ($cksData->ADMINKS === "1") {
-                return redirect('admin');
+                return redirect('admin/');
             } else if ($cksData->ADMINKS != "1") {
-                return redirect('adminKS');
+                return redirect('adminKS/' . $cksData->ADMINKS);
             }
         } else {
             return redirect('login')->with('msg', 'Yêu cầu nhập email/password!');

@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('layoutKS')
 @section('content')
 <!-- Begin Page Content -->
 <div class="container-fluid">
@@ -6,31 +6,48 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Xem thành phố
-                <a href="{{url('/admin/thanhpho')}}" class="float-right btn-primary btn-sm">Tất cả</a>
+            <h6 class="m-0 font-weight-bold text-primary">Xem Loại phòng
+                @if(Session::has('cksData'))
+                <a href="{{url('/adminKS/loaiphong/findbyKS/'.Session::get('cksData')->ADMINKS)}}" class="float-right btn-primary btn-sm">Tất cả</a>
+                @endif
             </h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <form action="{{url('/admin/thanhpho')}}" method="GET">
+                @if(Session::has('cksData'))
+                <form action="{{url('/adminKS/loaiphong/findbyKS/'.Session::get('cksData')->ADMINKS)}}" method="GET">
+                    @endif
                     @csrf
                     <table class="table table-bordered">
+
                         <tr>
-                            <th>Tên thành phố</th>
-                            <td>{{$data->TenTP}}</td>
+                            <th>Tên loại phòng</th>
+                            <td>{{$loaiphongs->TenLoaiPhong}}</td>
                         </tr>
                         <tr>
-                            <th>Mô tả</th>
-                            <td>{{$data->mota}}</td>
+                            <th>Máy lạnh</th>
+                            <td>{{$loaiphongs->isMayLanh}}</td>
+                        </tr>
+                        <tr>
+                            <th>Số giường</th>
+                            <td>{{$loaiphongs->soGiuong}}</td>
+                        </tr>
+                        <tr>
+                            <th>Giá phòng</th>
+                            <td>{{$loaiphongs->Gia}}</td>
+                        </tr>
+                        <tr>
+                            <th>Số lượng</th>
+                            <td>{{$loaiphongs->soLuongPhong}}</td>
                         </tr>
                         <tr>
                             <th>Hình ảnh</th>
                             <td>
                                 <table class="table table-bordered mt-3">
                                     <tr>
-                                        @foreach($data->hinhanhtp as $img)
-                                        <td class="imgcol{{$img->MaTP}}">
-                                            <img width="150" height="200" src="{{asset('storage/app/'.$img->src)}}">
+                                        @foreach($loaiphongs->hinhanhloaiphongs as $img)
+                                        <td class="imgcol{{$img->UIDLoaiPhong}}">
+                                            <img width="150" height="200" src="{{asset('storage/app'.$img->src)}}">
                                         </td>
                                         @endforeach
                                     </tr>

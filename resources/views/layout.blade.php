@@ -70,7 +70,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Thành phần quản lý:</h6>
                         <a class="collapse-item" href="{{url('admin/khthanthiet')}}">Chủ khách sạn</a>
-                        <a class="collapse-item" href="{{url('/admin/khtiemnang')}}">Khách hàng tiềm năng</a>
+                        <a class="collapse-item" href="{{url('/admin/khtiemnang')}}">Khách hàng </a>
                     </div>
                 </div>
             </li>

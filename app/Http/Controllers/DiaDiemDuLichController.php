@@ -28,25 +28,25 @@ class DiaDiemDuLichController extends Controller
     }
     public function store(Request $request)
     {
-        $request->validate([
-            'TenDiaDiemDuLich' => 'required',
-            'DiaChi' => 'required',
-            'MoTa' => 'required',
-            'GiaTien' => 'required',
-            'MaTP' => 'required',
-            'ThoiGianHoatDong' => 'required',
-        ]);
+        // $request->validate([
+        //     'TenDiaDiemDuLich' => 'required',
+        //     'DiaChi' => 'required',
+        //     'MoTa' => 'required',
+        //     'GiaTien' => 'required',
+        //     'MaTP' => 'required',
+        //     'ThoiGianHoatDong' => 'required',
+        // ]);
 
         $data = new Diadiemdulich();
-        $data = new Thanhpho();
-        $data->TenDiaDiemDuLich = $request->DiaDiemDuLich;
+        //  $dataTP = new Thanhpho();
+        $data->TenDiaDiemDuLich = $request->TenDiaDiemDuLich;
         $data->DiaChi = $request->DiaChi;
         $data->MoTa = $request->MoTa;
         $data->GiaTien = $request->GiaTien;
         $data->MaTP = $request->MaTP;
         $data->ThoiGianHoatDong = $request->ThoiGianHoatDong;
         $data->save();
-        return redirect('createDDDl')->with('success', 'data has been');
+        return redirect('admin/diadiemdulich/create')->with('success', 'Địa điểm du lịch đã được thêm');
 
         foreach ($request->file('imgs') as $img) {
             $imgPath = $img->store('public/imgs');
@@ -57,7 +57,7 @@ class DiaDiemDuLichController extends Controller
         }
     }
 
-    
+
 
     /**
      * Display the specified resource.
@@ -156,19 +156,19 @@ class DiaDiemDuLichController extends Controller
     public function TimDiaDiemDuLich(Request $request)
     {
         //
-    
+
         $this->validate($request, [
             'Search' => 'required',
         ]);
-        
-        
-        $Search = $request->input("Search");   
+
+
+        $Search = $request->input("Search");
         $diadiemdulichs = Diadiemdulich::where('TenDiaDiemDuLich', 'LIKE', '%' . $Search . '%')
-                    ->orWhere('DiaChi', 'LIKE', '%' . $Search . '%')
-                    ->get();
-        
+            ->orWhere('DiaChi', 'LIKE', '%' . $Search . '%')
+            ->get();
+
         // $isAdminKH ="isAdminKH";
-        
+
         if (!empty($diadiemdulichs)) {
 
             return $diadiemdulichs;
@@ -177,10 +177,8 @@ class DiaDiemDuLichController extends Controller
         } else {
             // handle the case where the image upload fails
             // e.g. return an error response or redirect back to the form with an error message
-            return response()->json(["message"=>"eror"],404);
+            return response()->json(["message" => "eror"], 404);
         }
-       
-
     }
 
 

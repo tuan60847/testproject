@@ -19,7 +19,8 @@ class DonDatPhongController extends Controller
      */
     public function index()
     {
-        return Dondatphong::all();
+        $dondatphong = Dondatphong::all();
+        return view('dondatphong.index', ['dondatphong' => $dondatphong]);
     }
 
     /**
@@ -96,7 +97,7 @@ class DonDatPhongController extends Controller
         ]);
         $UIDKS = $request->input("UIDKS");
         return Dondatphong::where('isChecked', 5)
-            ->orWhereIn('isChecked', [6,7,8])
+            ->orWhereIn('isChecked', [6, 7, 8])
             ->where('UIDDatPhong', 'LIKE', '%' . $UIDKS . '%')
             ->get();
     }
@@ -108,7 +109,7 @@ class DonDatPhongController extends Controller
         ]);
         $EmailKH = $request->input("EmailKH");
         return Dondatphong::where('isChecked', 5)
-            ->orWhereIn('isChecked', [6,7,8])
+            ->orWhereIn('isChecked', [6, 7, 8])
             ->where('EmailKH', $EmailKH)
             ->get();
     }
@@ -126,8 +127,9 @@ class DonDatPhongController extends Controller
      */
     public function show(string $id)
     {
-        //
-        return Dondatphong::findOrFail($id);
+        $DonDatPhong = Dondatphong::find($id);
+        return view('dondatphong.show', ['dondatphong' => $DonDatPhong]);
+        // return Dondatphong::findOrFail($id);
     }
 
     /**
@@ -325,5 +327,141 @@ class DonDatPhongController extends Controller
         $dondatphong->isChecked = 7;
         $dondatphong->update();
         return response()->json($dondatphong);
+    }
+    public function checkDonDatPhong(Request $request)
+    {
+        // $this->validate($request, [
+        //     'UIDKS' => 'required',
+        // ]);
+        // $UIDKS = $request->input("UIDKS");
+        // $statuses = [
+        //     0 => 'Chưa xác nhận',
+        //     1 => 'Đã xác nhận',
+        //     2 => 'Xác nhận của khách sạn',
+        // ];
+
+        // $dondatphong = Dondatphong::where('isChecked', array_search('Đã xác nhận', $statuses))
+        //     ->where('UIDDatPhong', 'LIKE', '%' . $UIDKS . '%')->get();
+
+        // if ($dondatphong->count() > 0) {
+        //     return view('dondatphong.index', ['dondatphong' => $dondatphong]);
+        // } else {
+        //     $dondatphong = Dondatphong::where('isChecked', array_search('Xác nhận của khách sạn', $statuses))
+        //         ->where('UIDDatPhong', 'LIKE', '%' . $UIDKS . '%')->get();
+        //     return redirect('/adminKS/dondahoanthanh/findbyKS/', ['dondahoanthanh' => $dondatphong]);
+        // }
+        $this->validate($request, [
+            'UIDKS' => 'required',
+        ]);
+        $UIDKS = $request->input("UIDKS");
+        $statuses = [
+            1 => 'Đã xác nhận',
+            2 => 'Xác nhận của khách hàng',
+            3 => 'Check in',
+            4 => 'Check out',
+        ];
+        $searchValues = ['Đã xác nhận', 'Xác nhận của khách hàng'];
+
+        $foundIndexes = [];
+        foreach ($searchValues as $searchValue) {
+            $foundIndex = array_search($searchValue, $statuses);
+            if ($foundIndex !== false) {
+                $foundIndexes[] = $foundIndex;
+            }
+        }
+
+        $dondatphong = Dondatphong::whereIn('isChecked', $foundIndexes)->where('UIDDatPhong', 'LIKE', '%' . $UIDKS . '%')->get();
+
+        if ($dondatphong->count() > 0) {
+            return view('dondatphong.index', ['dondatphong' => $dondatphong]);
+        }
+    }
+    public function dondangdienra(Request $request)
+    {
+        $this->validate($request, [
+            'UIDKS' => 'required',
+        ]);
+        $UIDKS = $request->input("UIDKS");
+        // $statuses = [
+        //     1 => 'Đã xác nhận',
+        //     2 => 'Xác nhận của khách hàng',
+        //     3 => 'Check in',
+        //     4 => 'Check out',
+        // ];
+        // $searchValues = ['Đã xác nhận', 'Xác nhận của khách hàng'];
+        // $foundIndexes = [];
+        // foreach ($searchValues as $searchValue) {
+        //     $foundIndex = array_search($searchValue, $statuses);
+        //     if ($foundIndex !== false) {
+        //         $foundIndexes[] = $foundIndex;
+        //     }
+        // }
+
+        // $dondatphong = Dondatphong::where('isChecked', array_search('Check in', $statuses))->where('UIDDatPhong', 'LIKE', '%' . $UIDKS . '%')->get();
+
+        // if ($dondatphong->count() > 0) {
+        //     return view('dondatphong.dondahoanthanh', ['dondatphong' => $dondatphong]);
+        // }
+        $statuses = [
+            1 => 'Đã xác nhận',
+            2 => 'Xác nhận của khách hàng',
+            3 => 'Check in',
+            4 => 'Check out',
+            5 => 'Hoàn thành',
+            6 => 'Khách hàng yêu cầu hủy',
+            7 => 'Khách sạn yêu cầu hủy',
+            8 => 'Hoàn thành từ chối',
+        ];
+        if ($dondatphong = Dondatphong::where('isChecked', 3)->where('UIDDatPhong', 'LIKE', '%' . $UIDKS . '%')->get()) {
+            return view('dondatphong.dondahoanthanh', ['dondatphong' => $dondatphong]);
+        }
+    }
+    public function dondahuy(Request $request)
+    {
+        $this->validate($request, [
+            'UIDKS' => 'required',
+        ]);
+        $UIDKS = $request->input("UIDKS");
+        $statuses = [
+            1 => 'Đã xác nhận',
+            2 => 'Xác nhận của khách hàng',
+            6 => 'Người dùng đã hủy',
+            7 => 'Khách sạn đã hủy',
+        ];
+        $searchValues = ['Người dùng đã hủy', 'Khách sạn đã hủy'];
+
+        $foundIndexes = [];
+        foreach ($searchValues as $searchValue) {
+            $foundIndex = array_search($searchValue, $statuses);
+            if ($foundIndex !== false) {
+                $foundIndexes[] = $foundIndex;
+            }
+        }
+
+        $dondatphong = Dondatphong::whereIn('isChecked', $foundIndexes)->where('UIDDatPhong', 'LIKE', '%' . $UIDKS . '%')->get();
+
+        if ($dondatphong->count() > 0) {
+            return view('dondatphong.dondahuy', ['dondatphong' => $dondatphong]);
+        }
+    }
+    public function lichsu(Request $request)
+    {
+        $this->validate($request, [
+            'UIDKS' => 'required',
+        ]);
+        $UIDKS = $request->input("UIDKS");
+        $statuses = [
+            1 => 'Đã xác nhận',
+            2 => 'Xác nhận của khách hàng',
+            3 => 'Check in',
+            4 => 'Check out',
+            5 => 'Hoàn thành',
+            6 => 'Khách hàng yêu cầu hủy',
+            7 => 'Khách sạn yêu cầu hủy',
+            8 => 'Hoàn thành từ chối',
+        ];
+        if ($dondatphong = Dondatphong::where('isChecked', 5)->where('UIDDatPhong', 'LIKE', '%' . $UIDKS . '%')->get()) {
+            return view('dondatphong.lichsu', ['dondatphong' => $dondatphong]);
+        }
     }
 }

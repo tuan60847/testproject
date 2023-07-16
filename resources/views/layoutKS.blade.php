@@ -11,6 +11,12 @@
 
     <title>Admin khách sạn</title>
 
+    @if(!Session::has('cksData'))
+    <script type="text/javascript">
+        window.location.href = "{{url('login')}}";
+    </script>
+    @endif
+
     <!-- Custom fonts for this template-->
     <link href="{{asset('vendor/fontawesome-free/css/all.min.css')}}" rel="stylesheet" type="text/css">
     <link href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i" rel="stylesheet">
@@ -53,20 +59,44 @@
             <div class="sidebar-heading">
                 Thành phần
             </div>
-
             <!-- Nav Item - Pages Collapse Menu -->
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo">
                     <i class="fas fa-male"></i>
                     <span>Quản lý đơn đặt phòng</span>
                 </a>
+                @csrf
                 <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Thành phần quản lý:</h6>
-                        <a class="collapse-item" href="{{url('')}}">Đơn đã đặt</a>
-                        <a class="collapse-item" href="{{url('')}}">Đơn đã hoàn thành</a>
-                        <a class="collapse-item" href="{{url('')}}">Đơn đã hủy</a>
-                        <a class="collapse-item" href="{{url('')}}">Lịch sử đặ phòng</a>
+                        <a href="#" class="collapse-item" onclick="event.preventDefault(); document.getElementById('dondadat-form').submit();">Đơn đã đặt</a>
+                        <form id="dondadat-form" action="{{ url('/adminKS/dondadat/findbyKS') }}" method="POST" style="display: none;">
+                            @csrf
+                            @if(Session::has('cksData'))
+                            <input type="hidden" name="UIDKS" value="{{ Session::get('cksData')->ADMINKS }}">
+                            @endif
+                        </form>
+                        <a href="#" class="collapse-item" onclick="event.preventDefault(); document.getElementById('dondahoathanh-form').submit();">Đơn đã check in</a>
+                        <form id="dondahoathanh-form" action="{{ url('/adminKS/dondangdienra/findbyKS') }}" method="POST" style="display: none;">
+                            @csrf
+                            @if(Session::has('cksData'))
+                            <input type="hidden" name="UIDKS" value="{{ Session::get('cksData')->ADMINKS }}">
+                            @endif
+                        </form>
+                        <a href="#" class="collapse-item" onclick="event.preventDefault(); document.getElementById('dondahuy-form').submit();">Đơn đã hủy</a>
+                        <form id="dondahuy-form" action="{{ url('/adminKS/dondahuy/findbyKS') }}" method="POST" style="display: none;">
+                            @csrf
+                            @if(Session::has('cksData'))
+                            <input type="hidden" name="UIDKS" value="{{ Session::get('cksData')->ADMINKS }}">
+                            @endif
+                        </form>
+                        <a href="#" class="collapse-item" onclick="event.preventDefault(); document.getElementById('lichsu-form').submit();">Lịch sử</a>
+                        <form id="lichsu-form" action="{{ url('/adminKS/lichsu/findbyKS') }}" method="POST" style="display: none;">
+                            @csrf
+                            @if(Session::has('cksData'))
+                            <input type="hidden" name="UIDKS" value="{{ Session::get('cksData')->ADMINKS }}">
+                            @endif
+                        </form>
                     </div>
                 </div>
             </li>
@@ -77,13 +107,17 @@
                     <i class="fas fa-fw fa-cog"></i>
                     <span>Quản lý phòng</span>
                 </a>
+                @csrf
+                <!-- @if(Session::has('cksData'))
+                @data=cksData->ADMINKS -->
                 <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordionSidebar">
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Thành phần quản lý:</h6>
-                        <a class="collapse-item" href="{{url('')}}">Loại phòng</a>
-                        <a class="collapse-item" href="{{url('')}}">Phòng còn lại</a>
+                        <a class="collapse-item" @if(Session::has('cksData')) href="{{url('/adminKS/loaiphong/findbyKS/'.Session::get('cksData')->ADMINKS)}}" @endif method="GET">Loại phòng</a>
+                        <a class="collapse-item" @if(Session::has('cksData')) href="{{url('/adminKS/phongconlai/findbyKS/'.Session::get('cksData')->ADMINKS)}}" @endif>Phòng còn lại</a>
                     </div>
                 </div>
+                <!-- @endif -->
             </li>
             <li class="nav-item">
                 <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseUtilities" aria-expanded="true" aria-controls="collapseUtilities">
@@ -117,7 +151,7 @@
                     <div class="bg-white py-2 collapse-inner rounded">
                         <h6 class="collapse-header">Login Screens:</h6>
                         <a class="collapse-item" href="{{url('login')}}">Login</a>
-                        <a class="collapse-item" href="register.html">Register</a>
+                        <a class="collapse-item" href="{{url('register')}}">Register</a>
                         <a class="collapse-item" href="forgot-password.html">Forgot Password</a>
                         <div class="collapse-divider"></div>
                         <h6 class="collapse-header">Other Pages:</h6>

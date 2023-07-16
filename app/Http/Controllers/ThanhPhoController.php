@@ -23,6 +23,12 @@ class ThanhPhoController extends Controller
         return view('thanhpho.index', ['data' => $data]);
     }
 
+    public function indexWeb()
+    {
+        $data = Thanhpho::all();
+        return view('thanhpho.index', ['data' => $data]);
+    }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -72,18 +78,18 @@ class ThanhPhoController extends Controller
     public function TimThanhPho(Request $request)
     {
         //
-    
+
         $this->validate($request, [
             'Search' => 'required',
         ]);
-        
-        
-        $Search = $request->input("Search");   
+
+
+        $Search = $request->input("Search");
         $thanhphos = Thanhpho::where('TenTP', 'LIKE', '%' . $Search . '%')
-                    ->get();
-        
+            ->get();
+
         // $isAdminKH ="isAdminKH";
-        
+
         if (!empty($thanhphos)) {
 
             return $thanhphos;
@@ -92,10 +98,8 @@ class ThanhPhoController extends Controller
         } else {
             // handle the case where the image upload fails
             // e.g. return an error response or redirect back to the form with an error message
-            return response()->json(["message"=>"eror"],404);
+            return response()->json(["message" => "eror"], 404);
         }
-       
-
     }
 
     /**
@@ -149,3 +153,4 @@ class ThanhPhoController extends Controller
         return response()->json(['bool' => true]);
     }
 }
+

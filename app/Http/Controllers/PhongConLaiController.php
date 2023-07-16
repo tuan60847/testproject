@@ -270,6 +270,7 @@ class PhongConLaiController extends Controller
 
 
         return response()->json($phongconlai);
+        
     }
 
 }

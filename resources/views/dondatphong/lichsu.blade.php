@@ -46,7 +46,7 @@
                             <td>{{$d->NgayDatPhong}}</td>
                             <td>{{$d->TienCoc}}</td>
                             <td>{{$d->tongtien}}</td>
-                            <td>{{$d->isChecked==1?"Đã xác nhận":"Chưa xác nhận"}}</td>
+                            <td>{{$d->isChecked==5?"Đơn hoàn thành":"Chưa xác nhận"}}</td>
 
                             <td>
                                 <a href="{{url('adminKS/dondadat/findbyKS/'.$d->UIDDatPhong)}}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>

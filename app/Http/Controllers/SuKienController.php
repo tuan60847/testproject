@@ -35,15 +35,15 @@ class SuKienController extends Controller
     public function store(Request $request)
     {
         //     //
-        //     $this->validate($request, [
+        $request->validate([
 
-        //         'TenSuKien' => 'required',
-        //         'Mota' => 'required',
-        //         'NgayBatDau' => 'required|date_format:Y-m-d',
-        //         'MaDDDL' => 'required',
+            'TenSuKien' => 'required',
+            'Mota' => 'required',
+            'NgayBatDau' => 'required|date_format:Y-m-d',
+            'MaDDDL' => 'required',
 
 
-        //     ]);
+        ]);
 
         //     // $image_path =(string) $request->file('image')->store('image/khachsan', 'public');
 
@@ -82,13 +82,14 @@ class SuKienController extends Controller
         //         return response()->json(["message"=>"eror"],404);
         //     }
         $data = new Sukien();
-        $data = new Diadiemdulich();
+        //  $data = new Diadiemdulich();
         $data->TenSuKien = $request->TenSuKien;
-        $data->MoTa = $request->MoTa;
+        $data->Mota = $request->Mota;
         $data->NgayBatDau = $request->NgayBatDau;
         $data->NgayKetThuc = $request->NgayKetThuc;
         $data->MaDDDL = $request->MaDDDL;
         $data->save();
+
         foreach ($request->file('imgs') as $img) {
             $imgPath = $img->store('public/imgs');
             $imgData = new Hinhanhsukien();
@@ -96,7 +97,6 @@ class SuKienController extends Controller
             $imgData->src = $imgPath;
             $imgData->save();
         }
-
         return redirect('admin/sukien/create')->with('success', 'Thêm thành công');
     }
 
@@ -188,7 +188,7 @@ class SuKienController extends Controller
                 $imgData->save();
             }
         }
-        return redirect('admin/sukien/' . $id . '/edit')->with('success', 'Thành phố đã được cập nhật');
+        return redirect('admin/sukien/' . $id . '/edit')->with('success', 'Sự kiện đã được cập nhật');
     }
 
     /**
@@ -196,7 +196,7 @@ class SuKienController extends Controller
      */
     public function destroy(string $id)
     {
-        Sukien::where('MaDDDL', $id)->delete();
+        Sukien::where('maSuKien', $id)->delete();
         return redirect('admin/sukien/')->with('success', 'Sự kiện đã được xóa');
     }
     public function destroy_image($img_id)

@@ -1,4 +1,4 @@
-@extends('layout')
+@extends('layoutKS')
 @section('content')
 <!-- Begin Page Content -->
 <div class="container-fluid">
@@ -6,8 +6,8 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Thêm địa điểm du lịch
-                <a href="{{url('/admin/diadiemdulich')}}" class="float-right btn-primary btn-sm">Tất cả</a>
+            <h6 class="m-0 font-weight-bold text-primary">Thêm loại phòng
+                <a @if(Session::has('cksData')) href="{{url('/adminKS/loaiphong/findbyKS/'. Session::get('cksData')->ADMINKS)}}" @endif class="float-right btn-primary btn-sm">Tất cả</a>
             </h6>
         </div>
         <div class="card-body">
@@ -20,35 +20,33 @@
             <p class="text-success">{{session('success')}}</p>
             @endif
             <div class="table-responsive">
-                <form action="{{url('/admin/diadiemdulich/')}}" method="POST" enctype="multipart/form-data">
+
+                <form @if(Session::has('cksData')) action="{{url('/adminKS/loaiphong/findbyKS/'.Session::get('cksData')->ADMINKS.'/')}}" @endif method="POST" enctype="multipart/form-data">
+
                     @csrf
                     <table class="table table-bordered">
                         <tr>
-                            <th>Tên địa điểm du lịch</th>
-                            <td><input type="text" name="TenDiaDiemDuLich" class="form-control"></td>
+                            <th>Tên loại phòng</th>
+                            <td><input type="text" name="TenLoaiPhong" class="form-control"></td>
                         </tr>
                         <tr>
-                            <th>Địa chỉ</th>
-                            <td><input type="text" name="DiaChi" class="form-control"></td>
+                            <th>Máy lạnh</th>
+                            <td><input type="text" name="isMayLanh" class="form-control"></td>
                         </tr>
                         <tr>
-                            <th>Mô tả</th>
-                            <td><textarea name="MoTa" id="" cols="30" rows="10" class="form-control"></textarea></td>
+                            <th>Số giường</th>
+                            <td><input type="text" name="soGiuong" class="form-control"></td>
                         </tr>
                         <tr>
-                            <th>Thời gian hoạt động</th>
-                            <td><input type="text" name="ThoiGianHoatDong" class="form-control"></td>
+                            <th>Giá phòng</th>
+                            <td><input type="text" name="Gia" class="form-control"></td>
                         </tr>
                         <tr>
-                            <th>Giá vé</th>
-                            <td><input type="text" name="GiaTien" class="form-control"></td>
+                            <th>Số lượng</th>
+                            <td><input type="text" name="soLuongPhong" class="form-control"></td>
                         </tr>
                         <tr>
-                            <th>Mã thành phố</th>
-                            <td><input type="text" name="MaTP" class="form-control"></td>
-                        </tr>
-                        <tr>
-                            <th>Hình thành phố</th>
+                            <th>Hình loại phòng</th>
                             <td><input type="file" multiple name="imgs[]"></td>
                         </tr>
                         <tr>
