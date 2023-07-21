@@ -89,7 +89,8 @@ Route::post('canceldondatphongbyuser', [DonDatPhongController::class,'CancelDonD
 Route::post('canceldondatphongbychukhachsan', [DonDatPhongController::class,'CancelDonDatPhongByChukhachSan']);
 Route::post('dondatphong', [DonDatPhongController::class,'store']);
 Route::put('dondatphong/{id}', [DonDatPhongController::class,'update']);
-
+Route::post('getddpnoprocessbyuser', [DonDatPhongController::class,'getDDPNoProcessByUSer']);
+Route::post('findddpinprocessbyuser', [DonDatPhongController::class,'findDDPInProcessByUser']);
 
 
 
@@ -179,6 +180,9 @@ Route::post('reset-password-user',[commonControl::class, 'ResetPasswordUser']);
 Route::get('reset-password-user/{email}&&{newpassword}',[commonControl::class, 'ResetPasswordUserGet']);
 Route::get('sendmailfogetpasswordcks/{email}',[commonControl::class, 'SendMailFogetPasswordCKS']);
 Route::get('reset-password-cks/{email}&&{newpassword}',[commonControl::class, 'ResetPasswordCKSGet']);
+Route::post('sendmaildoneddp',[commonControl::class, 'SendMailDoneDDP']);
+Route::post('sendmaildeclinedddp',[commonControl::class, 'SendMailDeclinedDDP']);
+
 
 Route::get('favorite/{id}', [FavoriteController::class,'show']);
 Route::post('setfavorite', [FavoriteController::class,'SetFavorite']);

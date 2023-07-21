@@ -90,6 +90,18 @@ class DonDatPhongController extends Controller
         return Dondatphong::whereNotIn('isChecked', [0, 5, 6, 7, 8])->Where('UIDDatPhong', 'LIKE', '%' . $UIDKS . '%')->get();
     }
 
+    public function findDDPInProcessByUser(Request $request)
+    {
+        $this->validate($request, [
+            'EmailKH' => 'required',
+        ]);
+        $EmailKH = $request->input("EmailKH");
+        return Dondatphong::whereNotIn('isChecked', [5, 6, 7, 8])
+            ->where('EmailKH', $EmailKH)
+            ->orderBy('NgayDatPhong', 'ASC')
+            ->get();
+    }
+
     public function findHistoryDDPByCKS(Request $request)
     {
         $this->validate($request, [
@@ -112,6 +124,18 @@ class DonDatPhongController extends Controller
             ->orWhereIn('isChecked', [6, 7, 8])
             ->where('EmailKH', $EmailKH)
             ->get();
+    }
+
+    public function getDDPNoProcessByUSer(Request $request)
+    {
+        $this->validate($request, [
+            'EmailKH' => 'required',
+            'UIDKS' => 'required',
+        ]);
+        $UIDKS = $request->input("UIDKS");
+        $EmailKH = $request->input("EmailKH");
+        $dondatphong = Dondatphong::where('UIDDatPhong', 'LIKE', '%' . $UIDKS . '%')->where('EmailKH', $EmailKH)->where('isChecked', 0)->first();
+        return $dondatphong;
     }
 
 
@@ -263,7 +287,9 @@ class DonDatPhongController extends Controller
 
         $Date = Carbon::createFromFormat('Y-m-d', $Ngay);
 
+
         $chitietdondatphong = Ctddp::where('MaDDP', $dondatphong->UIDDatPhong)->get();
+
         foreach ($chitietdondatphong as $item) {
             $loaiphong = Loaiphong::findOrFail($item->UIDLoaiPhong);
 
@@ -277,12 +303,14 @@ class DonDatPhongController extends Controller
                     if ($phongconlai->SoLuong + $item->soLuongPhong <= $loaiphong->soLuongPhong) {
                         $phongconlai->SoLuong = $phongconlai->SoLuong + $item->soLuongPhong;
                         $phongconlai->update();
-                    } else {
-                        return response()->json(["message" => "eror"], 404);
                     }
-                } else {
-                    return response()->json(["message" => "eror"], 404);
+                    //  else {
+                    //     return response()->json(["message" => "eror"], 404);
+                    // }
                 }
+                //  else {
+                //     return response()->json(["message" => "eror"], 404);
+                // }
             }
         }
         $dondatphong->isChecked = 6;
