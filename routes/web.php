@@ -7,7 +7,7 @@ use App\Http\Controllers\Api\ImageLoaiPhongController;
 use App\Http\Controllers\ChuKhachSanWebContronller;
 use App\Http\Controllers\CTDDPWebController;
 use App\Http\Controllers\DiaDiemDuLichWebController;
-use App\Http\Controllers\DonDatPhongController;
+use App\Http\Controllers\DonDatPhongWebController;
 use App\Http\Controllers\KhachHangWebController;
 use App\Http\Controllers\KhachSanWebController;
 use App\Http\Controllers\LoaiPhongWebController;
@@ -15,6 +15,7 @@ use App\Http\Controllers\PhongConLaiWebController;
 use App\Http\Controllers\seachWebController;
 use App\Http\Controllers\searchKhachSanController;
 use App\Http\Controllers\SuKienWebController;
+use App\Http\Controllers\ThanhPhoController;
 use App\Http\Controllers\ThanhPhoWebWebController;
 use App\Http\Controllers\VnpayController;
 use Illuminate\Support\Facades\Route;
@@ -87,13 +88,13 @@ Route::get('adminKS/loaiphong/findbyKS/{UIDLoaiPhong}/delete', [LoaiPhongWebCont
 
 Route::put('adminKS/loaiphong/findbyKS/{UIDKS}/{UIDLoaiPhong}', [LoaiPhongWebController::class, 'update']);
 //Đơn đặt phòng
-Route::resource('adminKS/dondatphong', DonDatPhongController::class);
-Route::post('adminKS/dondadat/findbyKS', [DonDatPhongController::class, 'checkDonDatPhong'])->name('adminKS.dondadat.findbyKS');
-Route::post('adminKS/dondangdienra/findbyKS', [DonDatPhongController::class, 'dondangdienra']);
-Route::post('adminKS/dondahuy/findbyKS', [DonDatPhongController::class, 'dondahuy']);
-Route::post('adminKS/lichsu/findbyKS', [DonDatPhongController::class, 'lichsu']);
+Route::resource('adminKS/dondatphong', DonDatPhongWebController::class);
+Route::post('adminKS/dondadat/findbyKS', [DonDatPhongWebController::class, 'checkDonDatPhong'])->name('adminKS.dondadat.findbyKS');
+Route::post('adminKS/dondangdienra/findbyKS', [DonDatPhongWebController::class, 'dondangdienra']);
+Route::post('adminKS/dondahuy/findbyKS', [DonDatPhongWebController::class, 'dondahuy']);
+Route::post('adminKS/lichsu/findbyKS', [DonDatPhongWebController::class, 'lichsu']);
 // Chi thiết đơn đặt phòng
-Route::get('adminKS/dondadat/findbyKS/{MaDDP}', [CTDDPWebController::class, 'show']);
+Route::get('adminKS/dondadat/findbyKS/{MaDDP}', [CTDDPWebController::class, 'showWeb']);
 
 //Phòng còn lại
 Route::get('adminKS/phongconlai/findbyKS/{UIDKS}', [PhongConLaiWebController::class, 'quanlyphongconlai']);
@@ -117,9 +118,10 @@ Route::get('image/loaiphong/{filename}', [ImageLoaiPhongController::class, 'Show
 Route::get('adminKS/delete/image/loaiphong/{src}', [LoaiPhongWebController::class, 'destroy_image']);
 Route::get('admin/delete/image/sukien/{src}', [SuKienWebController::class, 'destroy_image']);
 Route::get('admin/delete/image/diadiemdulich/{src}', [DiaDiemDuLichWebController::class, 'destroy_image']);
+Route::get('admin/delete/image/thanhpho/{src}', [ThanhPhoWebWebController::class, 'destroy_image']);
 //Tài khoản khách sạn
 Route::get('adminKS/khachsan/findbyKS/{UIDKS}', [KhachSanWebController::class, 'getks']);
 Route::get('adminKS/khachsan/findbyKS/{UIDKS}/show', [KhachSanWebController::class, 'showKS']);
 Route::get('adminKS/khachsan/findbyKS/{UIDKS}/edit', [KhachSanWebController::class, 'editKS']);
 
-Route::get('linkvnpay/{UIDDDP}', [VnpayController::class,'LinkVnPAy']);
+Route::get('linkvnpay/{UIDDDP}', [VnpayController::class, 'LinkVnPAy']);

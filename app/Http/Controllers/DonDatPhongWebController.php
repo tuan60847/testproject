@@ -327,7 +327,7 @@ class DonDatPhongWebController extends Controller
         }
 
 
-        if ($dondatphong = Dondatphong::whereIn('isChecked', [0, 1])->where('UIDDatPhong', 'LIKE', '%' . $UIDKS . '%')->get()) {
+        if ($dondatphong = Dondatphong::whereIn('isChecked', [0, 1, 2])->where('UIDDatPhong', 'LIKE', '%' . $UIDKS . '%')->get()) {
             return view('dondatphong.index', ['dondatphong' => $dondatphong]);
         }
     }
@@ -386,8 +386,9 @@ class DonDatPhongWebController extends Controller
         ]);
         $UIDKS = $request->input("UIDKS");
         $statuses = [
-            1 => 'Đã xác nhận',
-            2 => 'Xác nhận của khách hàng',
+            0 => 'Chưa xác nhận',
+            1 => 'Xác nhận của khách hàng',
+            2 => 'Xác nhận của khách sạn',
             3 => 'Check in',
             4 => 'Check out',
             5 => 'Hoàn thành',

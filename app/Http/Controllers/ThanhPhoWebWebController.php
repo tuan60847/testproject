@@ -47,7 +47,7 @@ class ThanhPhoWebWebController extends Controller
             $imgPath = $img->store('thanhpho', 'public');
             $imgData = new Hinhanhtp;
             $imgData->MaTP = $data->MaTP;
-            $imgData->src = $imgPath;
+            $imgData->src = 'image/' . $imgPath;
             $imgData->save();
         }
         return redirect('admin/thanhpho/create')->with('success', 'Thêm thành công');
@@ -117,11 +117,11 @@ class ThanhPhoWebWebController extends Controller
         $data->mota = $request->mota;
         $data->save();
         if ($request->hasFile('image')) {
-            foreach ($request->files('image') as $img) {
+            foreach ($request->file('image') as $img) {
                 $imgPath = $img->store('thanhpho', 'public');
                 $imgData = new Hinhanhtp;
                 $imgData->MaTP = $data->MaTP;
-                $imgData->src = $imgPath;
+                $imgData->src = 'image/' . $imgPath;
                 $imgData->save();
             }
         }
@@ -142,7 +142,6 @@ class ThanhPhoWebWebController extends Controller
 
         Storage::disk('public')->delete($hinhanhk->src);
         $hinhanhk->delete();
-        // return response(null, Response::HTTP_NO_CONTENT);
         return redirect('/admin/thanhpho/' . $hinhanhk->MaTP . '/edit');
     }
 }

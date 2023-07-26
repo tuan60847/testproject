@@ -229,10 +229,10 @@ class PhongConLaiController extends Controller
         $startDate =  $Date->copy()->addDays(1)->format('Y-m-d');
 
         $endDate =  $Date->copy()->addDays(15)->format('Y-m-d');
-
-
-
-
+       
+       
+       
+       
 
         $phongconlai = Phongconlai::whereBetween('Ngay', [$startDate, $endDate])
             ->where('UIDLoaiPhong', $UIDLoaiPhong)
@@ -258,10 +258,10 @@ class PhongConLaiController extends Controller
         $startDate =  $Date->addDays(0)->format('Y-m-d');
 
         $endDate =  $Date->addDays(14)->format('Y-m-d');
-
-
-
-
+       
+       
+        
+       
 
         $phongconlai = Phongconlai::whereBetween('Ngay', [$startDate, $endDate])
             ->where('UIDLoaiPhong', $UIDLoaiPhong)
@@ -271,12 +271,5 @@ class PhongConLaiController extends Controller
 
         return response()->json($phongconlai);
     }
-    public function quanlyphongconlai()
-    {
-        $phongconlai = Phongconlai::all();
-        return view('phongconlai.index', ['phongconlai' => $phongconlai]);
-    }
-    public function seachPhong()
-    {
-    }
+
 }

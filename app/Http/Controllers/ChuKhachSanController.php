@@ -6,20 +6,16 @@ use App\Models\Chukhachsan;
 use App\Models\Khachsan;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Illuminate\Support\Facades\Auth;
-use Illuminate\Support\Facades\Cookie;
 
 class ChuKhachSanController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        $data = Chukhachsan::all();
-        if ($request->ADMINKS != "1") {
-            return view('chukhachsan.index', ['data' => $data]);
-        }
+        //
+        return Chukhachsan::all();
     }
 
     /**
@@ -88,10 +84,10 @@ class ChuKhachSanController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Request $request, string $id)
+    public function show(string $id)
     {
-        $data = Chukhachsan::find($id);
-        return view('chukhachsan.show', ['data' => $data]);
+        //
+        return Chukhachsan::findOrFail($id);
     }
 
     /**
@@ -108,7 +104,7 @@ class ChuKhachSanController extends Controller
     public function update(Request $request, string $id)
     {
         //
-        $chukhachsan = Chukhachsan::findOrFail($id);
+        $chukhachsan=Chukhachsan::findOrFail($id);
         $this->validate($request, [
 
             'Password' => 'required',
@@ -127,7 +123,7 @@ class ChuKhachSanController extends Controller
 
 
         $HoTen = $request->input("HoTen");
-        $cmnd = $request->input("cmnd");
+        $cmnd =$request->input("cmnd");
         $SDT = $request->input("SDT");
 
 
@@ -151,7 +147,7 @@ class ChuKhachSanController extends Controller
         } else {
             // handle the case where the image upload fails
             // e.g. return an error response or redirect back to the form with an error message
-            return response()->json(["message" => "eror"], 404);
+            return response()->json(["message"=>"eror"],404);
         }
     }
 

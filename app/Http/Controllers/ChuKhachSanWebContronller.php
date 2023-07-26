@@ -132,23 +132,27 @@ class ChuKhachSanWebContronller extends Controller
 
 
 
-        $cks = Chukhachsan::where(['Email' => $request->Email, 'Password' => $request->Password])->count();
+        $cks = Chukhachsan::where(['Email' => $request->Email])->count();
+        // return $cks;
 
         if ($cks > 0) {
-            $cksData = Chukhachsan::where(['Email' => $request->Email, 'Password' => $request->Password])->first();
+            $cksData = Chukhachsan::where(['Email' => $request->Email])->first();
 
             session(['cksData' => $cksData]);
             if ($request->has('remenberme')) {
                 Cookie::queue('adminuser', $request->Email, 1440);
                 Cookie::queue('adminpwd', $request->Password, 1440);
             }
-            if ($cksData->ADMINKS === "1") {
-                return redirect('admin/');
-            } else if ($cksData->ADMINKS != "1") {
-                return redirect('adminKS/' . $cksData->ADMINKS);
+            $verifyPassword = new VarifyPasswordController();
+            if ($verifyPassword->checkverifyPassWord($request->Password, $cksData->Password)) {
+                if ($cksData->ADMINKS === "1") {
+                    return redirect('admin/');
+                } else if ($cksData->ADMINKS != "1") {
+                    return redirect('adminKS/' . $cksData->ADMINKS);
+                }
+            } else {
+                return redirect('login')->with('msg', 'Yêu cầu nhập email/password!');
             }
-        } else {
-            return redirect('login')->with('msg', 'Yêu cầu nhập email/password!');
         }
     }
     function logout()
@@ -160,5 +164,22 @@ class ChuKhachSanWebContronller extends Controller
     {
         $data = Chukhachsan::find($id);
         return view('chukhachsan.profile', ['data' => $data]);
+    }
+    public function checkPassword(Request $request)
+    {
+        $this->validate($request, [
+            'Email' => 'required',
+            'Password' => 'required',
+        ]);
+        $Email = $request->input("Email");
+        $Password = $request->input("Password");
+        $chukhachsan = Chukhachsan::findOrFail($Email);
+        if ($chukhachsan) {
+            $verifyPassword = new VarifyPasswordController();
+            if ($verifyPassword->checkverifyPassWord($Password, $chukhachsan->Password)) {
+            }
+            return response()->json(["message" => "eror"], 404);
+        }
+        return response()->json(["message" => "eror"], 404);
     }
 }

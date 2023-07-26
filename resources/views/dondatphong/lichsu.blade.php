@@ -44,8 +44,8 @@
                             <td>{{Str::limit($d->UIDDatPhong, 10)}}</td>
                             <td>{{$d->EmailKH}}</td>
                             <td>{{$d->NgayDatPhong}}</td>
-                            <td>{{$d->TienCoc}}</td>
-                            <td>{{$d->tongtien}}</td>
+                            <td>{{number_format($d->TienCoc,0,',','.')}}</td>
+                            <td>{{number_format($d->tongtien,0,',','.')}}</td>
                             <td>{{$d->isChecked==5?"Đơn hoàn thành":"Chưa xác nhận"}}</td>
 
                             <td>

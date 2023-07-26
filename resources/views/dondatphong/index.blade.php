@@ -44,9 +44,18 @@
                             <td>{{Str::limit($d->UIDDatPhong, 10)}}</td>
                             <td>{{$d->EmailKH}}</td>
                             <td>{{$d->NgayDatPhong}}</td>
-                            <td>{{$d->TienCoc}}</td>
+                            <td>{{number_format($d->TienCoc,0,',','.')}}</td>
                             <td>{{number_format($d->tongtien, 0, ',', '.')}}</td>
-                            <td>{{$d->isChecked==1?"Đã xác nhận":"Chưa xác nhận"}}</td>
+                            <td>
+                                @if ($d->isChecked == 0)
+                                Chưa xác nhận
+                                @elseif ($d->isChecked == 1)
+                                Khách hàng đã xác nhận
+                                @elseif ($d->isChecked == 2)
+                                Khách sạn đã xác nhận
+                                @endif
+                            </td>
+
 
                             <td>
                                 <a href="{{url('adminKS/dondadat/findbyKS/'.$d->UIDDatPhong)}}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>

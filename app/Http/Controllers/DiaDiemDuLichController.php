@@ -3,19 +3,17 @@
 namespace App\Http\Controllers;
 
 use App\Models\Diadiemdulich;
-use App\Models\Hinhanhdddl;
-use App\Models\Thanhpho;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
-use DB;
 
 class DiaDiemDuLichController extends Controller
 {
+    /**
+     * Display a listing of the resource.
+     */
     public function index()
     {
-        $data = Diadiemdulich::all();
-        return view('diadiemdulich.index', ['data' => $data]);
+        return Diadiemdulich::all();
     }
 
     /**
@@ -23,49 +21,69 @@ class DiaDiemDuLichController extends Controller
      */
     public function create()
     {
-        $data = Diadiemdulich::all();
-        return view('diadiemdulich.create', ['data' => $data]);
+        //
     }
+
+    /**
+     * Store a newly created resource in storage.
+     */
     public function store(Request $request)
     {
-        // $request->validate([
-        //     'TenDiaDiemDuLich' => 'required',
-        //     'DiaChi' => 'required',
-        //     'MoTa' => 'required',
-        //     'GiaTien' => 'required',
-        //     'MaTP' => 'required',
-        //     'ThoiGianHoatDong' => 'required',
-        // ]);
-
-        $data = new Diadiemdulich();
-        //  $dataTP = new Thanhpho();
-        $data->TenDiaDiemDuLich = $request->TenDiaDiemDuLich;
-        $data->DiaChi = $request->DiaChi;
-        $data->MoTa = $request->MoTa;
-        $data->GiaTien = $request->GiaTien;
-        $data->MaTP = $request->MaTP;
-        $data->ThoiGianHoatDong = $request->ThoiGianHoatDong;
-        $data->save();
-        return redirect('admin/diadiemdulich/create')->with('success', 'Địa điểm du lịch đã được thêm');
-
-        foreach ($request->file('image') as $img) {
-            $imgPath = $img->store('diadiemdulich', 'public');
-            $imgData = new Hinhanhdddl();
-            $imgData->MaDDDL = $data->MaDDDL;
-            $imgData->src = 'image/' . $imgPath;
-            $imgData->save();
+        $this->validate($request, [
+            
+            'TenDiaDiemDuLich' => 'required',
+            'MoTa' => 'required',
+            'MaTP' => 'required',
+            'DiaChi' => 'required',
+            
+            
+        ]);
+        
+        // $image_path =(string) $request->file('image')->store('image/khachsan', 'public');
+        $TenDiaDiemDuLich = $request->input("TenDiaDiemDuLich");
+        $MoTa = $request->input("MoTa");
+        $ThoiGianHoatDong =$request->input("ThoiGianHoatDong");
+        $DiaChi =$request->input("DiaChi");
+        // $dateNgaySinh = Carbon::parse("2001-07-21")->format('Y-m-d');
+        $GiaTien = $request->input("GiaTien");
+        $MaTP =$request->input("MaTP");
+        
+        
+        // $isAdminKH ="isAdminKH";
+        
+        if (!empty($TenDiaDiemDuLich)) {
+           
+            $diadiemdulich = new Diadiemdulich();
+            
+            $diadiemdulich->TenDiaDiemDuLich = $TenDiaDiemDuLich;
+            $diadiemdulich->MoTa = $MoTa;
+            $diadiemdulich->ThoiGianHoatDong = $ThoiGianHoatDong;
+            $diadiemdulich->GiaTien = $GiaTien;
+            $diadiemdulich->MaTP= $MaTP;
+            
+           
+            
+            $diadiemdulich->save();
+            
+            
+           
+            return response($diadiemdulich, Response::HTTP_CREATED);
+        } else {
+            // handle the case where the image upload fails
+            // e.g. return an error response or redirect back to the form with an error message
+            return response()->json(["message"=>"eror"],404);
         }
     }
 
-
+    
 
     /**
      * Display the specified resource.
      */
     public function show(string $id)
     {
-        $data = Diadiemdulich::find($id);
-        return view('diadiemdulich.show', ['data' => $data]);
+        //
+        return Diadiemdulich::findOrFail($id);
     }
 
     /**
@@ -73,8 +91,7 @@ class DiaDiemDuLichController extends Controller
      */
     public function edit(string $id)
     {
-        $data = Diadiemdulich::find($id);
-        return view('diadiemdulich.edit', ['data' => $data]);
+        //
     }
 
     /**
@@ -82,93 +99,73 @@ class DiaDiemDuLichController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        $data = Diadiemdulich::find($id);
-        $data->TenDiaDiemDuLich = $request->TenDiaDiemDuLich;
-        $data->DiaChi = $request->DiaChi;
-        $data->MoTa = $request->MoTa;
-        $data->ThoiGianHoatDong = $request->ThoiGianHoatDong;
-        $data->GiaTien = $request->GiaTien;
-        $data->MaTp = $request->MaTP;
-        $data->save();
-
-        if ($request->hasFile('image')) {
-            foreach ($request->file('image') as $img) {
-                $imgPath = $img->store('diadiemdulich', 'public');
-                $imgData = new Hinhanhdddl;
-                $imgData->MaDDDL = $data->MaDDDL;
-                $imgData->src = 'image/' .  $imgPath;
-                $imgData->save();
-            }
+        //
+        $this->validate($request, [
+            
+            'TenDiaDiemDuLich' => 'required',
+            'MoTa' => 'required',
+            'MaTP' => 'required',
+            'DiaChi' => 'required',
+            
+            
+        ]);
+        
+        // $image_path =(string) $request->file('image')->store('image/khachsan', 'public');
+        $TenDiaDiemDuLich = $request->input("TenDiaDiemDuLich");
+        $MoTa = $request->input("MoTa");
+        $ThoiGianHoatDong =$request->input("ThoiGianHoatDong");
+        $DiaChi =$request->input("DiaChi");
+        // $dateNgaySinh = Carbon::parse("2001-07-21")->format('Y-m-d');
+        $GiaTien = $request->input("GiaTien");
+        $MaTP =$request->input("MaTP");
+        
+        
+        // $isAdminKH ="isAdminKH";
+        
+        if (!empty($TenDiaDiemDuLich)) {
+           
+            $diadiemdulich = new Diadiemdulich();
+            
+            $diadiemdulich->TenDiaDiemDuLich = $TenDiaDiemDuLich;
+            $diadiemdulich->MoTa = $MoTa;
+            $diadiemdulich->ThoiGianHoatDong = $ThoiGianHoatDong;
+            $diadiemdulich->GiaTien = $GiaTien;
+            $diadiemdulich->MaTP= $MaTP;
+            $diadiemdulich->DiaChi=$DiaChi;
+           
+            
+            $diadiemdulich->save();
+            
+            
+           
+            return response($diadiemdulich, Response::HTTP_CREATED);
+        } else {
+            // handle the case where the image upload fails
+            // e.g. return an error response or redirect back to the form with an error message
+            return response()->json(["message"=>"eror"],404);
         }
-        return redirect('admin/diadiemdulich/' . $id . '/edit')->with('success', 'Địa điểm đã được cập nhật');
-        // //
-        // $this->validate($request, [
-
-        //     'TenDiaDiemDuLich' => 'required',
-        //     'MoTa' => 'required',
-        //     'MaTP' => 'required',
-        //     'DiaChi' => 'required',
-
-
-        // ]);
-
-        // // $image_path =(string) $request->file('image')->store('image/khachsan', 'public');
-        // $TenDiaDiemDuLich = $request->input("TenDiaDiemDuLich");
-        // $MoTa = $request->input("MoTa");
-        // $ThoiGianHoatDong = $request->input("ThoiGianHoatDong");
-        // $DiaChi = $request->input("DiaChi");
-        // // $dateNgaySinh = Carbon::parse("2001-07-21")->format('Y-m-d');
-        // $GiaTien = $request->input("GiaTien");
-        // $MaTP = $request->input("MaTP");
-
-
-        // // $isAdminKH ="isAdminKH";
-
-        // if (!empty($TenDiaDiemDuLich)) {
-
-        //     $diadiemdulich = new Diadiemdulich();
-
-        //     $diadiemdulich->TenDiaDiemDuLich = $TenDiaDiemDuLich;
-        //     $diadiemdulich->MoTa = $MoTa;
-        //     $diadiemdulich->ThoiGianHoatDong = $ThoiGianHoatDong;
-        //     $diadiemdulich->GiaTien = $GiaTien;
-        //     $diadiemdulich->MaTP = $MaTP;
-        //     $diadiemdulich->DiaChi = $DiaChi;
-
-
-        //     $diadiemdulich->save();
-
-
-
-        //     return response($diadiemdulich, Response::HTTP_CREATED);
-        // } else {
-        //     // handle the case where the image upload fails
-        //     // e.g. return an error response or redirect back to the form with an error message
-        //     return response()->json(["message" => "eror"], 404);
-        // }
     }
 
-    public function findbyMaTP(string $MaTP)
-    {
+    public function findbyMaTP(string $MaTP){
         return Diadiemdulich::where('MaTP', '=', $MaTP)->get();
     }
 
     public function TimDiaDiemDuLich(Request $request)
     {
         //
-
+    
         $this->validate($request, [
             'Search' => 'required',
         ]);
-
-
-        $Search = $request->input("Search");
+        
+        
+        $Search = $request->input("Search");   
         $diadiemdulichs = Diadiemdulich::where('TenDiaDiemDuLich', 'LIKE', '%' . $Search . '%')
-            ->orWhere('DiaChi', 'LIKE', '%' . $Search . '%')
-            ->get();
-
+                    ->orWhere('DiaChi', 'LIKE', '%' . $Search . '%')
+                    ->get();
+        
         // $isAdminKH ="isAdminKH";
-
+        
         if (!empty($diadiemdulichs)) {
 
             return $diadiemdulichs;
@@ -177,8 +174,10 @@ class DiaDiemDuLichController extends Controller
         } else {
             // handle the case where the image upload fails
             // e.g. return an error response or redirect back to the form with an error message
-            return response()->json(["message" => "eror"], 404);
+            return response()->json(["message"=>"eror"],404);
         }
+       
+
     }
 
 
@@ -188,16 +187,6 @@ class DiaDiemDuLichController extends Controller
      */
     public function destroy(string $id)
     {
-        Diadiemdulich::where('MaDDDL', $id)->delete();
-        return redirect('admin/diadiemdulich/')->with('success', 'Địa điểm đã được xóa');
-    }
-    public function destroy_image($src)
-    {
-        $hinhanhk = Hinhanhdddl::findOrFail("image/diadiemdulich/" . $src);
-
-        Storage::disk('public')->delete($hinhanhk->src);
-        $hinhanhk->delete();
-        // return response(null, Response::HTTP_NO_CONTENT);
-        return redirect('/admin/diadiemdulich/' . $hinhanhk->MaDDDL . '/edit');
+        //
     }
 }

@@ -61,6 +61,8 @@ class CTDDPController extends Controller
             $cttdp->SoNgayO = intval($SoNgayO);
             $cttdp->soLuongPhong = intval($soLuongPhong);
             $cttdp->Tien = floatval($Tien);
+
+
             $cttdp->save();
 
 
@@ -109,28 +111,10 @@ class CTDDPController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(string $MaDDP)
+    public function show(string $id)
     {
-
-        $ctddp = Ctddp::findOrFail($MaDDP);
-        return $ctddp;
-        // return view('dondatphong.show', ['ctddp' =>  $ctddp]);
-
-
-        //return Ctddp::findOrFail($id);
-
-    }
-
-    public function showWeb(string $MaDDP)
-    {
-
-        $ctddp = Ctddp::where('MaDDP', '=', $MaDDP)->get();
-        // return $ctddp;
-        return view('dondatphong.show', ['ctddp' =>  $ctddp]);
-
-
-        //return Ctddp::findOrFail($id);
-
+        //
+        return Ctddp::findOrFail($id);
     }
 
     /**
@@ -181,6 +165,10 @@ class CTDDPController extends Controller
             $cttdp->Tien = floatval($Tien);
 
 
+
+
+
+
             return $cttdp->update();
         } else {
             // handle the case where the image upload fails
@@ -196,11 +184,5 @@ class CTDDPController extends Controller
     {
         //
         return Ctddp::destroy($id);
-    }
-    public function Chitietdondat(String $id)
-    {
-
-        $ctddp = Ctddp::where('MaDDP', $id)->fisrt();
-        session(['dondat' => $ctddp]);
     }
 }

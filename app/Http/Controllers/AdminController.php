@@ -60,9 +60,9 @@ class AdminController extends Controller
         $getDay = $currentDate->day;
         // return $getThang;
 
-        $sumTongTien = Dondatphong::where('UIDDatPhong', 'LIKE', '%' . $UIDDatPhong . '%')->sum('tongtien');
-        $sumThang = Dondatphong::whereYear('NgayDatPhong', '=', $getYear)->whereMonth('NgayDatPhong', '=', $getThang)->sum('tongtien');
-        $sumDay = Dondatphong::whereYear('NgayDatPhong', '=', $getYear)->whereMonth('NgayDatPhong', '=', $getThang)->whereDay('NgayDatPhong', '=', $getDay)->sum('tongtien');
+        $sumTongTien = Dondatphong::where('UIDDatPhong', 'LIKE', '%' . $UIDDatPhong . '%')->where('isChecked', 5)->sum('tongtien');
+        $sumThang = Dondatphong::whereYear('NgayDatPhong', '=', $getYear)->whereMonth('NgayDatPhong', '=', $getThang)->where('UIDDatPhong', 'LIKE', '%' . $UIDDatPhong . '%')->where('isChecked', 5)->sum('tongtien');
+        $sumDay = Dondatphong::whereYear('NgayDatPhong', '=', $getYear)->whereMonth('NgayDatPhong', '=', $getThang)->whereDay('NgayDatPhong', '=', $getDay)->where('UIDDatPhong', 'LIKE', '%' . $UIDDatPhong . '%')->where('isChecked', 5)->sum('tongtien');
 
         return view('deshbord', compact('sumTongTien', 'sumThang', 'sumDay'));
     }

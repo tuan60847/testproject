@@ -10,11 +10,8 @@ use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
 
 class HinhAnhDiaDiemDuLichController extends Controller
-{ public function index()
-    {
-        $data = Hinhanhdddl::all();
-        return view('imgDiaDiem.imgDDDL',['data'=>$data]);
-    }
+{
+    //
     public function imageStore(Request $request)
     {
 
@@ -52,6 +49,10 @@ class HinhAnhDiaDiemDuLichController extends Controller
         $hinhanhtps = Hinhanhdddl::where('MaDDDL', $MaDDDL)->get();
 
         return response()->json($hinhanhtps, Response::HTTP_OK);
+    }
+    public function index()
+    {
+        return Hinhanhdddl::all();
     }
     public function destroy($src)
     {

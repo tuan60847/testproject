@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Models\Hinhanhsukien;
 use Illuminate\Http\Request;
-use DB;
 
 use Illuminate\Support\Facades\Storage;
 use Symfony\Component\HttpFoundation\Response;
@@ -53,8 +52,7 @@ class HinhAnhSuKienController extends Controller
     }
     public function index()
     {
-       $data=Hinhanhsukien::all();
-       return view('imgEvent.imgSuKien',['data'=>$data]);
+        return Hinhanhsukien::all();
     }
     public function destroy($src)
     {

@@ -47,12 +47,12 @@
                             <th>Trạng thái</th>
                             <td>
                                 <select name="isChecked" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm">
-                                    @if($dondatphong->isChecked==0)
-                                    <option value="0" selected>Chưa xác nhận</option>
-                                    <option value="1">Xác nhận</option>
+                                    @if($dondatphong->isChecked==1)
+                                    <option value="1" selected>Xác nhận của khách hàng</option>
+                                    <option value="2">Xác nhận của khách sạn</option>
                                     <option value="6">Hủy đơn đặt phòng</option>
-                                    @elseif ($dondatphong->isChecked == 1)
-                                    <option value="1" selected>Xác nhận</option>
+                                    @elseif ($dondatphong->isChecked == 2)
+                                    <option value="2" selected>Xác nhận của khách sạn</option>
                                     <option value="3">Check In</option>
                                     @elseif ($dondatphong->isChecked == 0)
                                     <option value="0">Chưa xác nhận</option>
