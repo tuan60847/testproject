@@ -33,7 +33,12 @@
     <p>Thank you for choosing our services! We sincerely appreciate your trust and support.</p>
     <p>This is your booking confirmation:</p>
     <p>- Booking ID: {{ $renderbody['MaDDP'] }}</p>
-    <p>- Total Price:<strong>{{number_format($renderbody['GiaTien'], 0, ',', '.') }}</strong></p>
+    <p>- Total Price: <strong>{{ number_format($renderbody['GiaTien'], 0, ',', '.') }}</strong></p>
+    @if ($renderbody['TraTruoc'] != 0)
+        <p>- Deposits: <strong>{{ number_format($renderbody['TraTruoc'], 0, ',', '.') }}</strong></p>
+        <p>- Money Pay In Cast: <strong>{{ number_format($renderbody['ConLai'], 0, ',', '.') }}</strong></p>
+    @endif
+
     <p>- Details:</p>
     <div style="display: flex; justify-content: center;">
         <table style="border: 1px solid #000; margin: 0 auto;">
@@ -55,7 +60,7 @@
                         <td style="border-left: 1px solid #000; border-right: 1px solid #000; text-align: center;">
                             {{ $item['soLuongPhong'] }}</td>
                         <td style="border-left: 1px solid #000; border-right: 1px solid #000; text-align: center;">
-                            {{ number_format($item['Tien'], 0, ',', '.')  }}</td>
+                            {{ number_format($item['Tien'], 0, ',', '.') }}</td>
                     </tr>
                 @endforeach
             </tbody>

@@ -21,7 +21,8 @@ use App\Http\Controllers\PhongConLaiController;
 use App\Http\Controllers\searchController;
 use App\Http\Controllers\SuKienController;
 use App\Http\Controllers\ThanhPhoController;
-
+use App\Http\Controllers\VarifyPasswordController;
+use App\Http\Controllers\VnpayController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,12 +43,13 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 // Dùng Để xóa một dữ liệu
 Route::delete('khachhang/{id}', [testcontrol::class,'destroy']);
 // Dùng Để sử dụng các phương thức dữ liệu
-Route::resource('khachhang', testcontrol::class);
 Route::get('khachhang/{id}', [testcontrol::class,'show']);
 Route::post('khachhang', [testcontrol::class,'store']);
 Route::put('khachhang/{id}', [testcontrol::class,'update']);
 Route::get('khachhang/setoff/{id}', [testcontrol::class,'setoff']);
 Route::get('khachhang/seton/{id}', [testcontrol::class,'seton']);
+Route::post('checkpassworduser', [testcontrol::class,'checkpassword']);
+Route::resource('khachhang', testcontrol::class);
 
 
 
@@ -77,7 +79,7 @@ Route::post('loaiphong', [LoaiPhongController::class,'store']);
 Route::put('loaiphong/{id}', [LoaiPhongController::class,'update']);
 
 
-Route::resource('dondatphong', DonDatPhongController::class);
+
 Route::delete('dondatphong/{id}', [DonDatPhongController::class,'destroy']);
 Route::get('dondatphong/{id}', [DonDatPhongController::class,'show']);
 Route::get('dondatphong/findlastbyEmail/{EmailKH}', [DonDatPhongController::class,'lastItemByEmail']);
@@ -91,6 +93,8 @@ Route::post('dondatphong', [DonDatPhongController::class,'store']);
 Route::put('dondatphong/{id}', [DonDatPhongController::class,'update']);
 Route::post('getddpnoprocessbyuser', [DonDatPhongController::class,'getDDPNoProcessByUSer']);
 Route::post('findddpinprocessbyuser', [DonDatPhongController::class,'findDDPInProcessByUser']);
+Route::get('acceptdondatphongget/{UIDDDP}', [DonDatPhongController::class,'AcceptDonDatPhongGet']);
+Route::resource('dondatphong', DonDatPhongController::class);
 
 
 
@@ -153,6 +157,7 @@ Route::get('chukhachsan/{id}', [ChuKhachSanController::class,'show']);
 Route::post('chukhachsan', [ChuKhachSanController::class,'store']);
 Route::put('chukhachsan/{id}', [ChuKhachSanController::class,'update']);
 Route::resource('chukhachsan', ChuKhachSanController::class);
+Route::post('checkpasswordcks', [ChuKhachSanController::class,'checkPassword']);
 
 
 Route::post('image/hinhanhSK/upload',[HinhAnhSuKienController::class, 'imageStore']);
@@ -189,4 +194,11 @@ Route::post('setfavorite', [FavoriteController::class,'SetFavorite']);
 Route::post('getkhachsanfavoritebykh', [FavoriteController::class,'getKhachSanFavoriteByKH']);
 Route::post('getboolenfavorite', [FavoriteController::class,'getBoolenFavorite']);
 Route::resource('favorite', FavoriteController::class);
+
+
+Route::post('vnpay', [VnpayController::class,'PaymentVNpay']);
+
+
+Route::get('cipherpassword/{password}', [VarifyPasswordController::class,'hashPassWord']);
+
 

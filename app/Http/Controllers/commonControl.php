@@ -92,7 +92,9 @@ class commonControl extends Controller
         $khachhang = Khachhang::findOrFail($email);
 
         if ($khachhang) {
-            $khachhang->Password = $newpassword;
+            $varifyPassword = new VarifyPasswordController();
+            $cipperPassword = $varifyPassword->hashPassWord($newpassword);
+            $khachhang->Password = $cipperPassword;
             return $khachhang->update();
         } else {
             return response()->json(["message" => "eror"], 404);
@@ -115,7 +117,7 @@ class commonControl extends Controller
                 'resetPasswordLink' => $resetPasswordLink
             ];
             Mail::send('emails.forgetpasswordkhachhang', ['renderbody' => $renderbody], function ($email) use ($EmailKH, $chukhachsan) {
-                $email->subject("Forget Password");
+                $email->subject("Forget Password Inkeepper");
                 $email->to($EmailKH, $chukhachsan->HoTen);
             });
             return true;
@@ -131,7 +133,9 @@ class commonControl extends Controller
         $chukhachsan = Chukhachsan::findOrFail($email);
 
         if ($chukhachsan) {
-            $chukhachsan->Password = $newpassword;
+            $varifyPassword = new VarifyPasswordController();
+            $cipperPassword = $varifyPassword->hashPassWord($newpassword);
+            $chukhachsan->Password = $cipperPassword;
             return $chukhachsan->update();
         } else {
             return response()->json(["message" => "eror"], 404);
@@ -160,14 +164,14 @@ class commonControl extends Controller
                 'Tien' => $ChiTietDonDatPhong->Tien,
             ];
         }
-
-
         if ($khachhang) {
             $renderbody = [
                 'Email' => $khachhang->Email,
                 'HoTen' => $khachhang->HoTen,
                 'MaDDP' => $UIDDatPhong,
                 'GiaTien' => $DDP->tongtien,
+                'TraTruoc' => 0,
+                'ConLai' => 0,
                 'ChiTietDonDatPhong' => $renderBodyChiTietDonDatPhong,
             ];
             // return $renderbody;

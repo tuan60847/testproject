@@ -39,38 +39,40 @@ class ChuKhachSanController extends Controller
             'NgaySinh' => 'required|date_format:Y-m-d',
             'cmnd' => 'required',
             'SDT' => 'required',
-            
-            
+
+
         ]);
-        
-        
+
+
         $Email = $request->input("Email");
         $Password = $request->input("Password");
         $NgaySinh =$request->input("NgaySinh");
 
-        
+
         $HoTen = $request->input("HoTen");
         $cmnd =$request->input("cmnd");
         $SDT = $request->input("SDT");
-       
-        
-        
+
+
+
         if (!empty($Email)) {
-           
+
             $chukhachsan = new Chukhachsan();
             $chukhachsan->Email = $Email;
-            $chukhachsan->Password = $Password;
+            $varifyPassword = new VarifyPasswordController();
+            $cipperPassword = $varifyPassword->hashPassWord($Password);
+            $chukhachsan->Password = $cipperPassword;
             $chukhachsan->NgaySinh = $NgaySinh;
             $chukhachsan->HoTen = $HoTen;
             $chukhachsan->SDT = $SDT;
             $chukhachsan->cmnd= $cmnd;
             $chukhachsan->ADMINKS=$cmnd."_".$SDT;
-            
-            
+
+
             $chukhachsan->save();
-            
-            
-           
+
+
+
             return response($chukhachsan, Response::HTTP_CREATED);
         } else {
             // handle the case where the image upload fails
@@ -104,45 +106,51 @@ class ChuKhachSanController extends Controller
         //
         $chukhachsan=Chukhachsan::findOrFail($id);
         $this->validate($request, [
-            
+
             'Password' => 'required',
             'HoTen' => 'required',
             'NgaySinh' => 'required|date_format:Y-m-d',
             'cmnd' => 'required',
             'SDT' => 'required',
-            
-            
+
+
         ]);
-        
-        
-       
+
+
+
         $Password = $request->input("Password");
         $NgaySinh =$request->input("NgaySinh");
 
-    
+
         $HoTen = $request->input("HoTen");
         $cmnd =$request->input("cmnd");
         $SDT = $request->input("SDT");
-       
-        
-        
+
+
+
         if (!empty($chukhachsan)) {
 
-            $chukhachsan->Password = $Password;
+            // $chukhachsan->Password = $cipperPassword;
+            if($Password != $chukhachsan->Password){
+                $varifyPassword = new VarifyPasswordController();
+                $cipperPassword = $varifyPassword->hashPassWord($Password);
+                $chukhachsan->Password = $cipperPassword;
+            }
+
             $chukhachsan->NgaySinh = $NgaySinh;
             $chukhachsan->HoTen = $HoTen;
             $chukhachsan->SDT = $SDT;
-            $chukhachsan->cmnd= $cmnd;      
+            $chukhachsan->cmnd= $cmnd;
             $chukhachsan->save();
 
-            return response($chukhachsan);
+            return true;
         } else {
             // handle the case where the image upload fails
             // e.g. return an error response or redirect back to the form with an error message
             return response()->json(["message"=>"eror"],404);
         }
     }
-    
+
 
     /**
      * Remove the specified resource from storage.
@@ -153,4 +161,25 @@ class ChuKhachSanController extends Controller
         $chukhachsan = Chukhachsan::find($id);
         return $chukhachsan->delete();
     }
+
+    public function checkPassword(Request $request){
+        $this->validate($request, [
+            'Email' => 'required',
+            'Password' => 'required',
+        ]);
+        $Email = $request->input("Email");
+        $Password = $request->input("Password");
+        $chukhachsan=Chukhachsan::findOrFail($Email);
+        if($chukhachsan){
+            $verifyPassword = new VarifyPasswordController();
+            // $cipperPassword = $varifyPassword->hashPassWord($chukhachsan->Password);
+            if($verifyPassword->checkverifyPassWord($Password,$chukhachsan->Password)){
+                return true;
+            }
+            return response()->json(["message"=>"eror"],404);
+        }
+        return response()->json(["message"=>"eror"],404);
+     }
+
+
 }
