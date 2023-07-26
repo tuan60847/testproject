@@ -45,8 +45,8 @@
                                 <table class="table table-bordered mt-3">
                                     <tr>
                                         @foreach($data->hinhanhks as $img)
-                                        <td class="imgcol{{$img->UIDKS}}">
-                                            <img width="150" height="200" src="{{asset('storage/app'.$img->src)}}">
+                                        <td class="imgcol{{asset($img->src)}}">
+                                            <img width="150" height="200" src="{{asset($img->src)}}">
                                         </td>
                                         @endforeach
                                     </tr>

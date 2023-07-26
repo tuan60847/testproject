@@ -7,6 +7,7 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Sửa thành phố</h6>
+            <a href="{{url('/admin/thanhpho')}}" class="float-right btn-primary btn-sm">Tất cả</a>
         </div>
         <div class="card-body">
             @if($errors->any())
@@ -35,16 +36,19 @@
                             <td>
                                 <table class="table table-bordered mt-3">
                                     <tr>
-                                        <input type="file" multiple name="imgs[]">
+                                        <input type="file" multiple name="image[]">
                                         @foreach($data->hinhanhtps as $img)
-                                        <td class="imgcol{{$img->MaTP}}">
+                                        <td class="imgcol{{$img->src}}">
                                             @if($img)
-                                            <img width="150" height="200" src="{{asset('storage/app'.$img->src)}}" alt="Image" />
+                                            <img width="150" height="200" src="{{asset($img->src)}}" alt="Image" />
                                             @endif
                                             <p>
-                                                <button type="button" onclick="return confirm('Bạn có chắc muốn xóa hình này?')" class="btn btn-danger btn-sm delete-image" data-image-id="{{$img->MaTP}}">
+                                                <!-- <button type="button" onclick="return confirm('Bạn có chắc muốn xóa hình này?')" class="btn btn-danger btn-sm delete-image" data-image-id="{{$img->MaTP}}">
                                                     <i class="fa fa-trash"></i>
-                                                </button>
+                                                </button> -->
+                                                <a class="btn btn-danger btn-sm delete-image" href="{{url('admin/delete').'/'.$img->src}}">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
                                             </p>
                                         </td>
                                         @endforeach

@@ -3,40 +3,56 @@
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Đơn đặt phòng</h1>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Xem chi tiết đơn đặt phòng
-                <a href="{{url('/adminKS/dondadat/finbydKS')}}" class="float-right btn-primary btn-sm">Tất cả</a>
+            <h6 class="m-0 font-weight-bold text-primary">Đơn đặt phòng
+                <!-- <a href="{{url('/adminKS/dondatphong/create')}}" class="float-right btn-primary btn-sm">Thêm mới</a> -->
             </h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <form @if(Session::has('cksData')) action="{{url('/adminKS/dondadat/findbyKS')}}" @endif method="GET">
-                    @csrf
-                    <table class="table table-bordered">
-
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
                         <tr>
-                            <th>Mã đơn đặt phòng</th>
-                            <td>{{$ctddp->MaDDP}}</td>
-                        </tr>
-                        <tr>
+                            <th>Mã chi tiết đặt phòng</th>
                             <th>Mã loại phòng</th>
-                            <td></td>
-                        </tr>
-                        <th>Số ngày ở</th>
-                        <td></td>
-                        </tr>
-                        <tr>
+                            <th>Số ngày ở</th>
                             <th>Số lượng phòng</th>
-                            <td></td>
-                        </tr>
-                        <tr>
                             <th>Tổng tiền</th>
-                            <td></td>
                         </tr>
-                    </table>
-                </form>
+                    </thead>
+                    <tfoot>
+                        <tr>
+                            <th>Mã chi tiết đặt phòng</th>
+                            <th>Mã loại phòng</th>
+                            <th>Số ngày ở</th>
+                            <th>Số lượng phòng</th>
+                            <th>Tổng tiền</th>
+                        </tr>
+                    </tfoot>
+                    <tbody>
+                        @if($ctddp )
+                        @foreach($ctddp as $d)
+                        <tr>
+                            <td>{{Str::limit($d->MaDDP,10)}}</td>
+                            <td>{{Str::limit($d->UIDLoaiPhong, 10)}}</td>
+                            <td>{{$d->SoNgayO}}</td>
+                            <td>{{$d->soLuongPhong}}</td>
+                            <td>{{number_format($d->Tien, 0, ',', '.')}}</td>
+
+                            <!-- <td>
+                                 <a href="{{url('adminKS/dondadat/findbyKS/'.$d->UIDDatPhong)}}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
+                                <a href="{{url('adminKS/dondadat/'.$d->UIDDatPhong.'/edit')}}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a> 
+                                 <a onclick="confirm('Bạn có chắc muốn xóa loại phòng này?')" href="{{url('admin/loaiphong/'.$d->UIDLoaiPhong.'/delete')}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a> 
+                            </td> -->
+                        </tr>
+                        @endforeach
+                        @endif
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

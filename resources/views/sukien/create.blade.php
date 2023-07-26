@@ -45,7 +45,7 @@
                         </tr>
                         <tr>
                             <th>Hình sự kiện</th>
-                            <td><input type="file" multiple name="imgs[]"></td>
+                            <td><input type="file" multiple name="image[]"></td>
                         </tr>
                         <tr>
                             <td>

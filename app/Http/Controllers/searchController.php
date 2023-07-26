@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Chukhachsan;
 use App\Models\Diadiemdulich;
+use App\Models\Khachhang;
 use App\Models\Khachsan;
+use App\Models\Sukien;
 use App\Models\Thanhpho;
 use Illuminate\Http\Request;
 
@@ -37,11 +40,21 @@ class searchController extends Controller
 
         $listSearch['diadiemdulich'] = $diadiemdulichs;
 
+        $chukhachsans = Chukhachsan::where('HoTen', 'LIKE', '%' . $Search . '%')
+            ->orWhere('cmnd', $Search)
+            ->get();
+        $listSearch['chukhachsan'] = $chukhachsans;
+
+        $khachhangs = Khachhang::where('HoTen', 'LIKE', '%' . $Search . '%')
+            ->orWhere('cmnd', $Search)
+            ->get();
+        $listSearch['khachhang'] = $khachhangs;
         // $isAdminKH ="isAdminKH";
-
+        $sukiens = Sukien::where('TenSuKien', 'LIKE', '%' . $Search . '%')->get();
+        $listSearch['sukien'] = $sukiens;
         if (!empty($listSearch)) {
-
-            return $listSearch;
+            return view('search', compact('khachSans', 'thanhphos', 'diadiemdulichs', 'chukhachsans', 'khachhangs', 'sukiens'));
+            // return $listSearch;
 
             // return response($khachsan, Response::HTTP_CREATED);
         } else {
@@ -50,7 +63,4 @@ class searchController extends Controller
             return response()->json(["message" => "eror"], 404);
         }
     }
-
-
-    
 }

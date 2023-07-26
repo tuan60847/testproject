@@ -12,7 +12,7 @@
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <form action="{{url('/admin/diadiemdulich')}}" method="GET">
+                <form action="{{url('/admin/diadiemdulich/'.$data->MaDDDL)}}" method="GET">
                     @csrf
                     <table class="table table-bordered">
                         <tr>
@@ -45,8 +45,8 @@
                                 <table class="table table-bordered mt-3">
                                     <tr>
                                         @foreach($data->hinhanhdddls as $img)
-                                        <td class="imgcol{{$img->MaDDDL}}">
-                                            <img width="150" height="200" src="{{asset('storage/app'.$img->src)}}">
+                                        <td class="imgcol{{$img->src}}">
+                                            <img width="150" height="200" src="{{asset($img->src)}}">
                                         </td>
                                         @endforeach
                                     </tr>

@@ -50,16 +50,19 @@
                             <td>
                                 <table class="table table-bordered mt-3">
                                     <tr>
-                                        <input type="file" multiple name="imgs[]">
+                                        <input type="file" multiple name="image[]">
                                         @foreach($loaiphong->hinhanhloaiphongs as $img)
-                                        <td class="imgcol{{$img->MaTP}}">
+                                        <td class="imgcol{{$img->src}}">
                                             @if($img)
-                                            <img width="150" height="200" src="{{asset('storage/app/'.$img->src)}}" alt="Image" />
+                                            <img width="150" height="200" src="{{asset($img->src)}}" />
                                             @endif
                                             <p>
-                                                <button type="button" onclick="return confirm('Bạn có chắc muốn xóa hình này?')" class="btn btn-danger btn-sm delete-image" data-image-id="{{$img->MaTP}}">
+                                                <!-- <button type="button" onclick="return confirm('Bạn có chắc muốn xóa hình này?')" class="btn btn-danger btn-sm delete-image" data-image-id="{{$img->src}}">
                                                     <i class="fa fa-trash"></i>
-                                                </button>
+                                                </button> -->
+                                                <a class="btn btn-danger btn-sm delete-image" href="{{url('adminKS/delete').'/'.$img->src}}">
+                                                    <i class="fa fa-trash"></i>
+                                                </a>
                                             </p>
                                         </td>
                                         @endforeach
@@ -90,13 +93,14 @@
 
 <!-- Page level custom scripts -->
 <script src="{{asset('js/demo/datatables-demo.js')}}"></script>
-<script type="text/javascript">
+<!-- <script type="text/javascript">
     $(document).ready(function() {
         $(".delete-image").on('click', function() {
             var _img_id = $(this).attr('data-image-id');
             var _vm = $(this);
+            var_dump(_vm);
             $.ajax({
-                url: "{{url('adminKS/imgloaiphong/delete')}}/" + _img_id,
+                url: "{{url('adminKS/imgloaiphong/delete/')}}" + _img_id,
                 dataType: 'json',
                 beforeSend: function() {
                     _vm.addClass('disabled');
@@ -110,6 +114,35 @@
             });
         });
     });
+</script> -->
+<script type="text/javascript">
+    function confirmAndDeleteImage(buttonElement) {
+        if (confirm('Bạn có chắc muốn xóa hình này?')) {
+            var _img_id = $(buttonElement).attr('data-image-id');
+            var _vm = $(buttonElement);
+
+            $.ajax({
+                url: `{{ url('adminKS/imgloaiphong/delete/') }}/${_img_id}`,
+                type: 'GET', // Sử dụng phương thức GET
+                dataType: 'json',
+                beforeSend: function() {
+                    _vm.addClass('disabled');
+                },
+                success: function(res) {
+                    if (res.bool === true) {
+                        $(".imgcol[src='" + _img_id + "']").remove();
+                    } else {
+                        alert("Lỗi xóa hình ảnh");
+                    }
+                    _vm.removeClass('disabled');
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert("Có lỗi xảy ra khi gửi yêu cầu xóa hình ảnh.");
+                    _vm.removeClass('disabled');
+                }
+            });
+        }
+    }
 </script>
 @endsection
 @endsection

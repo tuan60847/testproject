@@ -52,10 +52,11 @@
                             <td>{{$d->soLuongPhong}}</td>
                             <td>{{count($d->hinhanhloaiphongs)}}</td>
                             <td>
-                                <a href="{{url('adminKS/loaiphong/findbyKS/'.$d->UIDKS.'/show/'.$d->UIDLoaiPhong)}}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
+                                <a href="{{url('adminKS/loaiphong/findbyKS/'.$d->UIDLoaiPhong.'/show')}}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
                                 <a href="{{url('adminKS/loaiphong/findbyKS/'.$d->UIDLoaiPhong.'/edit')}}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
 
-                                <a onclick="confirm('Bạn có chắc muốn xóa loại phòng này?')" href="{{url('adminKS/loaiphong/findbyKS/'.$d->UIDKS.'/'.$d->UIDLoaiPhong.'/delete')}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                <!-- <a onclick="confirm('Bạn có chắc muốn xóa loại phòng này?')" @if(Session::has('cksData')) href="{{url('adminKS/loaiphong/findbyKS/'.Session::get('cksData')->ADMINKS.'/delete/'.$d->UIDLoaiPhong)}}" @endif class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a> -->
+                                <a onclick="confirm('Bạn có chắc muốn xóa loại phòng này?')" href="{{url('adminKS/loaiphong/findbyKS/'.$d->UIDLoaiPhong.'/delete')}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>
                         @endforeach

@@ -50,8 +50,8 @@
 
                             <td>
                                 <a href="{{url('adminKS/dondadat/findbyKS/'.$d->UIDDatPhong)}}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
-                                <!-- <a href="{{url('adminKS/donda/'.$d->UIDDatPhong.'/edit')}}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a> -->
-                                <a onclick="confirm('Bạn có chắc muốn xóa loại phòng này?')" href="{{url('admin/loaiphong/'.$d->UIDLoaiPhong.'/delete')}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                <!-- <a href="{{url('adminKS/dondatphong/'.$d->UIDDatPhong.'/edit')}}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a> -->
+                                <!-- <a onclick="confirm('Bạn có chắc muốn xóa loại phòng này?')" href="{{url('admin/lichsu/findbyKS/'.$d->UIDLoaiPhong)}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a> -->
                             </td>
                         </tr>
                         @endforeach

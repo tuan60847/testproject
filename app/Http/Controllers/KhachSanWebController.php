@@ -1,0 +1,201 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Hinhanhk;
+use App\Models\Khachsan;
+use App\Models\Loaiphong;
+use App\Models\Phongconlai;
+use GuzzleHttp\Promise\Create;
+use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\Log;
+use DB;
+
+class KhachSanWebController extends Controller
+{
+    public function index()
+    {
+        $data = Khachsan::all();
+        return view('khachsan.index', ['data' => $data]);
+    }
+
+    public function create(Khachsan $data)
+    {
+        return view('khachsan.create', ['data' => $data]);
+    }
+
+    public function findbyMaDDDL(string $id)
+    {
+        //
+        $Khachsans =  Khachsan::where('MaDDDL', '=', $id)->orderByDesc('UIDKS')->get();
+        $responseData = [];
+        foreach ($Khachsans as $Khachsan) {
+            $responseData[] = [
+                'UIDKS' => $Khachsan->UIDKS,
+                'TenKS' => $Khachsan->TenKS,
+                'DiaChi' => $Khachsan->DiaChi,
+                'SDT' => $Khachsan->SDT,
+                'MaDDDL' => $Khachsan->MaDDDL,
+                'Wifi' => boolval($Khachsan->Wifi),
+                'Buffet' => boolval($Khachsan->Buffet),
+                'isActive' => boolval($Khachsan->isActive),
+            ];
+        }
+
+        return response()->json($responseData);
+    }
+
+    public function store(Request $request)
+    {
+
+        $data = new Khachsan();
+        $data->TenKS = $request->TenKS;
+        $data->DiaChi = $request->DiaChi;
+        $data->Buffet = $request->Buffet;
+        $data->Wifi = $request->Wifi;
+        $data->isActive = $request->isActive;
+        $data->MaDDDL = $request->MaDDDL;
+        $data->save();
+        foreach ($request->file('image') as $img) {
+            $imgPath = $img->store('khachsan', 'pulic');
+            $imgData = new Hinhanhk;
+            $imgData->UIDKS = $data->UIDKS;
+            $imgData->src = 'image/' .  $imgPath;
+            $imgData->save();
+        }
+        return redirect('admin/khachsan/create')->with('success', 'Thêm thành công');
+    }
+
+    public function show(string $id)
+    {
+        $data = Khachsan::find($id);
+        return view('khachsan.show', ['data' => $data]);
+    }
+    public function edit(string $id)
+    {
+        //
+    }
+    public function update(Request $request, string $id)
+    {
+        $data = Khachsan::find($id);
+        $data->TenKS = $request->TenKS;
+        $data->DiaChi = $request->DiaChi;
+        $data->Buffet = $request->Buffet;
+        $data->Wifi = $request->Wifi;
+        $data->isActive = $request->isActive;
+        $data->MaDDDL = $request->MaDDDL;
+        $data->save();
+
+        if ($request->hasFile('image')) {
+            foreach ($request->files('image') as $img) {
+                $imgPath = $img->store('khachsan', 'public');
+                $imgData = new Hinhanhk();
+                $imgData->UIDKS = $data->UIDKS;
+                $imgData->src = 'image/' .  $imgPath;
+                $imgData->save();
+            }
+        }
+    }
+
+    public function TimKhachSan(Request $request)
+    {
+        //
+
+        $this->validate($request, [
+            'Search' => 'required',
+            'NgayDatPhong' => 'required|date_format:Y-m-d',
+            'NgayTraPhong' => 'date_format:Y-m-d',
+            // 'soGiuong'=> 'required',
+            'SoLuongPhong' => 'required'
+        ]);
+
+
+        $Search = $request->input("Search");
+        $NgayDatPhong = $request->input("NgayDatPhong");
+        $NgayTraPhong = $request->input("NgayTraPhong");
+        $soGiuong = $request->input("soGiuong");
+        $SoLuongPhong = $request->input("SoLuongPhong");
+        $khachSans = Khachsan::Where('DiaChi', 'LIKE', '%' . $Search . '%')
+            ->where('isActive', true)
+            ->get();
+        $khachsantam = [];
+        foreach ($khachSans as $khachsan) {
+            $loaiphongs = Loaiphong::Where('UIDKS', '=', $khachsan->UIDKS)->get();
+
+            foreach ($loaiphongs as $loaiphong) {
+                if ($loaiphong->soGiuong == $soGiuong || $soGiuong == "") {
+                    $phongconlai = Phongconlai::Where('UIDLoaiPhong', '=', $loaiphong->UIDLoaiPhong)->Where('Ngay', '=', $NgayDatPhong)->first();
+                    if (!$phongconlai) {
+                        if ($loaiphong->soLuongPhong > intval($SoLuongPhong)) {
+                            $khachsantam[] = $khachsan;
+                            break;
+                        }
+                    } else if ($phongconlai->SoLuong > intval($SoLuongPhong)) {
+                        $khachsantam[] = $khachsan;
+                        break;
+                    }
+                }
+            }
+        }
+        $responseData = [];
+        foreach ($khachsantam as $Khachsan) {
+            $responseData[] = [
+                'UIDKS' => $Khachsan->UIDKS,
+                'TenKS' => $Khachsan->TenKS,
+                'DiaChi' => $Khachsan->DiaChi,
+                'SDT' => $Khachsan->SDT,
+                'MaDDDL' => $Khachsan->MaDDDL,
+                'Wifi' => boolval($Khachsan->Wifi),
+                'Buffet' => boolval($Khachsan->Buffet),
+                'isActive' => boolval($Khachsan->isActive),
+                'taxCode' => $Khachsan->taxcode,
+            ];
+        }
+
+        return response()->json($responseData);
+
+        // $isAdminKH ="isAdminKH";
+    }
+
+    /**
+     * Remove the specified resource from storage.
+     */
+    public function destroy(string $id)
+    {
+        //
+        return Khachsan::destroy($id);
+    }
+    public function getks(String $id)
+    {
+        $data = Khachsan::where('UIDKS', $id)->get();
+        $responseData = [];
+
+        foreach ($data as $d) {
+            $responseData[] = [
+                'UIDKS' => $d->UIDKS,
+                'TenKS' => $d->TenKS,
+                'DiaChi' => $d->DiaChi,
+                'SDT' => $d->SDT,
+                'Buffet' => $d->Buffet,
+                'Wifi' => $d->Wifi,
+                'MaDDDL' => $d->MaDDDL,
+                'taxcode' => $d->taxcode,
+            ];
+        }
+
+        return view('taikhoanKS.index', ['data' => $data]);
+        // return redirect('adminKS/loaiphong/findbyKS/' . $loaiphong->UIDKS);
+    }
+    public function showKS(String $UIDKS)
+    {
+        $data = Khachsan::where('UIDKS', '=', $UIDKS)->first();
+        // return $loaiphong;
+        return view('taikhoanKS.show', ['data' => $data]);
+    }
+    public function editKS(String $id)
+    {
+        $data = Khachsan::find($id);
+        return view('taikhoanKS.edit', ['data' => $data]);
+    }
+}

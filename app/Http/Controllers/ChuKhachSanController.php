@@ -69,7 +69,7 @@ class ChuKhachSanController extends Controller
         //
         $chukhachsan = Chukhachsan::findOrFail($id);
         $this->validate($request, [
-            
+
             'Password' => 'required',
             'HoTen' => 'required',
             'NgaySinh' => 'required|date_format:Y-m-d',
@@ -81,9 +81,9 @@ class ChuKhachSanController extends Controller
 
 
         $Email = $request->input("Email");
-        
-        
-       
+
+
+
         $Password = $request->input("Password");
         $NgaySinh = $request->input("NgaySinh");
 
@@ -161,5 +161,10 @@ class ChuKhachSanController extends Controller
     {
         session()->forget(['cksData']);
         return redirect('login');
+    }
+    public function profile(String $id)
+    {
+        $data = Chukhachsan::find($id);
+        return view('chukhachsan.profile', ['data' => $data]);
     }
 }

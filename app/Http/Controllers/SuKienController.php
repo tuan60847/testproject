@@ -26,7 +26,8 @@ class SuKienController extends Controller
      */
     public function create()
     {
-        return view('sukien.create');
+        $data = Sukien::all();
+        return view('sukien.create', ['data' => $data]);
     }
 
     /**
@@ -90,11 +91,11 @@ class SuKienController extends Controller
         $data->MaDDDL = $request->MaDDDL;
         $data->save();
 
-        foreach ($request->file('imgs') as $img) {
-            $imgPath = $img->store('public/imgs');
+        foreach ($request->file('image') as $img) {
+            $imgPath = $img->store('sukien', 'public');
             $imgData = new Hinhanhsukien();
             $imgData->maSuKien = $data->maSuKien;
-            $imgData->src = $imgPath;
+            $imgData->src = 'image/' . $imgPath;
             $imgData->save();
         }
         return redirect('admin/sukien/create')->with('success', 'Thêm thành công');
@@ -179,12 +180,12 @@ class SuKienController extends Controller
         $data->MaDDDL = $request->MaDDDL;
         $data->save();
 
-        if ($request->hasFile('imgs')) {
-            foreach ($request->files('imgs') as $img) {
-                $imgPath = $img->store('public/imgs');
+        if ($request->hasFile('image')) {
+            foreach ($request->file('image') as $img) {
+                $imgPath = $img->store('sukien', 'public');
                 $imgData = new Hinhanhsukien();
                 $imgData->maSuKien = $data->maSuKien;
-                $imgData->src = $imgPath;
+                $imgData->src = 'image/' .  $imgPath;
                 $imgData->save();
             }
         }
@@ -199,12 +200,13 @@ class SuKienController extends Controller
         Sukien::where('maSuKien', $id)->delete();
         return redirect('admin/sukien/')->with('success', 'Sự kiện đã được xóa');
     }
-    public function destroy_image($img_id)
+    public function destroy_image($src)
     {
-        $data = Hinhanhsukien::where('maSuKien', $img_id)->first();
-        Storage::delete($data->src);
+        $hinhanhk = Hinhanhsukien::findOrFail("image/sukien/" . $src);
 
-        Hinhanhsukien::where('maSuKien', $img_id)->delete();
-        return response()->json(['bool' => true]);
+        Storage::disk('public')->delete($hinhanhk->src);
+        $hinhanhk->delete();
+        // return response(null, Response::HTTP_NO_CONTENT);
+        return redirect('admin/sukien/' . $hinhanhk->MaSuKien . '/edit');
     }
 }

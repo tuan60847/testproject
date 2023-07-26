@@ -6,13 +6,13 @@
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Xem thành phố
+            <h6 class="m-0 font-weight-bold text-primary">Xem chi tiết sự kiện
                 <a href="{{url('/admin/sukien')}}" class="float-right btn-primary btn-sm">Tất cả</a>
             </h6>
         </div>
         <div class="card-body">
             <div class="table-responsive">
-                <form action="{{url('/admin/sukien')}}" method="GET">
+                <form action="{{url('/admin/sukien'.$data->MaSuKien)}}" method="GET">
                     @csrf
                     <table class="table table-bordered">
                         <tr>
@@ -41,8 +41,8 @@
                                 <table class="table table-bordered mt-3">
                                     <tr>
                                         @foreach($data->hinhanhsukiens as $img)
-                                        <td class="imgcol{{$img->maSuKien}}">
-                                            <img width="150" height="200" src="{{asset('storage/app'.$img->src)}}">
+                                        <td class="imgcol{{asset($img->src)}}">
+                                            <img width="150" height="200" src="{{asset($img->src)}}">
                                         </td>
                                         @endforeach
                                     </tr>

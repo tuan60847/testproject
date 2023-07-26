@@ -50,8 +50,8 @@ class ThanhPhoController extends Controller
         $data->TenTP = $request->TenTP;
         $data->mota = $request->mota;
         $data->save();
-        foreach ($request->file('imgs') as $img) {
-            $imgPath = $img->store('public/imgs');
+        foreach ($request->file('image') as $img) {
+            $imgPath = $img->store('thanhpho', 'public');
             $imgData = new Hinhanhtp;
             $imgData->MaTP = $data->MaTP;
             $imgData->src = $imgPath;
@@ -114,26 +114,25 @@ class ThanhPhoController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, string $MaTP)
     {
         //     $data->update($request->all());
         //    return redirect('city/'.$id.'/edit')->route('thanhpho.city')->with('success','thành công');
 
-        $data = Thanhpho::find($id);
+        $data = Thanhpho::findOrFail($MaTP);
         $data->TenTP = $request->TenTP;
         $data->mota = $request->mota;
         $data->save();
-
-        if ($request->hasFile('imgs')) {
-            foreach ($request->files('imgs') as $img) {
-                $imgPath = $img->store('public/imgs');
+        if ($request->hasFile('image')) {
+            foreach ($request->files('image') as $img) {
+                $imgPath = $img->store('thanhpho', 'public');
                 $imgData = new Hinhanhtp;
                 $imgData->MaTP = $data->MaTP;
                 $imgData->src = $imgPath;
                 $imgData->save();
             }
         }
-        return redirect('admin/thanhpho/' . $id . '/edit')->with('success', 'Thành phố đã được cập nhật');
+        return redirect('admin/thanhpho/' . $MaTP . '/edit')->with('success', 'Thành phố đã được cập nhật');
     }
 
     /**
@@ -144,13 +143,13 @@ class ThanhPhoController extends Controller
         Thanhpho::where('MaTP', $id)->delete();
         return redirect('admin/thanhpho/')->with('success', 'Thành phố đã được xóa');
     }
-    public function destroy_image($img_id)
+    public function destroy_image($src)
     {
-        $data = Hinhanhtp::where('MaTP', $img_id)->first();
-        Storage::delete($data->src);
+        $hinhanhk = Hinhanhtp::findOrFail("image/thanhpho/" . $src);
 
-        Hinhanhtp::where('MaTP', $img_id)->delete();
-        return response()->json(['bool' => true]);
+        Storage::disk('public')->delete($hinhanhk->src);
+        $hinhanhk->delete();
+        // return response(null, Response::HTTP_NO_CONTENT);
+        return redirect('/admin/thanhpho/' . $hinhanhk->MaTP . '/edit');
     }
 }
-

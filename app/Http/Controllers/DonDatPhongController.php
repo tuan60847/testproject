@@ -138,7 +138,8 @@ class DonDatPhongController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $dondatphong = Dondatphong::find($id);
+        return view('dondatphong.edit', ['dondatphong' => $dondatphong]);
     }
 
     /**
@@ -148,34 +149,36 @@ class DonDatPhongController extends Controller
     {
         //
         $dondatphong = Dondatphong::findOrFail($id);
-        $this->validate($request, [
+        // $this->validate($request, [
 
-            'EmailKH' => 'required',
-            'NgayDatPhong' => 'required|date_format:Y-m-d',
-            'isChecked' => 'required',
-            'TienCoc' => 'required',
-            'tongtien' => 'required',
+        //     'EmailKH' => 'required',
+        //     'NgayDatPhong' => 'required|date_format:Y-m-d',
+        //     'isChecked' => 'required',
+        //     'TienCoc' => 'required',
+        //     'tongtien' => 'required',
 
 
-        ]);
+        // ]);
 
-        $EmailKH = $request->input("EmailKH");
-        $NgayDatPhong = $request->input("NgayDatPhong");
-        $TienCoc = $request->input("TienCoc");
-        $tongtien = $request->input("tongtien");
+        // $EmailKH = $request->input("EmailKH");
+        // $NgayDatPhong = $request->input("NgayDatPhong");
+        // $TienCoc = $request->input("TienCoc");
+        // $tongtien = $request->input("tongtien");
         $isChecked = $request->input("isChecked");
         if (!empty($dondatphong)) {
-            $dondatphong->EmailKH = $EmailKH;
-            $dondatphong->NgayDatPhong = $NgayDatPhong;
-            $dondatphong->TienCoc = $TienCoc;
-            $dondatphong->tongtien = $tongtien;
+            // $dondatphong->EmailKH = $EmailKH;
+            // $dondatphong->NgayDatPhong = $NgayDatPhong;
+            // $dondatphong->TienCoc = $TienCoc;
+            // $dondatphong->tongtien = $tongtien;
             $dondatphong->isChecked = $isChecked;
-            return $dondatphong->update();
+            $dondatphong->update();
+            return redirect('/adminKS/dondatphong')->with('success', 'Đơn đặt phòng đã được cập nhật');
         } else {
             // handle the case where the image upload fails
             // e.g. return an error response or redirect back to the form with an error message
             return response()->json(["message" => "eror"], 404);
         }
+        return redirect('/adminKS/dondatdat/findbyKS/' . $dondatphong->UIDDatPhong)->with('success', 'Đơn đặt phòng đã được cập nhật');
     }
 
     /**
@@ -356,8 +359,8 @@ class DonDatPhongController extends Controller
         ]);
         $UIDKS = $request->input("UIDKS");
         $statuses = [
-            1 => 'Đã xác nhận',
-            2 => 'Xác nhận của khách hàng',
+            1 => 'Xác nhận của khách hàng',
+            2 => 'Xác nhận của khách sạn',
             3 => 'Check in',
             4 => 'Check out',
         ];
@@ -371,9 +374,8 @@ class DonDatPhongController extends Controller
             }
         }
 
-        $dondatphong = Dondatphong::whereIn('isChecked', $foundIndexes)->where('UIDDatPhong', 'LIKE', '%' . $UIDKS . '%')->get();
 
-        if ($dondatphong->count() > 0) {
+        if ($dondatphong = Dondatphong::whereIn('isChecked', [0, 1])->where('UIDDatPhong', 'LIKE', '%' . $UIDKS . '%')->get()) {
             return view('dondatphong.index', ['dondatphong' => $dondatphong]);
         }
     }

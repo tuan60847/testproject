@@ -28,20 +28,35 @@ return [
     |
     */
 
-    'disks' => [
 
+    'disks' => [
+        // 'links' => [
+        //     'driver' => 'local',
+        //     'root' => storage_path('image'),
+        //     'url' => env('APP_URL') . '../public',
+        //     'visibility' => 'public',
+        //     'throw' => false,
+        // ],
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),
             'throw' => false,
         ],
 
+        // 'public' => [
+        //     'driver' => 'local',
+        //     'root' => storage_path('app/public'),
+        //     'url' => env('APP_URL') . '/storage',
+        //     'visibility' => 'public',
+        //     'throw' => false,
+        // ],
         'public' => [
             'driver' => 'local',
-            'root' => storage_path('app/public'),
-            'url' => env('APP_URL').'/storage',
+            'root' => public_path('image'), // Đường dẫn tới thư mục public/image
+            'url' => env('APP_URL') . '/storage', // URL truy cập đến thư mục public/image
             'visibility' => 'public',
             'throw' => false,
+
         ],
 
         's3' => [
@@ -68,7 +83,6 @@ return [
     | the locations of the links and the values should be their targets.
     |
     */
-
     'links' => [
         public_path('storage') => storage_path('app/public'),
     ],

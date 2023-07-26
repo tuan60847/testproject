@@ -44,7 +44,7 @@
                             <td>
                                 <a href="{{url('admin/thanhpho/'.$d->MaTP)}}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
                                 <a href="{{url('admin/thanhpho/'.$d->MaTP.'/edit')}}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
-                                <a onclick="confirm('Bạn có chắc muốn xóa thành phố này?')" href="{{url('admin/thanhpho/'.$d->MaTP.'/delete')}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
+                                <!-- <a onclick="confirm('Bạn có chắc muốn xóa thành phố này?')" href="{{url('admin/thanhpho/'.$d->MaTP.'/delete')}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a> -->
                             </td>
                         </tr>
                         @endforeach

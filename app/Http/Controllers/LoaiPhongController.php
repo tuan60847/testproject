@@ -102,13 +102,14 @@ class LoaiPhongController extends Controller
             $loaiphong->soLuongPhong = $request->soLuongPhong;
             $loaiphong->isMayLanh = $request->isMayLanh;
             $loaiphong->save();
-            foreach ($request->file('imgs') as $img) {
-                $imgPath = $img->store('public/imgs');
+            foreach ($request->file('image') as $img) {
+                $imgPath = $img->store('loaiphong', 'public');
                 $imgData = new Hinhanhloaiphong;
                 $imgData->UIDLoaiPhong = $loaiphong->UIDLoaiPhong;
-                $imgData->src = $imgPath;
+                $imgData->src = 'image/' . $imgPath;
                 $imgData->save();
             }
+            // return $loaiphong;
             return redirect('adminKS/loaiphong/findbyKS/' . $loaiphong->UIDKS . '/create')->with('success', 'Thêm thành công');
         }
 
@@ -159,7 +160,7 @@ class LoaiPhongController extends Controller
     }
 
 
-    public function show(string $id)
+    public function show(string $UIDLoaiPhong)
     {
         //
         // $loaiphong = Loaiphong::findOrFail($id);
@@ -173,7 +174,9 @@ class LoaiPhongController extends Controller
         //     'isMayLanh' => boolval($loaiphong->isMayLanh),
         // ];
         //return response()->json($responseData);
-        $loaiphong = Loaiphong::find($id);
+
+        $loaiphong = Loaiphong::where('UIDLoaiPhong', '=', $UIDLoaiPhong)->first();
+        // return $loaiphong;
         return view('loaiphong.show', ['loaiphong' => $loaiphong]);
     }
 
@@ -279,12 +282,12 @@ class LoaiPhongController extends Controller
         $loaiphong->isMayLanh = $request->isMayLanh;
         $loaiphong->save();
 
-        if ($request->hasFile('imgs')) {
-            foreach ($request->files('imgs') as $img) {
-                $imgPath = $img->store('public/imgs');
+        if ($request->hasFile('image')) {
+            foreach ($request->file('image') as $img) {
+                $imgPath = $img->store('loaiphong', 'public');
                 $imgData = new Hinhanhloaiphong();
-                $imgData->maSuKien = $loaiphong->UIDLoaiPhong;
-                $imgData->src = $imgPath;
+                $imgData->UIDLoaiPhong = $loaiphong->UIDLoaiPhong;
+                $imgData->src = 'image/' . $imgPath;
                 $imgData->save();
             }
         }
@@ -294,26 +297,41 @@ class LoaiPhongController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id, $UIDKS)
+    public function destroy(string $id)
     {
-        // $loaiphong = Loaiphong::findOrFail($id);
-        // if (!empty($loaiphong)) {
-        //     $loaiphong->isActive = 0;
-        //     return $loaiphong->update();
-        // } else {
-        //     return response()->json(["message" => "error"], 404);
-        // }
+        $loaiphong = Loaiphong::findOrFail($id);
+        if (!empty($loaiphong)) {
+            $loaiphong->isActive = 0;
+            $loaiphong->update();
+            return redirect('adminKS/loaiphong/findbyKS/' . $loaiphong->UIDKS)->with('success', 'Loại phòng đã được xóa');
+        } else {
+            return response()->json(["message" => "error"], 404);
+        }
         // $loaiphongs = Loaiphong::where('UIDKS', $id)->where('isActive', '!=', 0)->get();
-        Loaiphong::where('UIDLoaiPhong', $id)->delete();
-        //   return redirect('adminKS/loaiphong/findbyKS/' . $UIDKS)->with('success', 'Loại phòng đã được xóa');
-        return redirect()->route('adminKS.loaiphong.findbyKS', $UIDKS, $id)->with('success', 'Loại phòng đã được xóa');
-    }
-    public function destroy_image($img_id)
-    {
-        $loaiphong = Hinhanhloaiphong::where('UIDLoaiPhong', $img_id)->first();
-        Storage::delete($loaiphong->src);
+        //Loaiphong::where('UIDKS', $UIDKS)->orWhere('UIDLoaiPhong', $id)->delete();
 
-        Hinhanhloaiphong::where('UIDLoaiPhong', $img_id)->delete();
-        return response()->json(['bool' => true]);
+        // return redirect()->route('adminKS.loaiphong.findbyKS', $UIDKS, $id)->with('success', 'Loại phòng đã được xóa');
+    }
+    public function destroy_image($src)
+    {
+        //$data = Hinhanhloaiphong::where('src', $src)->first();
+
+        // if (!$data) {
+        //     return response()->json(['bool' => false, 'message' => 'Hình ảnh không tồn tại.']);
+        // }
+
+        // Storage::delete($data->src);
+
+        // // Xóa hình ảnh khỏi cơ sở dữ liệu
+        // $data->delete();
+
+        // return response()->json(['bool' => true, 'message' => 'Xóa hình ảnh thành công.']);
+
+        $hinhanhk = Hinhanhloaiphong::findOrFail("image/loaiphong/" . $src);
+
+        Storage::disk('public')->delete($hinhanhk->src);
+        $hinhanhk->delete();
+        // return response(null, Response::HTTP_NO_CONTENT);
+        return redirect('/adminKS/loaiphong/findbyKS/' . $hinhanhk->UIDLoaiPhong . '/edit');
     }
 }

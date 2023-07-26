@@ -124,9 +124,9 @@ class CTDDPController extends Controller
     public function showWeb(string $MaDDP)
     {
 
-        $ctddp = Ctddp::findOrFail($MaDDP);
-        return $ctddp;
-        // return view('dondatphong.show', ['ctddp' =>  $ctddp]);
+        $ctddp = Ctddp::where('MaDDP', '=', $MaDDP)->get();
+        // return $ctddp;
+        return view('dondatphong.show', ['ctddp' =>  $ctddp]);
 
 
         //return Ctddp::findOrFail($id);

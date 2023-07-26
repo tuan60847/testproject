@@ -33,7 +33,7 @@
                         </tr>
                         <tr>
                             <th>Hình thành phố</th>
-                            <td><input type="file" multiple name="imgs[]"></td>
+                            <td><input type="file" multiple name="image[]"></td>
                         </tr>
                         <tr>
                             <td colspan="2">

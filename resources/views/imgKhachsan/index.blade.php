@@ -31,15 +31,14 @@
                         </tr>
                     </tfoot>
                     <tbody>
-                        @if($data)
-                        @foreach($data as $d)
+                        @if($hinhanhk)
+                        @foreach($hinhanhk as $d)
                         <tr>
-                            <td>{{$d->MaKS}}</td>
-                            <td>{{$d->TenTP}}</td>
-                            <td>{{$d->mota0}}</td>
+                            <td>{{$d->UIDKS}}</td>
+                            <td>{{$d->src}}</td>
                             <td>
-                                <a href="{{url('/imgKS/'.$d->MaKS)}}" method="GET" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
-                                <a href="{{url('imgKS/'.$d->MaKS.'/edit')}}" method="POST" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
+                                <a href="{{url('/imgKS/'.$d->UIDKS)}}" method="GET" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
+                                <a href="{{url('imgKS/'.$d->UIDKS.'/edit')}}" method="POST" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
                                 <a onclick="confirm('Bạn có muốn xóa thành phố này không?')" href="{{url('city/'.$d->MaTP.'/delete')}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a>
                             </td>
                         </tr>

@@ -9,7 +9,7 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Sự kiện
-                <a href="{{url('/admin/sukien/create')}}" class="float-right btn-primary btn-sm">Thêm mới</a>
+                <a href="{{url('/admin/sukien1/create')}}" class="float-right btn-primary btn-sm">Thêm mới</a>
             </h6>
         </div>
         <div class="card-body">

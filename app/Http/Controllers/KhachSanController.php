@@ -130,11 +130,11 @@ class KhachSanController extends Controller
         $data->isActive = $request->isActive;
         $data->MaDDDL = $request->MaDDDL;
         $data->save();
-        foreach ($request->file('imgs') as $img) {
-            $imgPath = $img->store('public/imgs');
+        foreach ($request->file('image') as $img) {
+            $imgPath = $img->store('khachsan', 'pulic');
             $imgData = new Hinhanhk;
             $imgData->UIDKS = $data->UIDKS;
-            $imgData->src = $imgPath;
+            $imgData->src = 'image/' .  $imgPath;
             $imgData->save();
         }
         return redirect('admin/khachsan/create')->with('success', 'Thêm thành công');
@@ -172,12 +172,12 @@ class KhachSanController extends Controller
         $data->MaDDDL = $request->MaDDDL;
         $data->save();
 
-        if ($request->hasFile('imgs')) {
-            foreach ($request->files('imgs') as $img) {
-                $imgPath = $img->store('public/imgs');
+        if ($request->hasFile('image')) {
+            foreach ($request->files('image') as $img) {
+                $imgPath = $img->store('khachsan', 'public');
                 $imgData = new Hinhanhk();
                 $imgData->UIDKS = $data->UIDKS;
-                $imgData->src = $imgPath;
+                $imgData->src = 'image/' .  $imgPath;
                 $imgData->save();
             }
         }
@@ -192,7 +192,7 @@ class KhachSanController extends Controller
             'NgayDatPhong' => 'required|date_format:Y-m-d',
             'NgayTraPhong' => 'date_format:Y-m-d',
             // 'soGiuong'=> 'required',
-            'SoLuongPhong'=>'required'
+            'SoLuongPhong' => 'required'
         ]);
 
 
@@ -205,25 +205,23 @@ class KhachSanController extends Controller
             ->where('isActive', true)
             ->get();
         $khachsantam = [];
-        foreach($khachSans as $khachsan){
-            $loaiphongs = Loaiphong::Where('UIDKS','=',$khachsan->UIDKS)->get();
+        foreach ($khachSans as $khachsan) {
+            $loaiphongs = Loaiphong::Where('UIDKS', '=', $khachsan->UIDKS)->get();
 
-            foreach ($loaiphongs as $loaiphong){
-                if($loaiphong->soGiuong==$soGiuong||$soGiuong==""){
-                    $phongconlai = Phongconlai::Where('UIDLoaiPhong','=',$loaiphong->UIDLoaiPhong)->Where('Ngay','=',$NgayDatPhong)->first();
-                    if(!$phongconlai){
-                        if($loaiphong->soLuongPhong>intval($SoLuongPhong)){
-                            $khachsantam[]=$khachsan;
+            foreach ($loaiphongs as $loaiphong) {
+                if ($loaiphong->soGiuong == $soGiuong || $soGiuong == "") {
+                    $phongconlai = Phongconlai::Where('UIDLoaiPhong', '=', $loaiphong->UIDLoaiPhong)->Where('Ngay', '=', $NgayDatPhong)->first();
+                    if (!$phongconlai) {
+                        if ($loaiphong->soLuongPhong > intval($SoLuongPhong)) {
+                            $khachsantam[] = $khachsan;
                             break;
-                        }     
-                    }else if($phongconlai->SoLuong > intval($SoLuongPhong)){
-                        $khachsantam[]=$khachsan;
+                        }
+                    } else if ($phongconlai->SoLuong > intval($SoLuongPhong)) {
+                        $khachsantam[] = $khachsan;
                         break;
                     }
                 }
-                
             }
-            
         }
         $responseData = [];
         foreach ($khachsantam as $Khachsan) {
@@ -241,7 +239,7 @@ class KhachSanController extends Controller
         }
 
         return response()->json($responseData);
-        
+
         // $isAdminKH ="isAdminKH";
     }
 
@@ -252,5 +250,26 @@ class KhachSanController extends Controller
     {
         //
         return Khachsan::destroy($id);
+    }
+    public function getks(String $id)
+    {
+        $data = Khachsan::where('UIDKS', $id)->get();
+        $responseData = [];
+
+        foreach ($data as $d) {
+            $responseData[] = [
+                'UIDKS' => $d->UIDKS,
+                'TenKS' => $d->TenKS,
+                'DiaChi' => $d->DiaChi,
+                'SDT' => $d->SDT,
+                'Buffet' => $d->Buffet,
+                'Wifi' => $d->Wifi,
+                'MaDDDL' => $d->MaDDDL,
+                'taxcode' => $d->taxcode,
+            ];
+        }
+
+        return view('taikhoanKS.index', ['data' => $data]);
+        // return redirect('adminKS/loaiphong/findbyKS/' . $loaiphong->UIDKS);
     }
 }

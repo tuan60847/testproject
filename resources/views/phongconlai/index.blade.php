@@ -1,15 +1,14 @@
-@extends('layout')
+@extends('layoutKS')
 @section('content')
 <!-- Begin Page Content -->
 <div class="container-fluid">
 
     <!-- Page Heading -->
-    <h1 class="h3 mb-2 text-gray-800">Thành phố</h1>
+    <h1 class="h3 mb-2 text-gray-800">Phòng còn lại</h1>
     <!-- DataTales Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Thành phố
-                <!-- <a href="{{url('/adminKS/phongconlai/create')}}" class="float-right btn-primary btn-sm">Thêm mới</a> -->
+            <h6 class="m-0 font-weight-bold text-primary">Phòng còn lại
             </h6>
         </div>
         <div class="card-body">
@@ -20,30 +19,22 @@
                             <th>Mã loại phòng</th>
                             <th>Số lượng</th>
                             <th>Ngày</th>
-                            <th>Thao tác</th>
                         </tr>
                     </thead>
                     <tfoot>
                         <tr>
-                        <th>Mã loại phòng</th>
+                            <th>Mã loại phòng</th>
                             <th>Số lượng</th>
                             <th>Ngày</th>
-                            <th>Thao tác</th>
                         </tr>
                     </tfoot>
                     <tbody>
-                        @if($data )
-                        @foreach($data as $d)
+                        @if($phongconlai )
+                        @foreach($phongconlai as $d)
                         <tr>
-                            <td>{{$d->MaTP}}</td>
-                            <td>{{$d->TenTP}}</td>
-                            <td>{{Str::limit($d->mota,30)}}</td>
-                            <td>{{count($d->hinhanhtps)}}</td>
-                            <td>
-                                <a href="{{url('admin/thanhpho/'.$d->MaTP)}}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>
-                                <!-- <a href="{{url('admin/thanhpho/'.$d->MaTP.'/edit')}}" class="btn btn-success btn-sm"><i class="fa fa-edit"></i></a>
-                                <a onclick="confirm('Bạn có chắc muốn xóa thành phố này?')" href="{{url('admin/thanhpho/'.$d->MaTP.'/delete')}}" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i></a> -->
-                            </td>
+                            <td>{{$d->UIDLoaiPhong}}</td>
+                            <td>{{$d->SoLuong}}</td>
+                            <td>{{$d->Ngay}}</td>
                         </tr>
                         @endforeach
                         @endif

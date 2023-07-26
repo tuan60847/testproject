@@ -48,11 +48,11 @@ class DiaDiemDuLichController extends Controller
         $data->save();
         return redirect('admin/diadiemdulich/create')->with('success', 'Địa điểm du lịch đã được thêm');
 
-        foreach ($request->file('imgs') as $img) {
-            $imgPath = $img->store('public/imgs');
+        foreach ($request->file('image') as $img) {
+            $imgPath = $img->store('diadiemdulich', 'public');
             $imgData = new Hinhanhdddl();
             $imgData->MaDDDL = $data->MaDDDL;
-            $imgData->src = $imgPath;
+            $imgData->src = 'image/' . $imgPath;
             $imgData->save();
         }
     }
@@ -91,12 +91,12 @@ class DiaDiemDuLichController extends Controller
         $data->MaTp = $request->MaTP;
         $data->save();
 
-        if ($request->hasFile('imgs')) {
-            foreach ($request->files('imgs') as $img) {
-                $imgPath = $img->store('public/imgs');
+        if ($request->hasFile('image')) {
+            foreach ($request->file('image') as $img) {
+                $imgPath = $img->store('diadiemdulich', 'public');
                 $imgData = new Hinhanhdddl;
                 $imgData->MaDDDL = $data->MaDDDL;
-                $imgData->src = $imgPath;
+                $imgData->src = 'image/' .  $imgPath;
                 $imgData->save();
             }
         }
@@ -191,12 +191,13 @@ class DiaDiemDuLichController extends Controller
         Diadiemdulich::where('MaDDDL', $id)->delete();
         return redirect('admin/diadiemdulich/')->with('success', 'Địa điểm đã được xóa');
     }
-    public function destroy_image($img_id)
+    public function destroy_image($src)
     {
-        $data = Hinhanhdddl::where('MaTP', $img_id)->first();
-        Storage::delete($data->src);
+        $hinhanhk = Hinhanhdddl::findOrFail("image/diadiemdulich/" . $src);
 
-        Hinhanhdddl::where('MaTP', $img_id)->delete();
-        return response()->json(['bool' => true]);
+        Storage::disk('public')->delete($hinhanhk->src);
+        $hinhanhk->delete();
+        // return response(null, Response::HTTP_NO_CONTENT);
+        return redirect('/admin/diadiemdulich/' . $hinhanhk->MaDDDL . '/edit');
     }
 }

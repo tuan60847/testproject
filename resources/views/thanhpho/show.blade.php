@@ -28,9 +28,9 @@
                             <td>
                                 <table class="table table-bordered mt-3">
                                     <tr>
-                                        @foreach($data->hinhanhtp as $img)
-                                        <td class="imgcol{{$img->MaTP}}">
-                                            <img width="150" height="200" src="{{asset('storage/app/'.$img->src)}}">
+                                        @foreach($data->hinhanhtps as $img)
+                                        <td class="imgcol{{$img->src}}">
+                                            <img width="150" height="200" src="{{asset($img->src)}}">
                                         </td>
                                         @endforeach
                                     </tr>
