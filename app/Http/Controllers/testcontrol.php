@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Khachhang;
+
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -51,7 +52,7 @@ class testcontrol extends Controller
             'Password' => 'required',
             'HoTen' => 'required',
             'NgaySinh' => 'required|date_format:Y-m-d',
-            
+
             'cmnd' => 'required',
             'SDT' => 'required',
         ]);
@@ -68,7 +69,10 @@ class testcontrol extends Controller
 
             $khachhang = new Khachhang();
             $khachhang->Email = $Email;
-            $khachhang->Password = $Password;
+
+            $varifyPassword = new VarifyPasswordController();
+            $cipperPassword = $varifyPassword->hashPassWord($Password);
+            $khachhang->Password = $cipperPassword;
             $khachhang->NgaySinh = $NgaySinh;
             $khachhang->HoTen = $HoTen;
             $khachhang->SDT = $SDT;
@@ -138,14 +142,16 @@ class testcontrol extends Controller
         $SDT = $request->input("SDT");
         $isDatPhong = $request->input("isDatPhong") == "false" || $request->input("isDatPhong") == null ? false : true;
         if (!empty($khachhang)) {
-            $khachhang->Password = $Password;
+            if($Password!=$khachhang->Password){
+                $varifyPassword = new VarifyPasswordController();
+                $cipperPassword = $varifyPassword->hashPassWord($Password);
+                $khachhang->Password = $cipperPassword;
+            }
             $khachhang->NgaySinh = $NgaySinh;
             $khachhang->HoTen = $HoTen;
             $khachhang->SDT = $SDT;
             $khachhang->cmnd = $cmnd;
             $khachhang->isDatPhong = $isDatPhong;
-
-
             return $khachhang->update();
         } else {
             // handle the case where the image upload fails
@@ -202,5 +208,23 @@ class testcontrol extends Controller
     //         return response()->json(["message"=>"eror"],404);
     //     }
     // }
+    public function checkPassword(Request $request){
+        $this->validate($request, [
+            'Email' => 'required',
+            'Password' => 'required',
+        ]);
+        $Email = $request->input("Email");
+        $Password = $request->input("Password");
+        $chukhachsan=Khachhang::findOrFail($Email);
+        if($chukhachsan){
+            $verifyPassword = new VarifyPasswordController();
+            // $cipperPassword = $varifyPassword->hashPassWord($chukhachsan->Password);
+            if($verifyPassword->checkverifyPassWord($Password,$chukhachsan->Password)){
+                return true;
+            }
+            return response()->json(["message"=>"eror"],404);
+        }
+        return response()->json(["message"=>"eror"],404);
+     }
 
 }

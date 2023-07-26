@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chukhachsan;
+use App\Models\Ctddp;
+use App\Models\Dondatphong;
 use App\Models\Khachhang;
+use App\Models\Loaiphong;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Mail;
 
@@ -89,7 +92,9 @@ class commonControl extends Controller
         $khachhang = Khachhang::findOrFail($email);
 
         if ($khachhang) {
-            $khachhang->Password = $newpassword;
+            $varifyPassword = new VarifyPasswordController();
+            $cipperPassword = $varifyPassword->hashPassWord($newpassword);
+            $khachhang->Password = $cipperPassword;
             return $khachhang->update();
         } else {
             return response()->json(["message" => "eror"], 404);
@@ -112,7 +117,7 @@ class commonControl extends Controller
                 'resetPasswordLink' => $resetPasswordLink
             ];
             Mail::send('emails.forgetpasswordkhachhang', ['renderbody' => $renderbody], function ($email) use ($EmailKH, $chukhachsan) {
-                $email->subject("Forget Password");
+                $email->subject("Forget Password Inkeepper");
                 $email->to($EmailKH, $chukhachsan->HoTen);
             });
             return true;
@@ -128,13 +133,100 @@ class commonControl extends Controller
         $chukhachsan = Chukhachsan::findOrFail($email);
 
         if ($chukhachsan) {
-            $chukhachsan->Password = $newpassword;
+            $varifyPassword = new VarifyPasswordController();
+            $cipperPassword = $varifyPassword->hashPassWord($newpassword);
+            $chukhachsan->Password = $cipperPassword;
             return $chukhachsan->update();
         } else {
             return response()->json(["message" => "eror"], 404);
         }
     }
 
+    public function SendMailDoneDDP(Request $request)
+    {
+        $this->validate($request, [
+            'email' => 'required',
+            'UIDDatPhong' => 'required',
+        ]);
+        $EmailKH = $request->input("email");
+        $UIDDatPhong = $request->input("UIDDatPhong");
+
+        $khachhang = Khachhang::findOrFail($EmailKH);
+        $DDP = Dondatphong::findOrFail($UIDDatPhong);
+        $ChiTietDonDatPhongs = Ctddp::where('MaDDP', $UIDDatPhong)->get();
+        $renderBodyChiTietDonDatPhong = [];
+        foreach ($ChiTietDonDatPhongs as $ChiTietDonDatPhong) {
+            $loaiPhong = Loaiphong::findOrFail($ChiTietDonDatPhong->UIDLoaiPhong);
+            $renderBodyChiTietDonDatPhong[] = [
+                'TenLoaiPhong' => $loaiPhong->TenLoaiPhong,
+                'SoNgayO' => $ChiTietDonDatPhong->SoNgayO,
+                'soLuongPhong' => $ChiTietDonDatPhong->soLuongPhong,
+                'Tien' => $ChiTietDonDatPhong->Tien,
+            ];
+        }
+        if ($khachhang) {
+            $renderbody = [
+                'Email' => $khachhang->Email,
+                'HoTen' => $khachhang->HoTen,
+                'MaDDP' => $UIDDatPhong,
+                'GiaTien' => $DDP->tongtien,
+                'TraTruoc' => 0,
+                'ConLai' => 0,
+                'ChiTietDonDatPhong' => $renderBodyChiTietDonDatPhong,
+            ];
+            // return $renderbody;
+            Mail::send('emails.statusddp', ['renderbody' => $renderbody], function ($email) use ($EmailKH, $khachhang) {
+                $email->subject("Booking Invoice");
+                $email->to($EmailKH, $khachhang->HoTen);
+            });
+            return true;
+        } else {
+            return  response()->json(["message" => "eror"], 404);
+        }
+    }
+
+    public function SendMailDeclinedDDP(Request $request)
+    {
+        $this->validate($request, [
+            'email' => 'required',
+            'UIDDatPhong' => 'required',
+        ]);
+        $EmailKH = $request->input("email");
+        $UIDDatPhong = $request->input("UIDDatPhong");
+
+        $khachhang = Khachhang::findOrFail($EmailKH);
+        $DDP = Dondatphong::findOrFail($UIDDatPhong);
+        $ChiTietDonDatPhongs = Ctddp::where('MaDDP', $UIDDatPhong)->get();
+        $renderBodyChiTietDonDatPhong = [];
+        foreach ($ChiTietDonDatPhongs as $ChiTietDonDatPhong) {
+            $loaiPhong = Loaiphong::findOrFail($ChiTietDonDatPhong->UIDLoaiPhong);
+            $renderBodyChiTietDonDatPhong[] = [
+                'TenLoaiPhong' => $loaiPhong->TenLoaiPhong,
+                'SoNgayO' => $ChiTietDonDatPhong->SoNgayO,
+                'soLuongPhong' => $ChiTietDonDatPhong->soLuongPhong,
+                'Tien' => $ChiTietDonDatPhong->Tien,
+            ];
+        }
+
+
+        if ($khachhang) {
+            $renderbody = [
+                'Email' => $khachhang->Email,
+                'HoTen' => $khachhang->HoTen,
+                'MaDDP' => $UIDDatPhong,
+                'GiaTien' => $DDP->tongtien,
+                'ChiTietDonDatPhong' => $renderBodyChiTietDonDatPhong,
+            ];
+            // return $renderbody;
+            Mail::send('emails.statusdeclinedddp', ['renderbody' => $renderbody], function ($email) use ($EmailKH, $khachhang) {
+                $email->subject("Reservations Rejected");
+                $email->to($EmailKH, $khachhang->HoTen);
+            });
+            return true;
+        } else {
+            return  response()->json(["message" => "eror"], 404);
+        }
+    }
 
 
 

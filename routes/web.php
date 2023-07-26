@@ -16,6 +16,7 @@ use App\Http\Controllers\seachWebController;
 use App\Http\Controllers\searchKhachSanController;
 use App\Http\Controllers\SuKienWebController;
 use App\Http\Controllers\ThanhPhoWebWebController;
+use App\Http\Controllers\VnpayController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -120,3 +121,5 @@ Route::get('admin/delete/image/diadiemdulich/{src}', [DiaDiemDuLichWebController
 Route::get('adminKS/khachsan/findbyKS/{UIDKS}', [KhachSanWebController::class, 'getks']);
 Route::get('adminKS/khachsan/findbyKS/{UIDKS}/show', [KhachSanWebController::class, 'showKS']);
 Route::get('adminKS/khachsan/findbyKS/{UIDKS}/edit', [KhachSanWebController::class, 'editKS']);
+
+Route::get('linkvnpay/{UIDDDP}', [VnpayController::class,'LinkVnPAy']);

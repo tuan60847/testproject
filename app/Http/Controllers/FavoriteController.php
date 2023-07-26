@@ -47,21 +47,19 @@ class FavoriteController extends Controller
 
         $Email = $request->input("Email");
         $UIDKS = $request->input("UIDKS");
-        
+
         $favorite = Favorite::where('Email', '=', $Email)->where('UIDKS', '=', $UIDKS)->first();
         // return $favorite;
-        
-        if(!$favorite){
+
+        if (!$favorite) {
             $newfavorite = new Favorite();
-            $newfavorite->Email=$Email;
-            $newfavorite->UIDKS=$UIDKS;
+            $newfavorite->Email = $Email;
+            $newfavorite->UIDKS = $UIDKS;
             return $newfavorite->save();
-        }else{
+        } else {
             $favorite->isActive =  !$favorite->isActive;
             return $favorite->update();
-           
         }
-        
     }
 
     public function getBoolenFavorite(Request $request)
@@ -75,17 +73,15 @@ class FavoriteController extends Controller
 
         $Email = $request->input("Email");
         $UIDKS = $request->input("UIDKS");
-        
+
         $favorite = Favorite::where('Email', '=', $Email)->where('UIDKS', '=', $UIDKS)->first();
         // return $favorite;
-        
-        if(!$favorite||$favorite->isActive==false){
+
+        if (!$favorite || $favorite->isActive == false) {
             return response()->json(["message" => "eror"], 404);
-        }else{
+        } else {
             return true;
-           
         }
-        
     }
 
 
@@ -94,20 +90,20 @@ class FavoriteController extends Controller
         //
         $this->validate($request, [
             'Email' => 'required',
-          
+
         ]);
 
 
         $Email = $request->input("Email");
 
-       
-        $favorites = Favorite::where('Email', '=', $Email)->get();
+
+        $favorites = Favorite::where('Email', '=', $Email)->where("isActive",1)->get();
         $responseData = [];
-       
-    // foreach ($Khachsans as $Khachsan) {
-   
-    // }
-        foreach ( $favorites as $favorite){
+
+        // foreach ($Khachsans as $Khachsan) {
+
+        // }
+        foreach ($favorites as $favorite) {
             $Khachsan = Khachsan::findOrFail($favorite->UIDKS);
             $responseData[] = [
                 'UIDKS' => $Khachsan->UIDKS,
@@ -118,16 +114,14 @@ class FavoriteController extends Controller
                 'Wifi' => boolval($Khachsan->Wifi),
                 'Buffet' => boolval($Khachsan->Buffet),
                 'isActive' => boolval($Khachsan->isActive),
-                
+                'taxCode' => $Khachsan->taxcode
+
             ];
         }
         return $responseData;
-        
-        
-        
     }
 
-    
+
 
     /**
      * Display the specified resource.

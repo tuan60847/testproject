@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Models\Ctddp;
 use App\Models\Dondatphong;
+use App\Models\Khachhang;
 use App\Models\Loaiphong;
 use App\Models\Phongconlai;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
 use Symfony\Component\HttpFoundation\Response;
 
 use function PHPUnit\Framework\isEmpty;
@@ -91,6 +93,18 @@ class DonDatPhongController extends Controller
         return Dondatphong::whereNotIn('isChecked', [0, 5, 6, 7, 8])->Where('UIDDatPhong', 'LIKE', '%' . $UIDKS . '%')->get();
     }
 
+    public function findDDPInProcessByUser(Request $request)
+    {
+        $this->validate($request, [
+            'EmailKH' => 'required',
+        ]);
+        $EmailKH = $request->input("EmailKH");
+        return Dondatphong::whereNotIn('isChecked', [5, 6, 7, 8])
+            ->where('EmailKH', $EmailKH)
+            ->orderBy('NgayDatPhong', 'ASC')
+            ->get();
+    }
+
     public function findHistoryDDPByCKS(Request $request)
     {
         $this->validate($request, [
@@ -113,6 +127,18 @@ class DonDatPhongController extends Controller
             ->orWhereIn('isChecked', [6, 7, 8])
             ->where('EmailKH', $EmailKH)
             ->get();
+    }
+
+    public function getDDPNoProcessByUSer(Request $request)
+    {
+        $this->validate($request, [
+            'EmailKH' => 'required',
+            'UIDKS' => 'required',
+        ]);
+        $UIDKS = $request->input("UIDKS");
+        $EmailKH = $request->input("EmailKH");
+        $dondatphong = Dondatphong::where('UIDDatPhong', 'LIKE', '%' . $UIDKS . '%')->where('EmailKH', $EmailKH)->where('isChecked', 0)->first();
+        return $dondatphong;
     }
 
 
@@ -257,6 +283,100 @@ class DonDatPhongController extends Controller
         return response()->json($dondatphong->update());
     }
 
+    public function AcceptDonDatPhongGet(string $UIDDatPhong)
+    {
+        $dondatphong = Dondatphong::findOrFail($UIDDatPhong);
+        $Ngay = $dondatphong->NgayDatPhong;
+        $ArrayMaxRoom = [];
+        $Date = Carbon::createFromFormat('Y-m-d', $Ngay);
+        $startDate =  $Date->addDays(0)->format('Y-m-d');
+        $chitietdondatphong = Ctddp::where('MaDDP', $dondatphong->UIDDatPhong)->get();
+        foreach ($chitietdondatphong as $item) {
+            $loaiphong = Loaiphong::findOrFail($item->UIDLoaiPhong);
+            $MaxRoom = $loaiphong->soLuongPhong;
+            $endDate =  $Date->copy()->addDays(intval($item->SoNgayO))->format('Y-m-d');
+            $phongconlai = Phongconlai::whereBetween('Ngay', [$startDate, $endDate])
+                ->where('UIDLoaiPhong', $item->UIDLoaiPhong)
+                ->orderBy('SoLuong', 'asc')
+                ->first();
+            if (!empty($phongconlai)) {
+                $ArrayMaxRoom[] = $phongconlai->SoLuong;
+            } else {
+                $ArrayMaxRoom[] = $MaxRoom;
+            }
+        }
+
+        for ($i = 0; $i < count($chitietdondatphong); $i++) {
+            if ($ArrayMaxRoom[$i] < $chitietdondatphong[$i]->soLuongPhong) {
+                return response()->json(["message" => "eror"], 404);
+            }
+        }
+
+        foreach ($chitietdondatphong as $item) {
+            $loaiphong = Loaiphong::findOrFail($item->UIDLoaiPhong);
+
+            for ($i = 0; $i <= intval($item->SoNgayO); $i++) {
+                $NgayTam = $Date->copy()->addDays($i)->format('Y-m-d');
+                $phongconlai = Phongconlai::where('Ngay', $NgayTam)
+                    ->where('UIDLoaiPhong', $item->UIDLoaiPhong)
+                    ->first();
+
+                if (empty($phongconlai)) {
+                    $phongconlai = new Phongconlai();
+                    $phongconlai->Ngay = $NgayTam;
+                    $phongconlai->UIDLoaiPhong = $item->UIDLoaiPhong;
+
+
+                    if ($loaiphong->soLuongPhong >= $item->soLuongPhong) {
+                        $phongconlai->SoLuong = $loaiphong->soLuongPhong - $item->soLuongPhong;
+
+                        $phongconlai->save();
+                    }
+                } else {
+                    if ($phongconlai->SoLuong >= $item->soLuongPhong) {
+                        $phongconlai->SoLuong = $phongconlai->SoLuong - $item->soLuongPhong;
+
+                        $phongconlai->update();
+                    }
+                }
+            }
+        }
+        $dondatphong->isChecked = 2;
+        $dondatphong->TienCoc = $dondatphong->tongtien*30/100;
+        $dondatphong->update();
+        $khachhang = Khachhang::findOrFail($dondatphong->EmailKH);
+        $ChiTietDonDatPhongs = Ctddp::where('MaDDP', $UIDDatPhong)->get();
+        $renderBodyChiTietDonDatPhong = [];
+        foreach ($ChiTietDonDatPhongs as $ChiTietDonDatPhong) {
+            $loaiPhong = Loaiphong::findOrFail($ChiTietDonDatPhong->UIDLoaiPhong);
+            $renderBodyChiTietDonDatPhong[] = [
+                'TenLoaiPhong' => $loaiPhong->TenLoaiPhong,
+                'SoNgayO' => $ChiTietDonDatPhong->SoNgayO,
+                'soLuongPhong' => $ChiTietDonDatPhong->soLuongPhong,
+                'Tien' => $ChiTietDonDatPhong->Tien,
+            ];
+        }
+        if ($khachhang) {
+            $renderbody = [
+                'Email' => $khachhang->Email,
+                'HoTen' => $khachhang->HoTen,
+                'MaDDP' => $UIDDatPhong,
+                'GiaTien' => $dondatphong->tongtien,
+                'TraTruoc' => $dondatphong->tongtien*30/100,
+                'ConLai' =>  $dondatphong->tongtien*70/100,
+                'ChiTietDonDatPhong' => $renderBodyChiTietDonDatPhong,
+            ];
+            $EmailKH =  $dondatphong->EmailKH;
+            // return $renderbody;
+            Mail::send('emails.statusddp', ['renderbody' => $renderbody], function ($email) use ($EmailKH, $khachhang) {
+                $email->subject("Booking Invoice");
+                $email->to($EmailKH, $khachhang->HoTen);
+            });
+
+        }
+        return true;
+    }
+
     public function CancelDonDatPhongByUser(Request $request)
     {
         $this->validate($request, [
@@ -268,7 +388,9 @@ class DonDatPhongController extends Controller
 
         $Date = Carbon::createFromFormat('Y-m-d', $Ngay);
 
+
         $chitietdondatphong = Ctddp::where('MaDDP', $dondatphong->UIDDatPhong)->get();
+
         foreach ($chitietdondatphong as $item) {
             $loaiphong = Loaiphong::findOrFail($item->UIDLoaiPhong);
 
@@ -282,12 +404,14 @@ class DonDatPhongController extends Controller
                     if ($phongconlai->SoLuong + $item->soLuongPhong <= $loaiphong->soLuongPhong) {
                         $phongconlai->SoLuong = $phongconlai->SoLuong + $item->soLuongPhong;
                         $phongconlai->update();
-                    } else {
-                        return response()->json(["message" => "eror"], 404);
                     }
-                } else {
-                    return response()->json(["message" => "eror"], 404);
+                    //  else {
+                    //     return response()->json(["message" => "eror"], 404);
+                    // }
                 }
+                //  else {
+                //     return response()->json(["message" => "eror"], 404);
+                // }
             }
         }
         $dondatphong->isChecked = 6;
