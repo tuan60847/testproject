@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Hinhanhk;
 use App\Models\Khachsan;
+use App\Models\Loaiphong;
+use App\Models\Phongconlai;
 use GuzzleHttp\Promise\Create;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -61,7 +63,6 @@ class KhachSanController extends Controller
                 'Wifi' => boolval($Khachsan->Wifi),
                 'Buffet' => boolval($Khachsan->Buffet),
                 'isActive' => boolval($Khachsan->isActive),
-
             ];
         }
 
@@ -185,32 +186,63 @@ class KhachSanController extends Controller
     public function TimKhachSan(Request $request)
     {
         //
-    
+
         $this->validate($request, [
             'Search' => 'required',
+            'NgayDatPhong' => 'required|date_format:Y-m-d',
+            'NgayTraPhong' => 'date_format:Y-m-d',
+            // 'soGiuong'=> 'required',
+            'SoLuongPhong'=>'required'
         ]);
-        
-        
-        $Search = $request->input("Search");   
-        $khachSans = Khachsan::where('TenKS', 'LIKE', '%' . $Search . '%')
-                    ->orWhere('DiaChi', 'LIKE', '%' . $Search . '%')
-                    ->where('isActive',true)
-                    ->get();
+
+
+        $Search = $request->input("Search");
+        $NgayDatPhong = $request->input("NgayDatPhong");
+        $NgayTraPhong = $request->input("NgayTraPhong");
+        $soGiuong = $request->input("soGiuong");
+        $SoLuongPhong = $request->input("SoLuongPhong");
+        $khachSans = Khachsan::Where('DiaChi', 'LIKE', '%' . $Search . '%')
+            ->where('isActive', true)
+            ->get();
+        $khachsantam = [];
+        foreach($khachSans as $khachsan){
+            $loaiphongs = Loaiphong::Where('UIDKS','=',$khachsan->UIDKS)->get();
+
+            foreach ($loaiphongs as $loaiphong){
+                if($loaiphong->soGiuong==$soGiuong||$soGiuong==""){
+                    $phongconlai = Phongconlai::Where('UIDLoaiPhong','=',$loaiphong->UIDLoaiPhong)->Where('Ngay','=',$NgayDatPhong)->first();
+                    if(!$phongconlai){
+                        if($loaiphong->soLuongPhong>intval($SoLuongPhong)){
+                            $khachsantam[]=$khachsan;
+                            break;
+                        }     
+                    }else if($phongconlai->SoLuong > intval($SoLuongPhong)){
+                        $khachsantam[]=$khachsan;
+                        break;
+                    }
+                }
+                
+            }
+            
+        }
+        $responseData = [];
+        foreach ($khachsantam as $Khachsan) {
+            $responseData[] = [
+                'UIDKS' => $Khachsan->UIDKS,
+                'TenKS' => $Khachsan->TenKS,
+                'DiaChi' => $Khachsan->DiaChi,
+                'SDT' => $Khachsan->SDT,
+                'MaDDDL' => $Khachsan->MaDDDL,
+                'Wifi' => boolval($Khachsan->Wifi),
+                'Buffet' => boolval($Khachsan->Buffet),
+                'isActive' => boolval($Khachsan->isActive),
+                'taxCode' => $Khachsan->taxcode,
+            ];
+        }
+
+        return response()->json($responseData);
         
         // $isAdminKH ="isAdminKH";
-        
-        if (!empty($khachSans)) {
-
-            return $khachSans;
-
-            // return response($khachsan, Response::HTTP_CREATED);
-        } else {
-            // handle the case where the image upload fails
-            // e.g. return an error response or redirect back to the form with an error message
-            return response()->json(["message"=>"eror"],404);
-        }
-       
-
     }
 
     /**

@@ -14,24 +14,23 @@ class testcontrol extends Controller
      */
     public function index()
     {
-        
+
         $customers = Khachhang::all();
 
-    $responseData = [];
-    foreach ($customers as $customer) {
-        $responseData[] = [
-            'Email' => $customer->Email,
-            'Password' => $customer->Password,
-            'NgaySinh' => $customer->NgaySinh,
-            'HoTen' => $customer->HoTen,
-            'cmnd' => $customer->cmnd,
-            'SDT' => $customer->SDT,
-            'isDatPhong' => boolval($customer->isDatPhong),
-        ];
-    }
+        $responseData = [];
+        foreach ($customers as $customer) {
+            $responseData[] = [
+                'Email' => $customer->Email,
+                'Password' => $customer->Password,
+                'NgaySinh' => $customer->NgaySinh,
+                'HoTen' => $customer->HoTen,
+                'cmnd' => $customer->cmnd,
+                'SDT' => $customer->SDT,
+                'isDatPhong' => boolval($customer->isDatPhong),
+            ];
+        }
 
-    return response()->json($responseData);
-
+        return response()->json($responseData);
     }
 
     /**
@@ -55,43 +54,37 @@ class testcontrol extends Controller
             
             'cmnd' => 'required',
             'SDT' => 'required',
-            
-            
         ]);
-        
-       
         $Email = $request->input("Email");
         $Password = $request->input("Password");
-        $NgaySinh =$request->input("NgaySinh");
-
-        
+        $NgaySinh = $request->input("NgaySinh");
         $HoTen = $request->input("HoTen");
-        $cmnd =$request->input("cmnd");
+        $cmnd = $request->input("cmnd");
         $SDT = $request->input("SDT");
-        $isDatPhong=$request->input("isDatPhong")=="false"||$request->input("isDatPhong")==null?false:true;
-       
-        
+        $isDatPhong = $request->input("isDatPhong") == "false" || $request->input("isDatPhong") == null ? false : true;
+
+
         if (!empty($Email)) {
-           
+
             $khachhang = new Khachhang();
             $khachhang->Email = $Email;
             $khachhang->Password = $Password;
             $khachhang->NgaySinh = $NgaySinh;
             $khachhang->HoTen = $HoTen;
             $khachhang->SDT = $SDT;
-            $khachhang->cmnd= $cmnd;
-            $khachhang->isDatPhong=$isDatPhong;
-            
-            
+            $khachhang->cmnd = $cmnd;
+            $khachhang->isDatPhong = $isDatPhong;
+
+
             $khachhang->save();
-            
-            
-           
+
+
+
             return response($khachhang, Response::HTTP_CREATED);
         } else {
             // handle the case where the image upload fails
             // e.g. return an error response or redirect back to the form with an error message
-            return response()->json(["message"=>"eror"],404);
+            return response()->json(["message" => "eror"], 404);
         }
     }
 
@@ -101,7 +94,7 @@ class testcontrol extends Controller
     public function show(string $id)
     {
         //
-        $khachhang= Khachhang::find($id);
+        $khachhang = Khachhang::find($id);
         $responseData = [
             'Email' => $khachhang->Email,
             'Password' => $khachhang->Password,
@@ -110,10 +103,10 @@ class testcontrol extends Controller
             'cmnd' => $khachhang->cmnd,
             'SDT' => $khachhang->SDT,
             'isDatPhong' => boolval($khachhang->isDatPhong),
-          ];
-          
-          // Trả về dữ liệu dưới dạng JSON
-          return response()->json($responseData);
+        ];
+
+        // Trả về dữ liệu dưới dạng JSON
+        return response()->json($responseData);
     }
 
     /**
@@ -132,54 +125,33 @@ class testcontrol extends Controller
         //
         $khachhang = Khachhang::findOrFail($id);
         $this->validate($request, [
-            
             'Password' => 'required',
             'HoTen' => 'required',
             'NgaySinh' => 'required|date_format:Y-m-d',
-            
             'cmnd' => 'required',
             'SDT' => 'required',
-            
-            
         ]);
-        
-        
-       
         $Password = $request->input("Password");
-        $NgaySinh =$request->input("NgaySinh");
-
-       
+        $NgaySinh = $request->input("NgaySinh");
         $HoTen = $request->input("HoTen");
-        $cmnd =$request->input("cmnd");
+        $cmnd = $request->input("cmnd");
         $SDT = $request->input("SDT");
-        $isDatPhong=$request->input("isDatPhong")=="false"||$request->input("isDatPhong")==null?false:true;
-        
-       
-        
-        
+        $isDatPhong = $request->input("isDatPhong") == "false" || $request->input("isDatPhong") == null ? false : true;
         if (!empty($khachhang)) {
-           
-            
             $khachhang->Password = $Password;
             $khachhang->NgaySinh = $NgaySinh;
             $khachhang->HoTen = $HoTen;
             $khachhang->SDT = $SDT;
-            $khachhang->cmnd= $cmnd;
-            $khachhang->isDatPhong=$isDatPhong;
-           
-            
+            $khachhang->cmnd = $cmnd;
+            $khachhang->isDatPhong = $isDatPhong;
+
+
             return $khachhang->update();
-            
-            
-           
-            
         } else {
             // handle the case where the image upload fails
             // e.g. return an error response or redirect back to the form with an error message
-            return response()->json(["message"=>"eror"],404);
+            return response()->json(["message" => "eror"], 404);
         }
-        
-
     }
 
     /**
@@ -191,28 +163,28 @@ class testcontrol extends Controller
         return $khachhang->delete();
     }
 
-    public function setoff($id){
+    public function setoff($id)
+    {
         $khachhang = Khachhang::findOrFail($id);
-        if(!empty($khachhang)){
-            $khachhang->isDatPhong=false;
+        if (!empty($khachhang)) {
+            $khachhang->isDatPhong = false;
             return $khachhang->update();
-        }
-        else {
+        } else {
             // handle the case where the image upload fails
             // e.g. return an error response or redirect back to the form with an error message
-            return response()->json(["message"=>"eror"],404);
+            return response()->json(["message" => "eror"], 404);
         }
     }
-    public function seton($id){
+    public function seton($id)
+    {
         $khachhang = Khachhang::findOrFail($id);
-        if(!empty($khachhang)){
-            $khachhang->isDatPhong=true;
+        if (!empty($khachhang)) {
+            $khachhang->isDatPhong = true;
             return $khachhang->update();
-        }
-        else {
+        } else {
             // handle the case where the image upload fails
             // e.g. return an error response or redirect back to the form with an error message
-            return response()->json(["message"=>"eror"],404);
+            return response()->json(["message" => "eror"], 404);
         }
     }
 
@@ -221,7 +193,7 @@ class testcontrol extends Controller
     //     if(!empty($khachhang)){
     //         $array = [$khachhang->cmnd,$khachhang->SDT];
     //         $khachhang->isAdminKH=implode("_",$array);
-            
+
     //         return $khachhang->update();
     //     }
     //     else {
@@ -230,5 +202,5 @@ class testcontrol extends Controller
     //         return response()->json(["message"=>"eror"],404);
     //     }
     // }
-    
+
 }

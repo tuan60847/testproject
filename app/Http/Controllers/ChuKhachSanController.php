@@ -69,11 +69,10 @@ class ChuKhachSanController extends Controller
         //
         $chukhachsan = Chukhachsan::findOrFail($id);
         $this->validate($request, [
-            'Email' => 'required',
+            
             'Password' => 'required',
             'HoTen' => 'required',
             'NgaySinh' => 'required|date_format:Y-m-d',
-
             'cmnd' => 'required',
             'SDT' => 'required',
 
@@ -82,6 +81,9 @@ class ChuKhachSanController extends Controller
 
 
         $Email = $request->input("Email");
+        
+        
+       
         $Password = $request->input("Password");
         $NgaySinh = $request->input("NgaySinh");
 

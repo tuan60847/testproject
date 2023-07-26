@@ -22,6 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool $isDatPhong
  * 
  * @property Collection|Dondatphong[] $dondatphongs
+ * @property Collection|Favorite[] $favorites
  *
  * @package App\Models
  */
@@ -52,5 +53,10 @@ class Khachhang extends Model
 	public function dondatphongs()
 	{
 		return $this->hasMany(Dondatphong::class, 'EmailKH');
+	}
+
+	public function favorites()
+	{
+		return $this->hasMany(Favorite::class, 'Email');
 	}
 }

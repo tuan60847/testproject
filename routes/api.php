@@ -10,9 +10,11 @@
     use App\Http\Controllers\Api\ImageKSController;
     use App\Http\Controllers\Api\ImageLoaiPhongController;
     use App\Http\Controllers\ChuKhachSanController;
+    use App\Http\Controllers\commonControl;
     use App\Http\Controllers\CTDDPController;
     use App\Http\Controllers\DiaDiemDuLichController;
     use App\Http\Controllers\DonDatPhongController;
+    use App\Http\Controllers\FavoriteController;
     use App\Http\Controllers\KhachSanController;
     use App\Http\Controllers\LoaiPhongController;
     use App\Http\Controllers\PhongConLaiController;
@@ -78,7 +80,7 @@
     Route::delete('dondatphong/{id}', [DonDatPhongController::class, 'destroy']);
     Route::get('dondatphong/{id}', [DonDatPhongController::class, 'show']);
     Route::get('dondatphong/findlastbyEmail/{EmailKH}', [DonDatPhongController::class, 'lastItemByEmail']);
-    Route::get('dondatphong/processing/dondatphong', [DonDatPhongController::class, 'findDDPprocess']);
+    Route::get('dondatphong/processing/dondatphong/{UIDKS}', [DonDatPhongController::class, 'findDDPprocess']);
     Route::post('findhistoryddpbykh', [DonDatPhongController::class, 'findHistoryDDPByKH']);
     Route::post('findhistoryddpbycks', [DonDatPhongController::class, 'findHistoryDDPByCKS']);
     Route::post('acceptdondatphong', [DonDatPhongController::class, 'AcceptDonDatPhong']);
@@ -160,4 +162,34 @@
     Route::resource('hinhanhSK', HinhAnhSuKienController::class);
 
 
+    Route::post('image/hinhanhSK/upload', [HinhAnhSuKienController::class, 'imageStore']);
+    Route::delete('hinhanhSK/image/SuKien/{src}', [HinhAnhSuKienController::class, 'destroy']);
+    Route::get('hinhanhSK/UIDSK/{MaSuKien}', [HinhAnhSuKienController::class, 'getImageByUIDMaSukien']);
+    Route::resource('hinhanhSK', HinhAnhSuKienController::class);
+
+    Route::get('phongconlai/{id}', [PhongConLaiController::class, 'show']);
+    Route::post('phongconlai', [PhongConLaiController::class, 'store']);
+    Route::post('bookingroom', [PhongConLaiController::class, 'BookingRoom']);
+    Route::post('checkoutroom', [PhongConLaiController::class, 'CheckoutRoom']);
+    Route::post('getdateroom', [PhongConLaiController::class, 'GetDateRoom']);
+    Route::post('getroomdatenow', [PhongConLaiController::class, 'GetRoomDateNow']);
+    Route::put('phongconlai/{id}', [PhongConLaiController::class, 'update']);
+    Route::resource('phongconlai', PhongConLaiController::class);
+
+
     Route::post('timkiem', [searchController::class, 'TimKiem']);
+
+
+    Route::get('sendmailthanksuser/{email}', [commonControl::class, 'SendMailThanksUser']);
+    Route::get('sendmailthankscks/{email}', [commonControl::class, 'SendMailThanksCKS']);
+    Route::get('sendmailfogetpassworduser/{email}', [commonControl::class, 'SendMailFogetPasswordUser']);
+    Route::post('reset-password-user', [commonControl::class, 'ResetPasswordUser']);
+    Route::get('reset-password-user/{email}&&{newpassword}', [commonControl::class, 'ResetPasswordUserGet']);
+    Route::get('sendmailfogetpasswordcks/{email}', [commonControl::class, 'SendMailFogetPasswordCKS']);
+    Route::get('reset-password-cks/{email}&&{newpassword}', [commonControl::class, 'ResetPasswordCKSGet']);
+
+    Route::get('favorite/{id}', [FavoriteController::class, 'show']);
+    Route::post('setfavorite', [FavoriteController::class, 'SetFavorite']);
+    Route::post('getkhachsanfavoritebykh', [FavoriteController::class, 'getKhachSanFavoriteByKH']);
+    Route::post('getboolenfavorite', [FavoriteController::class, 'getBoolenFavorite']);
+    Route::resource('favorite', FavoriteController::class);

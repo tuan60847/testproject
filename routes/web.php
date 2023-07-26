@@ -89,4 +89,4 @@ Route::post('adminKS/dondangdienra/findbyKS', [DonDatPhongController::class, 'do
 Route::post('adminKS/dondahuy/findbyKS', [DonDatPhongController::class, 'dondahuy']);
 Route::post('adminKS/lichsu/findbyKS', [DonDatPhongController::class, 'lichsu']);
 // Chi thiết đơn đặt phòng
-Route::get('adminKS/dondadat/findbyKS/{MaDDP}', [CTDDPController::class, 'show']);
+Route::get('adminKS/dondatphong/findbyKS/{MaDDP}', [CTDDPController::class, 'showWeb']);

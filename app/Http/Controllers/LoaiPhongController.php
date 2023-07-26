@@ -61,90 +61,81 @@ class LoaiPhongController extends Controller
     public function store(Request $request)
     {
         //
-
         $this->validate($request, [
-
             'TenLoaiPhong' => 'required',
             'Gia' => 'required',
             'soGiuong' => 'required',
             'soLuongPhong' => 'required',
             'isMayLanh' => 'required',
         ]);
+        $TenLoaiPhong = $request->input("TenLoaiPhong");
+        $UIDKS = $request->input("UIDKS");
+        $Gia = $request->input("Gia");
+        $soGiuong = $request->input("soGiuong");
+        $soLuongPhong = $request->input("soLuongPhong");
+        $isMayLanh = $request->input("isMayLanh") == false || $request->input("isMayLanh") == null ? false : true;
+        if (!empty($TenLoaiPhong)) {
 
+            //     $loaiphong = new Loaiphong();
+            //     $loaiphong->TenLoaiPhong = $TenLoaiPhong;
+            //     $loaiphong->Gia = floatval($Gia);
+            //     $loaiphong->UIDKS = $UIDKS;
+            //     $loaiphong->soGiuong = $soGiuong;
 
+            //     $loaiphong->soLuongPhong = intval($soLuongPhong);
+            //     $loaiphong->isMayLanh = $isMayLanh;
+            //     // $loaiphong->phongConLai = intval($soLuongPhong);
 
-        // $TenLoaiPhong = $request->input("TenLoaiPhong");
-        // $UIDKS = $request->input("UIDKS");
-        // $Gia = $request->input("Gia");
+            //     $loaiphong->save();
 
-
-        // $soGiuong = $request->input("soGiuong");
-        // $soLuongPhong = $request->input("soLuongPhong");
-        // $isMayLanh = $request->input("isMayLanh") == false || $request->input("isMayLanh") == null ? false : true;
-
-
-
-
-        // if (!empty($TenLoaiPhong)) {
-
-        //     $loaiphong = new Loaiphong();
-        //     $loaiphong->TenLoaiPhong = $TenLoaiPhong;
-        //     $loaiphong->Gia = floatval($Gia);
-        //     $loaiphong->UIDKS = $UIDKS;
-        //     $loaiphong->soGiuong = $soGiuong;
-
-        //     $loaiphong->soLuongPhong = intval($soLuongPhong);
-        //     $loaiphong->isMayLanh = $isMayLanh;
-        //     // $loaiphong->phongConLai = intval($soLuongPhong);
-
-        //     $loaiphong->save();
-
-        //     return response($loaiphong, Response::HTTP_CREATED);
-        // } else {
-        //     // handle the case where the image upload fails
-        //     // e.g. return an error response or redirect back to the form with an error message
-        //     return response()->json(["message" => "eror"], 404);
-        // }
-        $loaiphong = new Loaiphong();
-        $loaiphong->TenLoaiPhong = $request->TenLoaiPhong;
-        $loaiphong->Gia = $request->Gia;
-        $loaiphong->UIDKS = $request->UIDKS;
-        $loaiphong->soGiuong = $request->soGiuong;
-        $loaiphong->soLuongPhong = $request->soLuongPhong;
-        $loaiphong->isMayLanh = $request->isMayLanh;
-        $loaiphong->save();
-        foreach ($request->file('imgs') as $img) {
-            $imgPath = $img->store('public/imgs');
-            $imgData = new Hinhanhloaiphong;
-            $imgData->UIDLoaiPhong = $loaiphong->UIDLoaiPhong;
-            $imgData->src = $imgPath;
-            $imgData->save();
+            //     return response($loaiphong, Response::HTTP_CREATED);
+            // } else {
+            //     // handle the case where the image upload fails
+            //     // e.g. return an error response or redirect back to the form with an error message
+            //     return response()->json(["message" => "eror"], 404);
+            // }
+            $loaiphong = new Loaiphong();
+            $loaiphong->TenLoaiPhong = $request->TenLoaiPhong;
+            $loaiphong->Gia = $request->Gia;
+            $loaiphong->UIDKS = $request->UIDKS;
+            $loaiphong->soGiuong = $request->soGiuong;
+            $loaiphong->soLuongPhong = $request->soLuongPhong;
+            $loaiphong->isMayLanh = $request->isMayLanh;
+            $loaiphong->save();
+            foreach ($request->file('imgs') as $img) {
+                $imgPath = $img->store('public/imgs');
+                $imgData = new Hinhanhloaiphong;
+                $imgData->UIDLoaiPhong = $loaiphong->UIDLoaiPhong;
+                $imgData->src = $imgPath;
+                $imgData->save();
+            }
+            return redirect('adminKS/loaiphong/findbyKS/' . $loaiphong->UIDKS . '/create')->with('success', 'Thêm thành công');
         }
-        return redirect('adminKS/loaiphong/findbyKS/' . $loaiphong->UIDKS . '/create')->with('success', 'Thêm thành công');
+
+
+
+        // public function UpdateSLLoaiPhong(Request $request, string $UIDLoaiPhong)
+        // {
+        //     //
+        //     $loaiphong = Loaiphong::where('UIDLoaiPhong', $UIDLoaiPhong)->get();
+        //     $this->validate($request, [        
+        //         'phongConLai' => 'required',  
+        //     ]);
+        //     $phongConLai =$request->input("phongConLai");
+        //     if (!empty($loaiphong)) {
+
+        //         $loaiphong->phongConLai+=$phongConLai;
+        //         if($loaiphong->phongConLai>0&&$loaiphong->phongConLai<$loaiphong->soLuongPhong){
+        //             return $loaiphong->save();  
+        //         }else{
+        //             return response()->json(["message"=>"eror"],404);
+        //         }      
+        //     } else {
+        //         // handle the case where the image upload fails
+        //         // e.g. return an error response or redirect back to the form with an error message
+        //         return response()->json(["message"=>"eror"],404);
+        //     }
     }
-
-    // public function UpdateSLLoaiPhong(Request $request, string $UIDLoaiPhong)
-    // {
-    //     //
-    //     $loaiphong = Loaiphong::where('UIDLoaiPhong', $UIDLoaiPhong)->get();
-    //     $this->validate($request, [        
-    //         'phongConLai' => 'required',  
-    //     ]);
-    //     $phongConLai =$request->input("phongConLai");
-    //     if (!empty($loaiphong)) {
-
-    //         $loaiphong->phongConLai+=$phongConLai;
-    //         if($loaiphong->phongConLai>0&&$loaiphong->phongConLai<$loaiphong->soLuongPhong){
-    //             return $loaiphong->save();  
-    //         }else{
-    //             return response()->json(["message"=>"eror"],404);
-    //         }      
-    //     } else {
-    //         // handle the case where the image upload fails
-    //         // e.g. return an error response or redirect back to the form with an error message
-    //         return response()->json(["message"=>"eror"],404);
-    //     }
-    // }
 
     /**
      * Display the specified resource.

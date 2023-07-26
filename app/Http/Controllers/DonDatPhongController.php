@@ -85,9 +85,10 @@ class DonDatPhongController extends Controller
         }
     }
 
-    public function findDDPprocess()
+    public function findDDPprocess(string $UIDKS)
     {
-        return Dondatphong::whereNotIn('isChecked', [0, 5])->get();
+
+        return Dondatphong::whereNotIn('isChecked', [0, 5, 6, 7, 8])->Where('UIDDatPhong', 'LIKE', '%' . $UIDKS . '%')->get();
     }
 
     public function findHistoryDDPByCKS(Request $request)
@@ -118,8 +119,8 @@ class DonDatPhongController extends Controller
 
     public function lastItemByEmail(string $EmailKH)
     {
-        $DonDatPhong = Dondatphong::where('EmailKH', $EmailKH)->get();
-        return $DonDatPhong->last();
+        $DonDatPhong = Dondatphong::where('EmailKH', $EmailKH)->orderBy('isChecked', 'asc')->get();
+        return $DonDatPhong->first();
     }
 
     /**

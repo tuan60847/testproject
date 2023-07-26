@@ -20,9 +20,11 @@ use Illuminate\Database\Eloquent\Model;
  * @property bool $Wifi
  * @property bool $isActive
  * @property int $MaDDDL
+ * @property string $taxcode
  * 
  * @property Chukhachsan $chukhachsan
  * @property Diadiemdulich $diadiemdulich
+ * @property Collection|Favorite[] $favorites
  * @property Collection|Hinhanhk[] $hinhanhks
  * @property Collection|Loaiphong[] $loaiphongs
  *
@@ -49,7 +51,8 @@ class Khachsan extends Model
 		'Buffet',
 		'Wifi',
 		'isActive',
-		'MaDDDL'
+		'MaDDDL',
+		'taxcode'
 	];
 
 	public function chukhachsan()
@@ -60,6 +63,11 @@ class Khachsan extends Model
 	public function diadiemdulich()
 	{
 		return $this->belongsTo(Diadiemdulich::class, 'MaDDDL');
+	}
+
+	public function favorites()
+	{
+		return $this->hasMany(Favorite::class, 'UIDKS');
 	}
 
 	public function hinhanhks()
