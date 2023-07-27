@@ -46,6 +46,11 @@ Route::resource('admin/thanhpho', ThanhPhoWebWebController::class);
 Route::get('admin/thanhpho/{MaTP}/delete', [ThanhPhoWebWebController::class, 'destroy']);
 //khách sạn
 Route::resource('admin/khachsan', KhachSanWebController::class);
+Route::get('admin/checktaxcode/{UIDKS}', [KhachSanWebController::class, 'checkTaxcode']);
+Route::get('admin/changeactive/{UIDKS}', [KhachSanWebController::class, 'changeActive']);
+
+
+
 //Địa điểm du lịch
 Route::resource('/admin/diadiemdulich', DiaDiemDuLichWebController::class);
 Route::get('admin/diadiemdulich/{MaDDDL}/delete', [DiaDiemDuLichWebController::class, 'destroy']);

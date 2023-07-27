@@ -155,6 +155,11 @@ class ChuKhachSanWebContronller extends Controller
             }
         }
     }
+
+
+
+
+
     function logout()
     {
         session()->forget(['cksData']);
@@ -165,6 +170,7 @@ class ChuKhachSanWebContronller extends Controller
         $data = Chukhachsan::find($id);
         return view('chukhachsan.profile', ['data' => $data]);
     }
+
     public function checkPassword(Request $request)
     {
         $this->validate($request, [
