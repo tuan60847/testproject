@@ -53,21 +53,16 @@
                                     @if($dondatphong->isChecked==1 )
                                     <option value="1" selected>Xác nhận của khách hàng</option>
                                     <option value="2">Xác nhận của khách sạn</option>
-                                    <option value="6">Hủy đơn đặt phòng</option>
+                                    <option value="7">Hủy đơn đặt phòng</option>
                                     @elseif ($dondatphong->isChecked == 2)
                                     <option value="2" selected>Xác nhận của khách sạn</option>
                                     <option value="3">Check In</option>
-                                    @elseif ($dondatphong->isChecked == 0)
-                                    <option value="0">Chưa xác nhận</option>
-                                    <option value="1">Xác Nhận</option>
-                                    <option value="6">Hủy đơn đặt phòng</option>
+                                    <option value="7">Hủy đơn đặt phòng</option>
                                     @elseif ($dondatphong->isChecked == 3)
                                     <option value="3" selected>Check In</option>
                                     <option value="5">Check out</option>
                                     @elseif ($dondatphong->isChecked == 5)
                                     <option value="5" selected>Check out</option>
-                                    @elseif ($dondatphong->isChecked == 6)
-                                    <option value="6" selected>Hủy đơn đặt phòng</option>
                                     @endif
                                 </select>
                             </td>

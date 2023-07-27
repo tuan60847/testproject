@@ -130,7 +130,7 @@
                         <h6 class="collapse-header">Thành phần quản lý</h6>
                         <a class="collapse-item" @if(Session::has('cksData')) href="{{url('/adminKS/hinhanhKS/findbyKS/'.Session::get('cksData')->ADMINKS)}}" @endif method="GET">Hình ảnh Khách sạn</a>
                         <a class="collapse-item" href="{{url('')}}">Hình ảnh loại phòng</a>
-                         <a class="collapse-item" href="utilities-other.html">Other</a> 
+                         <a class="collapse-item" href="utilities-other.html">Other</a>
                     </div>
                 </div>
             </li> -->

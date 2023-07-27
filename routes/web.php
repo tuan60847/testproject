@@ -54,7 +54,7 @@ Route::get('admin/diadiemdulich/{MaDDDL}', [DiaDiemDuLichWebController::class, '
 Route::resource('/admin/sukien', SuKienWebController::class);
 Route::get('admin/sukien/{maSuKien}/delete', [SuKienWebController::class, 'destroy']);
 Route::get('admin/sukien/{maSuKien}', [SuKienWebController::class, 'destroy_image']);
-//Chủ khách sạn 
+//Chủ khách sạn
 Route::resource('admin/khthanthiet', ChuKhachSanWebContronller::class);
 //Khách hàng tiềm năng
 Route::resource('admin/khtiemnang', KhachHangWebController::class);
@@ -66,7 +66,7 @@ Route::get('/admin/imgthanhpho/delete/{MaTP}', [ThanhPhoController::class, 'dest
 //Tìm kiếm
 Route::get('/admin/seach');
 Route::get('adminKS/{ADMINKS}', [AdminController::class, 'index']);
-//Đăng nhập 
+//Đăng nhập
 
 Route::get('login/', [ChuKhachSanWebContronller::class, 'login']);
 Route::post('login/', [ChuKhachSanWebContronller::class, 'check_loginWeb']);
@@ -90,12 +90,17 @@ Route::put('adminKS/loaiphong/findbyKS/{UIDKS}/{UIDLoaiPhong}', [LoaiPhongWebCon
 //Đơn đặt phòng
 Route::resource('adminKS/dondatphong', DonDatPhongWebController::class);
 Route::post('adminKS/dondadat/findbyKS', [DonDatPhongWebController::class, 'checkDonDatPhong'])->name('adminKS.dondadat.findbyKS');
-// Route::post('adminKS/dondadat/findbyKS', [DonDatPhongWebController::class, 'AcceptDonDatPhong']);
+Route::post('adminKS/dondadat/accept', [DonDatPhongWebController::class, 'AcceptDonDatPhong']);
 Route::post('adminKS/dondangdienra/findbyKS', [DonDatPhongWebController::class, 'dondangdienra']);
 Route::post('adminKS/dondahuy/findbyKS', [DonDatPhongWebController::class, 'dondahuy']);
 Route::post('adminKS/lichsu/findbyKS', [DonDatPhongWebController::class, 'lichsu']);
+
+
+
 // Chi thiết đơn đặt phòng
 Route::get('adminKS/dondadat/findbyKS/{MaDDP}', [CTDDPWebController::class, 'showWeb']);
+
+
 
 //Phòng còn lại
 Route::get('adminKS/phongconlai/findbyKS/{UIDKS}', [PhongConLaiWebController::class, 'quanlyphongconlai']);
