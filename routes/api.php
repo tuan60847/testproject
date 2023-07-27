@@ -1,28 +1,28 @@
  <?php
 
-use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\testcontrol;
-use App\Http\Controllers\Api;
-use App\Http\Controllers\Api\HinhAnhDiaDiemDuLichController;
-use App\Http\Controllers\Api\HinhAnhSuKienController;
-use App\Http\Controllers\Api\HinhAnhThanhPhoController;
-use App\Http\Controllers\Api\ImageKSController;
-use App\Http\Controllers\Api\ImageLoaiPhongController;
-use App\Http\Controllers\ChuKhachSanController;
-use App\Http\Controllers\commonControl;
-use App\Http\Controllers\CTDDPController;
-use App\Http\Controllers\DiaDiemDuLichController;
-use App\Http\Controllers\DonDatPhongController;
-use App\Http\Controllers\FavoriteController;
-use App\Http\Controllers\KhachSanController;
-use App\Http\Controllers\LoaiPhongController;
-use App\Http\Controllers\PhongConLaiController;
-use App\Http\Controllers\searchController;
-use App\Http\Controllers\SuKienController;
-use App\Http\Controllers\ThanhPhoController;
-use App\Http\Controllers\VarifyPasswordController;
-use App\Http\Controllers\VnpayController;
+    use Illuminate\Http\Request;
+    use Illuminate\Support\Facades\Route;
+    use App\Http\Controllers\testcontrol;
+    use App\Http\Controllers\Api;
+    use App\Http\Controllers\Api\HinhAnhDiaDiemDuLichController;
+    use App\Http\Controllers\Api\HinhAnhSuKienController;
+    use App\Http\Controllers\Api\HinhAnhThanhPhoController;
+    use App\Http\Controllers\Api\ImageKSController;
+    use App\Http\Controllers\Api\ImageLoaiPhongController;
+    use App\Http\Controllers\ChuKhachSanController;
+    use App\Http\Controllers\commonControl;
+    use App\Http\Controllers\CTDDPController;
+    use App\Http\Controllers\DiaDiemDuLichController;
+    use App\Http\Controllers\DonDatPhongController;
+    use App\Http\Controllers\FavoriteController;
+    use App\Http\Controllers\KhachSanController;
+    use App\Http\Controllers\LoaiPhongController;
+    use App\Http\Controllers\PhongConLaiController;
+    use App\Http\Controllers\searchController;
+    use App\Http\Controllers\SuKienController;
+    use App\Http\Controllers\ThanhPhoController;
+    use App\Http\Controllers\VarifyPasswordController;
+    use App\Http\Controllers\VnpayController;
 
     /*
 |--------------------------------------------------------------------------
@@ -40,16 +40,16 @@ use App\Http\Controllers\VnpayController;
     });
 
 
-// Dùng Để xóa một dữ liệu
-Route::delete('khachhang/{id}', [testcontrol::class,'destroy']);
-// Dùng Để sử dụng các phương thức dữ liệu
-Route::get('khachhang/{id}', [testcontrol::class,'show']);
-Route::post('khachhang', [testcontrol::class,'store']);
-Route::put('khachhang/{id}', [testcontrol::class,'update']);
-Route::get('khachhang/setoff/{id}', [testcontrol::class,'setoff']);
-Route::get('khachhang/seton/{id}', [testcontrol::class,'seton']);
-Route::post('checkpassworduser', [testcontrol::class,'checkpassword']);
-Route::resource('khachhang', testcontrol::class);
+    // Dùng Để xóa một dữ liệu
+    Route::delete('khachhang/{id}', [testcontrol::class, 'destroy']);
+    // Dùng Để sử dụng các phương thức dữ liệu
+    Route::get('khachhang/{id}', [testcontrol::class, 'show']);
+    Route::post('khachhang', [testcontrol::class, 'store']);
+    Route::put('khachhang/{id}', [testcontrol::class, 'update']);
+    Route::get('khachhang/setoff/{id}', [testcontrol::class, 'setoff']);
+    Route::get('khachhang/seton/{id}', [testcontrol::class, 'seton']);
+    Route::post('checkpassworduser', [testcontrol::class, 'checkPassword']);
+    Route::resource('khachhang', testcontrol::class);
 
 
 
@@ -79,21 +79,21 @@ Route::resource('khachhang', testcontrol::class);
 
 
 
-Route::delete('dondatphong/{id}', [DonDatPhongController::class,'destroy']);
-Route::get('dondatphong/{id}', [DonDatPhongController::class,'show']);
-Route::get('dondatphong/findlastbyEmail/{EmailKH}', [DonDatPhongController::class,'lastItemByEmail']);
-Route::get('dondatphong/processing/dondatphong/{UIDKS}', [DonDatPhongController::class,'findDDPprocess']);
-Route::post('findhistoryddpbykh', [DonDatPhongController::class,'findHistoryDDPByKH']);
-Route::post('findhistoryddpbycks', [DonDatPhongController::class,'findHistoryDDPByCKS']);
-Route::post('acceptdondatphong', [DonDatPhongController::class,'AcceptDonDatPhong']);
-Route::post('canceldondatphongbyuser', [DonDatPhongController::class,'CancelDonDatPhongByUser']);
-Route::post('canceldondatphongbychukhachsan', [DonDatPhongController::class,'CancelDonDatPhongByChukhachSan']);
-Route::post('dondatphong', [DonDatPhongController::class,'store']);
-Route::put('dondatphong/{id}', [DonDatPhongController::class,'update']);
-Route::post('getddpnoprocessbyuser', [DonDatPhongController::class,'getDDPNoProcessByUSer']);
-Route::post('findddpinprocessbyuser', [DonDatPhongController::class,'findDDPInProcessByUser']);
-Route::get('acceptdondatphongget/{UIDDDP}', [DonDatPhongController::class,'AcceptDonDatPhongGet']);
-Route::resource('dondatphong', DonDatPhongController::class);
+    Route::delete('dondatphong/{id}', [DonDatPhongController::class, 'destroy']);
+    Route::get('dondatphong/{id}', [DonDatPhongController::class, 'show']);
+    Route::get('dondatphong/findlastbyEmail/{EmailKH}', [DonDatPhongController::class, 'lastItemByEmail']);
+    Route::get('dondatphong/processing/dondatphong/{UIDKS}', [DonDatPhongController::class, 'findDDPprocess']);
+    Route::post('findhistoryddpbykh', [DonDatPhongController::class, 'findHistoryDDPByKH']);
+    Route::post('findhistoryddpbycks', [DonDatPhongController::class, 'findHistoryDDPByCKS']);
+    Route::post('acceptdondatphong', [DonDatPhongController::class, 'AcceptDonDatPhong']);
+    Route::post('canceldondatphongbyuser', [DonDatPhongController::class, 'CancelDonDatPhongByUser']);
+    Route::post('canceldondatphongbychukhachsan', [DonDatPhongController::class, 'CancelDonDatPhongByChukhachSan']);
+    Route::post('dondatphong', [DonDatPhongController::class, 'store']);
+    Route::put('dondatphong/{id}', [DonDatPhongController::class, 'update']);
+    Route::post('getddpnoprocessbyuser', [DonDatPhongController::class, 'getDDPNoProcessByUSer']);
+    Route::post('findddpinprocessbyuser', [DonDatPhongController::class, 'findDDPInProcessByUser']);
+    Route::get('acceptdondatphongget/{UIDDDP}', [DonDatPhongController::class, 'AcceptDonDatPhongGet']);
+    Route::resource('dondatphong', DonDatPhongController::class);
 
 
 
@@ -133,6 +133,11 @@ Route::resource('dondatphong', DonDatPhongController::class);
     Route::resource('thanhpho', ThanhPhoController::class);
 
 
+    Route::post('image/hinhanhtp/upload', [HinhAnhThanhPhoController::class, 'imageStore']);
+    Route::delete('hinhanhtp/image/thanhpho/{src}', [HinhAnhThanhPhoController::class, 'destroy']);
+    Route::get('hinhanhtp/UIDThanhPho/{MaTP}', [HinhAnhThanhPhoController::class, 'getImageByUIDThanhPho']);
+    Route::resource('hinhanhtp', HinhAnhThanhPhoController::class);
+
     Route::post('image/hinhanhdddl/upload', [HinhAnhDiaDiemDuLichController::class, 'imageStore']);
     Route::delete('hinhanhdddl/image/diadiemdulich/{src}', [HinhAnhDiaDiemDuLichController::class, 'destroy']);
     Route::get('hinhanhdddl/UIDDDDL/{MaDDDL}', [HinhAnhDiaDiemDuLichController::class, 'getImageByUIDDDDL']);
@@ -161,11 +166,11 @@ Route::resource('dondatphong', DonDatPhongController::class);
 
 
 
-Route::get('chukhachsan/{id}', [ChuKhachSanController::class,'show']);
-Route::post('chukhachsan', [ChuKhachSanController::class,'store']);
-Route::put('chukhachsan/{id}', [ChuKhachSanController::class,'update']);
-Route::resource('chukhachsan', ChuKhachSanController::class);
-Route::post('checkpasswordcks', [ChuKhachSanController::class,'checkPassword']);
+    Route::get('chukhachsan/{id}', [ChuKhachSanController::class, 'show']);
+    Route::post('chukhachsan', [ChuKhachSanController::class, 'store']);
+    Route::put('chukhachsan/{id}', [ChuKhachSanController::class, 'update']);
+    Route::resource('chukhachsan', ChuKhachSanController::class);
+    Route::post('checkpasswordcks', [ChuKhachSanController::class, 'checkPassword']);
 
 
     Route::post('image/hinhanhSK/upload', [HinhAnhSuKienController::class, 'imageStore']);
@@ -186,27 +191,25 @@ Route::post('checkpasswordcks', [ChuKhachSanController::class,'checkPassword']);
     Route::post('timkiem', [searchController::class, 'TimKiem']);
 
 
-Route::get('sendmailthanksuser/{email}',[commonControl::class, 'SendMailThanksUser']);
-Route::get('sendmailthankscks/{email}',[commonControl::class, 'SendMailThanksCKS']);
-Route::get('sendmailfogetpassworduser/{email}',[commonControl::class, 'SendMailFogetPasswordUser']);
-Route::post('reset-password-user',[commonControl::class, 'ResetPasswordUser']);
-Route::get('reset-password-user/{email}&&{newpassword}',[commonControl::class, 'ResetPasswordUserGet']);
-Route::get('sendmailfogetpasswordcks/{email}',[commonControl::class, 'SendMailFogetPasswordCKS']);
-Route::get('reset-password-cks/{email}&&{newpassword}',[commonControl::class, 'ResetPasswordCKSGet']);
-Route::post('sendmaildoneddp',[commonControl::class, 'SendMailDoneDDP']);
-Route::post('sendmaildeclinedddp',[commonControl::class, 'SendMailDeclinedDDP']);
+    Route::get('sendmailthanksuser/{email}', [commonControl::class, 'SendMailThanksUser']);
+    Route::get('sendmailthankscks/{email}', [commonControl::class, 'SendMailThanksCKS']);
+    Route::get('sendmailfogetpassworduser/{email}', [commonControl::class, 'SendMailFogetPasswordUser']);
+    Route::post('reset-password-user', [commonControl::class, 'ResetPasswordUser']);
+    Route::get('reset-password-user/{email}&&{newpassword}', [commonControl::class, 'ResetPasswordUserGet']);
+    Route::get('sendmailfogetpasswordcks/{email}', [commonControl::class, 'SendMailFogetPasswordCKS']);
+    Route::get('reset-password-cks/{email}&&{newpassword}', [commonControl::class, 'ResetPasswordCKSGet']);
+    Route::post('sendmaildoneddp', [commonControl::class, 'SendMailDoneDDP']);
+    Route::post('sendmaildeclinedddp', [commonControl::class, 'SendMailDeclinedDDP']);
 
 
-Route::get('favorite/{id}', [FavoriteController::class,'show']);
-Route::post('setfavorite', [FavoriteController::class,'SetFavorite']);
-Route::post('getkhachsanfavoritebykh', [FavoriteController::class,'getKhachSanFavoriteByKH']);
-Route::post('getboolenfavorite', [FavoriteController::class,'getBoolenFavorite']);
-Route::resource('favorite', FavoriteController::class);
+    Route::get('favorite/{id}', [FavoriteController::class, 'show']);
+    Route::post('setfavorite', [FavoriteController::class, 'SetFavorite']);
+    Route::post('getkhachsanfavoritebykh', [FavoriteController::class, 'getKhachSanFavoriteByKH']);
+    Route::post('getboolenfavorite', [FavoriteController::class, 'getBoolenFavorite']);
+    Route::resource('favorite', FavoriteController::class);
 
 
-Route::post('vnpay', [VnpayController::class,'PaymentVNpay']);
+    Route::post('vnpay', [VnpayController::class, 'PaymentVNpay']);
 
 
-Route::get('cipherpassword/{password}', [VarifyPasswordController::class,'hashPassWord']);
-
-
+    Route::get('cipherpassword/{password}', [VarifyPasswordController::class, 'hashPassWord']);
