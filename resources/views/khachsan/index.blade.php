@@ -52,6 +52,7 @@
                             <td>{{$d->Buffet}}</td>
                             <td>{{$d->Wifi}}</td>
                             <td>{{$d->MaDDDL}}</td>
+                            
                             <td>{{count($d->hinhanhks)}}</td>
                             <td>
                                 <a href="{{url('admin/khachsan/'.$d->UIDKS)}}" class="btn btn-info btn-sm"><i class="fa fa-eye"></i></a>

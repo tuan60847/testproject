@@ -157,8 +157,8 @@ class DonDatPhongWebController extends Controller
         // }
         // return redirect('/adminKS/dondatdat/findbyKS/' . $dondatphong->UIDDatPhong)->with('success', 'Đơn đặt phòng đã được cập nhật');
         // $UIDKS = $request->input("UIDKS");
-        if($isChecked==2&&$dondatphong->isChecked!=2){
-            $UIDDatPhong = $request->input("UIDDatPhong");
+        if ($isChecked == 2 && $dondatphong->isChecked != 2) {
+            $UIDDatPhong = $dondatphong->UIDDatPhong;
             // $dondatphong = Dondatphong::findOrFail($UIDDatPhong);
             $Ngay = $dondatphong->NgayDatPhong;
             $ArrayMaxRoom = [];
@@ -216,7 +216,7 @@ class DonDatPhongWebController extends Controller
                 }
             }
             $dondatphong->isChecked = 2;
-            $dondatphong->TienCoc = $dondatphong->tongtien*30/100;
+            $dondatphong->TienCoc = $dondatphong->tongtien * 30 / 100;
             $dondatphong->update();
             $khachhang = Khachhang::findOrFail($dondatphong->EmailKH);
             $ChiTietDonDatPhongs = Ctddp::where('MaDDP', $UIDDatPhong)->get();
@@ -236,8 +236,8 @@ class DonDatPhongWebController extends Controller
                     'HoTen' => $khachhang->HoTen,
                     'MaDDP' => $UIDDatPhong,
                     'GiaTien' => $dondatphong->tongtien,
-                    'TraTruoc' => $dondatphong->tongtien*30/100,
-                    'ConLai' =>  $dondatphong->tongtien*70/100,
+                    'TraTruoc' => $dondatphong->tongtien * 30 / 100,
+                    'ConLai' =>  $dondatphong->tongtien * 70 / 100,
                     'ChiTietDonDatPhong' => $renderBodyChiTietDonDatPhong,
                 ];
                 $EmailKH =  $dondatphong->EmailKH;
@@ -246,25 +246,84 @@ class DonDatPhongWebController extends Controller
                     $email->subject("Booking Invoice");
                     $email->to($EmailKH, $khachhang->HoTen);
                 });
-
             }
             $dondatphong->isChecked = $isChecked;
             $dondatphong->update();
             return redirect('/adminKS/dondadat/findbyKS/' . $dondatphong->UIDDatPhong)->with('success', 'Đơn đặt phòng đã được cập nhật');
+        } elseif ($isChecked == 7) {
 
-        }elseif($isChecked==7){
-            if($dondatphong->isChecked>1&&$dondatphong->isChecked<4){
+            if ($dondatphong->isChecked > 1 && $dondatphong->isChecked < 4) {
+                if ($dondatphong->TienCoc != 0) {
+                    return redirect('/adminKS/dondadat/findbyKS/' . $dondatphong->UIDDatPhong)->with('success', 'Đơn đặt phòng không được phép hủy');
+                } elseif ($dondatphong->TienCoc = 0) {
+                    $Ngay = $dondatphong->NgayDatPhong;
 
+                    $Date = Carbon::createFromFormat('Y-m-d', $Ngay);
+
+                    $chitietdondatphong = Ctddp::where('MaDDP', $dondatphong->UIDDatPhong)->get();
+                    foreach ($chitietdondatphong as $item) {
+                        $loaiphong = Loaiphong::findOrFail($item->UIDLoaiPhong);
+
+                        for ($i = 0; $i <= intval($item->SoNgayO); $i++) {
+                            $NgayTam = $Date->copy()->addDays($i)->format('Y-m-d');
+                            $phongconlai = Phongconlai::where('Ngay', $NgayTam)
+                                ->where('UIDLoaiPhong', $item->UIDLoaiPhong)
+                                ->first();
+
+                            if (!empty($phongconlai)) {
+                                if ($phongconlai->SoLuong + $item->soLuongPhong <= $loaiphong->soLuongPhong) {
+                                    $phongconlai->SoLuong = $phongconlai->SoLuong + $item->soLuongPhong;
+                                    $phongconlai->update();
+                                } else {
+                                    return redirect('/adminKS/dondadat/findbyKS/' . $dondatphong->UIDDatPhong)->with('success', 'Đã hủy đơn đặt phòng');
+                                }
+                            } else {
+                                return redirect('/adminKS/dondadat/findbyKS/' . $dondatphong->UIDDatPhong)->with('success', 'Đã hủy đơn đặt phòng');
+                            }
+                        }
+                    }
+
+                    return redirect('/adminKS/dondadat/findbyKS/' . $dondatphong->UIDDatPhong)->with('success', 'Đã hủy đơn đặt phòng');
+                }
             }
-        }
-        else{
+            $UIDDatPhong = $dondatphong->UIDDatPhong;
+            $khachhang = Khachhang::findOrFail($dondatphong->EmailKH);
+            $ChiTietDonDatPhongs = Ctddp::where('MaDDP', $UIDDatPhong)->get();
+            // return $ChiTietDonDatPhongs;
+            $renderBodyChiTietDonDatPhong = [];
+            foreach ($ChiTietDonDatPhongs as $ChiTietDonDatPhong) {
+                $loaiPhong = Loaiphong::findOrFail($ChiTietDonDatPhong->UIDLoaiPhong);
+                $renderBodyChiTietDonDatPhong[] = [
+                    'TenLoaiPhong' => $loaiPhong->TenLoaiPhong,
+                    'SoNgayO' => $ChiTietDonDatPhong->SoNgayO,
+                    'soLuongPhong' => $ChiTietDonDatPhong->soLuongPhong,
+                    'Tien' => $ChiTietDonDatPhong->Tien,
+                ];
+            }
+            if ($khachhang) {
+                $renderbody = [
+                    'Email' => $khachhang->Email,
+                    'HoTen' => $khachhang->HoTen,
+                    'MaDDP' => $UIDDatPhong,
+                    'GiaTien' => $dondatphong->tongtien,
+                    'TraTruoc' => $dondatphong->tongtien * 30 / 100,
+                    'ConLai' =>  $dondatphong->tongtien * 70 / 100,
+                    'ChiTietDonDatPhong' => $renderBodyChiTietDonDatPhong,
+                ];
+                $EmailKH =  $dondatphong->EmailKH;
+                Mail::send('emails.statusddp', ['renderbody' => $renderbody], function ($email) use ($EmailKH, $khachhang) {
+                    $email->subject("Cancel Invoice");
+                    $email->to($EmailKH, $khachhang->HoTen);
+                });
+            }
+            $dondatphong->isChecked = $isChecked;
+            $dondatphong->update();
+            return redirect('/adminKS/dondadat/findbyKS/' . $dondatphong->UIDDatPhong)->with('success', 'Đơn đặt phòng đã được cập nhật');
+        } else {
             $dondatphong->isChecked = $isChecked;
             $dondatphong->update();
             return redirect('/adminKS/dondadat/findbyKS/' . $dondatphong->UIDDatPhong)->with('success', 'Đơn đặt phòng đã được cập nhật');
         }
-
-
-
     }
 
     public function destroy(string $id)
@@ -339,7 +398,7 @@ class DonDatPhongWebController extends Controller
             }
         }
         $dondatphong->isChecked = 2;
-        $dondatphong->TienCoc = $dondatphong->tongtien*30/100;
+        $dondatphong->TienCoc = $dondatphong->tongtien * 30 / 100;
         $dondatphong->update();
         $khachhang = Khachhang::findOrFail($dondatphong->EmailKH);
         $ChiTietDonDatPhongs = Ctddp::where('MaDDP', $UIDDatPhong)->get();
@@ -359,8 +418,8 @@ class DonDatPhongWebController extends Controller
                 'HoTen' => $khachhang->HoTen,
                 'MaDDP' => $UIDDatPhong,
                 'GiaTien' => $dondatphong->tongtien,
-                'TraTruoc' => $dondatphong->tongtien*30/100,
-                'ConLai' =>  $dondatphong->tongtien*70/100,
+                'TraTruoc' => $dondatphong->tongtien * 30 / 100,
+                'ConLai' =>  $dondatphong->tongtien * 70 / 100,
                 'ChiTietDonDatPhong' => $renderBodyChiTietDonDatPhong,
             ];
             $EmailKH =  $dondatphong->EmailKH;
@@ -369,7 +428,6 @@ class DonDatPhongWebController extends Controller
                 $email->subject("Booking Invoice");
                 $email->to($EmailKH, $khachhang->HoTen);
             });
-
         }
 
         $dondatphong->update();
@@ -597,10 +655,8 @@ class DonDatPhongWebController extends Controller
             } else {
                 return view('dondatphong.index', ['dondatphong' => $dondatphong])->with('message', 'Xác nhận không thành công yêu cầu đổi phòng hoặc hủy');
             }
-
         }
         return view('dondatphong.index', ['dondatphong' => $dondatphong])->with('message', 'Xác nhận không thành công yêu cầu đổi phòng hoặc hủy');
-
     }
     // public function lichsu(Request $request)
     // {
