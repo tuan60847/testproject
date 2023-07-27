@@ -66,10 +66,33 @@ class AdminController extends Controller
 
         return view('deshbord', compact('sumTongTien', 'sumThang', 'sumDay'));
     }
-    // public function seach(Request $request)
-    // {
-    //     $name = Chukhachsan::where('HoTen', 'like', $request->key . '% ')->orWhere('cmnd', $request->key)->get();
-    //     $tp = Thanhpho::where('TenTP', 'like', '%' . $request->key . '%')->get();
-    //     return view('seach', compact('name', 'tp'));
-    // }
+
+    public function hethong()
+    {
+        $currentDate = Carbon::now();
+        $getThang = $currentDate->month;
+        $getYear = $currentDate->year;
+        $getDay = $currentDate->day;
+
+        $dsDondatphongChecked5 = Dondatphong::where('isChecked', 5)->get();
+        $sumTongTien = Dondatphong::where('isChecked', 5)->sum('tongtien');
+
+        $tongNam = 0;
+        $tongThang = 0;
+        $tongNgay = 0;
+
+        foreach ($dsDondatphongChecked5 as $dondatphong) {
+            $giamGia = $dondatphong->tongtien * 0.1;
+            $tongNam += $giamGia;
+
+            if ($dondatphong->NgayDatPhong === $getYear) {
+                $tongThang += $giamGia;
+                if ($dondatphong->NgayDatPhong === $getThang) {
+                    $tongNgay += $giamGia;
+                }
+            }
+        }
+
+        return view('home', compact('tongNam', 'tongThang', 'tongNgay'));
+    }
 }

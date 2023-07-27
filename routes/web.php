@@ -35,10 +35,10 @@ use Illuminate\Support\Facades\Route;
 //     return view('home');
 // });
 
-Route::get('/admin', function () {
-    return view('home');
-});
-
+// Route::get('/admin', function () {
+//     return view('home');
+// });
+Route::get('admin/', [AdminController::class, 'hethong']);
 //thành phố
 // Route::get('/admin/thanhpho', [ThanhPhoController::class, 'index']);
 // Route::get('/admin/thanhpho/create', [ThanhPhoController::class, 'create']);
