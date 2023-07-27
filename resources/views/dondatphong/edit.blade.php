@@ -17,6 +17,9 @@
             @if(Session::has('success'))
             <div class="alert alert-success">{{Session::get('success')}}</div>
             @endif
+            @if(session::has('message'))
+            <div class="alert alert-success">{{ session::get('message') }}</div>
+            @endif
             <div class="table-responsive">
                 <form action="{{url('adminKS/dondatphong/'.$dondatphong->UIDDatPhong)}}" method="POST" enctype="multipart/form-data">
                     @csrf
@@ -47,7 +50,7 @@
                             <th>Trạng thái</th>
                             <td>
                                 <select name="isChecked" aria-controls="dataTable" class="custom-select custom-select-sm form-control form-control-sm">
-                                    @if($dondatphong->isChecked==1)
+                                    @if($dondatphong->isChecked==1 )
                                     <option value="1" selected>Xác nhận của khách hàng</option>
                                     <option value="2">Xác nhận của khách sạn</option>
                                     <option value="6">Hủy đơn đặt phòng</option>
@@ -67,8 +70,6 @@
                                     <option value="6" selected>Hủy đơn đặt phòng</option>
                                     @endif
                                 </select>
-
-
                             </td>
                         </tr>
 
@@ -95,5 +96,4 @@
 
 <!-- Page level custom scripts -->
 <script src="js/demo/datatables-demo.js"></script>
-
 @endsection

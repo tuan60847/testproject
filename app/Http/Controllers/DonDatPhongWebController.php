@@ -229,6 +229,7 @@ class DonDatPhongWebController extends Controller
         return response()->json($dondatphong->update());
     }
 
+
     public function CancelDonDatPhongByUser(Request $request)
     {
         $this->validate($request, [
@@ -304,33 +305,35 @@ class DonDatPhongWebController extends Controller
         $dondatphong->update();
         return response()->json($dondatphong);
     }
-    public function checkDonDatPhong(Request $request)
-    {
-        $this->validate($request, [
-            'UIDKS' => 'required',
-        ]);
-        $UIDKS = $request->input("UIDKS");
-        $statuses = [
-            1 => 'Xác nhận của khách hàng',
-            2 => 'Xác nhận của khách sạn',
-            3 => 'Check in',
-            4 => 'Check out',
-        ];
-        $searchValues = ['Đã xác nhận', 'Xác nhận của khách hàng'];
+    // public function checkDonDatPhong(Request $request)
+    // {
+    //     $this->validate($request, [
+    //         'UIDKS' => 'required',
+    //     ]);
+    //     $UIDKS = $request->input("UIDKS");
+    //     $statuses = [
+    //         1 => 'Xác nhận của khách hàng',
+    //         2 => 'Xác nhận của khách sạn',
+    //         3 => 'Check in',
+    //         4 => 'Check out',
+    //     ];
+    //     $searchValues = ['Đã xác nhận', 'Xác nhận của khách hàng'];
 
-        $foundIndexes = [];
-        foreach ($searchValues as $searchValue) {
-            $foundIndex = array_search($searchValue, $statuses);
-            if ($foundIndex !== false) {
-                $foundIndexes[] = $foundIndex;
-            }
-        }
+    //     $foundIndexes = [];
+    //     foreach ($searchValues as $searchValue) {
+    //         $foundIndex = array_search($searchValue, $statuses);
+    //         if ($foundIndex !== false) {
+    //             $foundIndexes[] = $foundIndex;
+    //         }
+    //     }
 
 
-        if ($dondatphong = Dondatphong::whereIn('isChecked', [0, 1, 2])->where('UIDDatPhong', 'LIKE', '%' . $UIDKS . '%')->get()) {
-            return view('dondatphong.index', ['dondatphong' => $dondatphong]);
-        }
-    }
+    //     if ($dondatphong = Dondatphong::whereIn('isChecked', [0, 1, 2])->where('UIDDatPhong', 'LIKE', '%' . $UIDKS . '%')->get()) {
+    //         return view('dondatphong.index', ['dondatphong' => $dondatphong]);
+    //     }
+    // }
+
+
     public function dondangdienra(Request $request)
     {
         $this->validate($request, [
@@ -379,25 +382,109 @@ class DonDatPhongWebController extends Controller
             return view('dondatphong.dondahuy', ['dondatphong' => $dondatphong]);
         }
     }
-    public function lichsu(Request $request)
+    // public function lichsu(Request $request)
+    // {
+    //     $this->validate($request, [
+    //         'UIDKS' => 'required',
+    //     ]);
+    //     $UIDKS = $request->input("UIDKS");
+    //     $statuses = [
+    //         0 => 'Chưa xác nhận',
+    //         1 => 'Xác nhận của khách hàng',
+    //         2 => 'Xác nhận của khách sạn',
+    //         3 => 'Check in',
+    //         4 => 'Check out',
+    //         5 => 'Hoàn thành',
+    //         6 => 'Khách hàng yêu cầu hủy',
+    //         7 => 'Khách sạn yêu cầu hủy',
+    //         8 => 'Hoàn thành từ chối',
+    //     ];
+    //     if ($dondatphong = Dondatphong::where('isChecked', 5)->where('UIDDatPhong', 'LIKE', '%' . $UIDKS . '%')->get()) {
+    //         return view('dondatphong.lichsu', ['dondatphong' => $dondatphong]);
+    //     }
+    // }
+    public function checkDonDatPhong(Request $request)
     {
         $this->validate($request, [
             'UIDKS' => 'required',
         ]);
+
         $UIDKS = $request->input("UIDKS");
-        $statuses = [
-            0 => 'Chưa xác nhận',
-            1 => 'Xác nhận của khách hàng',
-            2 => 'Xác nhận của khách sạn',
-            3 => 'Check in',
-            4 => 'Check out',
-            5 => 'Hoàn thành',
-            6 => 'Khách hàng yêu cầu hủy',
-            7 => 'Khách sạn yêu cầu hủy',
-            8 => 'Hoàn thành từ chối',
-        ];
-        if ($dondatphong = Dondatphong::where('isChecked', 5)->where('UIDDatPhong', 'LIKE', '%' . $UIDKS . '%')->get()) {
-            return view('dondatphong.lichsu', ['dondatphong' => $dondatphong]);
+        $dondatphong = Dondatphong::whereIn('isChecked', [0, 1, 2])->where('UIDDatPhong', 'LIKE', '%' . $UIDKS . '%')->get();
+        $enoughRooms = true;
+
+        foreach ($dondatphong as $dondat) {
+            $chitietdondatphong = Ctddp::where('MaDDP', $dondat->UIDDatPhong)->get();
+            foreach ($chitietdondatphong as $item) {
+                $loaiphong = Loaiphong::findOrFail($item->UIDLoaiPhong);
+
+                $startDate = Carbon::createFromFormat('Y-m-d', $dondat->NgayDatPhong);
+                $endDate = $startDate->copy()->addDays(intval($item->SoNgayO));
+
+                $phongconlai = Phongconlai::whereBetween('Ngay', [$startDate, $endDate])
+                    ->where('UIDLoaiPhong', $item->UIDLoaiPhong)
+                    ->orderBy('SoLuong', 'asc')
+                    ->first();
+
+                if ($phongconlai) {
+                    $soPhongConLai = $phongconlai->SoLuong;
+                } else {
+                    $soPhongConLai = $loaiphong->soLuongPhong;
+                }
+
+                if ($soPhongConLai < $item->soLuongPhong) {
+                    $enoughRooms = false;
+                    break;
+                }
+            }
+            if (!$enoughRooms) {
+                break;
+            }
+            if ($enoughRooms) {
+
+                $dondatphong->isChecked = 2;
+                Dondatphong::whereIn('isChecked', [0, 1, 2])->where('UIDDatPhong', 'LIKE', '%' . $UIDKS . '%')->update(['isChecked' => 2]);
+
+                return view('dondatphong.index', ['dondatphong' => $dondatphong])->with('message', 'Đã xác nhận đơn đặt phòng thành công.');
+            } else {
+                return view('dondatphong.index', ['dondatphong' => $dondatphong])->with('message', 'Xác nhận không thành công yêu cầu đổi phòng hoặc hủy');
+            }
         }
+    }
+    public function lichsu(Request $request)
+    {
+        $this->validate($request, [
+            'UIDDatPhong' => 'required',
+        ]);
+
+        $UIDDatPhong = $request->input('UIDDatPhong');
+        $dondatphong = Dondatphong::findOrFail($UIDDatPhong);
+        $chitietdondatphong = Ctddp::where('MaDDP', $UIDDatPhong)->get();
+        foreach ($chitietdondatphong as $item) {
+            $loaiphong = Loaiphong::findOrFail($item->UIDLoaiPhong);
+            $startDate = Carbon::createFromFormat('Y-m-d', $item->Ngay);
+            $endDate = $startDate->copy()->addDays($item->SoNgayO);
+
+            for ($date = $startDate; $date->lte($endDate); $date->addDay()) {
+                $ngayTam = $date->format('Y-m-d');
+                $phongconlai = Phongconlai::where('Ngay', $ngayTam)
+                    ->where('UIDLoaiPhong', $item->UIDLoaiPhong)
+                    ->first();
+
+                if (empty($phongconlai)) {
+                    $phongconlai = new Phongconlai();
+                    $phongconlai->Ngay = $ngayTam;
+                    $phongconlai->UIDLoaiPhong = $item->UIDLoaiPhong;
+                    $phongconlai->SoLuong = $loaiphong->soLuongPhong;
+                    $phongconlai->save();
+                } else {
+                    $phongconlai->SoLuong += $item->soLuongPhong;
+                    $phongconlai->update();
+                }
+            }
+        }
+        $dondatphong->isChecked = 5;
+        $dondatphong->save();
+        return view('dondatphong.lichsu')->with('message', 'Hoàn thành đơn đặt phòng thành công.');
     }
 }

@@ -90,6 +90,7 @@ Route::put('adminKS/loaiphong/findbyKS/{UIDKS}/{UIDLoaiPhong}', [LoaiPhongWebCon
 //Đơn đặt phòng
 Route::resource('adminKS/dondatphong', DonDatPhongWebController::class);
 Route::post('adminKS/dondadat/findbyKS', [DonDatPhongWebController::class, 'checkDonDatPhong'])->name('adminKS.dondadat.findbyKS');
+// Route::post('adminKS/dondadat/findbyKS', [DonDatPhongWebController::class, 'AcceptDonDatPhong']);
 Route::post('adminKS/dondangdienra/findbyKS', [DonDatPhongWebController::class, 'dondangdienra']);
 Route::post('adminKS/dondahuy/findbyKS', [DonDatPhongWebController::class, 'dondahuy']);
 Route::post('adminKS/lichsu/findbyKS', [DonDatPhongWebController::class, 'lichsu']);
