@@ -11,13 +11,17 @@ use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Illuminate\Support\Facades\Log;
 use DB;
+use Exception;
+use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
+use GuzzleHttp\Exception\RequestException;
 
 class KhachSanWebController extends Controller
 {
     public function index()
     {
-        $data = Khachsan::all();
-        return view('khachsan.index', ['data' => $data]);
+        $data = Khachsan::orderBy('isActive', 'asc')->get();
+        return view('khachsan.index', ['data' => $data])->with('success', 'Khách sạn đã được kích hoạt thành công');
     }
 
     public function create(Khachsan $data)
@@ -164,7 +168,9 @@ class KhachSanWebController extends Controller
     public function destroy(string $id)
     {
         //
-        return Khachsan::destroy($id);
+        $khachsan = Khachsan::findORFail($id);
+        $khachsan->isActive = false;
+        return $khachsan->update();
     }
     public function getks(String $id)
     {
@@ -197,5 +203,70 @@ class KhachSanWebController extends Controller
     {
         $data = Khachsan::find($id);
         return view('taikhoanKS.edit', ['data' => $data]);
+    }
+
+
+    public function checkTaxcode(String $UIDKS)
+    {
+        session()->flash('success', 'Cập nhật thành công.');
+        $khachsan = Khachsan::findOrFail($UIDKS);
+        $client = new \GuzzleHttp\Client([
+            'verify' => false,
+        ]);
+        try {
+            $Uri = "https://api.vietqr.io/v2/business/" . $khachsan->taxcode;
+            $response = $client->get($Uri); // Thay thế URL bằng URL của API bạn muốn gọi
+            $data = $response->getBody()->getContents();
+
+            // Xử lý dữ liệu từ API (ví dụ: chuyển đổi JSON thành mảng)
+            $dataArray = json_decode($data, true);
+
+            // Xử lý dữ liệu theo nhu cầu của bạn
+            // ...
+            // return $dataArray;
+            if ($dataArray['desc'] == '00') {
+                $data = Khachsan::orderBy('isActive', 'asc')->get();
+                session()->flash('success', 'Kích hoạt khách sạn thành công');
+                return view('khachsan.index', ['data' => $data])->with('success', 'Kích hoạt khách sạn thành công');
+                //Ghi hiện thông tin $dataArray['data'].['name'];
+            } else {
+                $data = Khachsan::orderBy('isActive', 'asc')->get();
+                session()->flash('success', 'Chưa có khách sạn này');
+                return view('khachsan.index', ['data' => $data])->with('success', 'Chưa có khách sạn này');
+                //Ghi kèm thông báo chưa có
+            }
+            // return response()->json($dataArray);
+            // return view('taikhoanKS.edit', ['data' => $khachsan]);
+        } catch (ClientException $e) {
+            // Kèm Thông báo lỗi 505
+            $data = Khachsan::orderBy('isActive', 'asc')->get();
+            session()->flash('success', 'Thông báo lỗi 505');
+            return view('khachsan.index', ['data' => $data])->with('success', 'Thông báo lỗi 505');
+        } catch (RequestException $e) {
+            // Xử lý lỗi RequestException (ví dụ: không thể kết nối tới server)
+            //kèm thông báo lỗi RequestException
+            $data = Khachsan::orderBy('isActive', 'asc')->get();
+            session()->flash('success', 'thông báo lỗi RequestException');
+            return view('khachsan.index', ['data' => $data])->with('success', 'thông báo lỗi RequestException');
+        } catch (Exception $e) {
+            // Xử lý các lỗi khác
+            // return response()->json(['error' => 'Unexpected error: ' . $e->getMessage()], 500);
+            //Kèm thông báo lỗi e->getMessage()
+            $data = Khachsan::orderBy('isActive', 'asc')->get();
+            session()->flash('success', 'thông báo lỗi Message');
+            return view('khachsan.index', ['data' => $data])->with('success', 'thông báo lỗi Message');
+        }
+    }
+
+    public function changeActive(String $UIDKS)
+    {
+        $khachsan = Khachsan::findOrFail($UIDKS);
+        if ($khachsan) {
+            $khachsan->isActive = !$khachsan->isActive;
+            $khachsan->update();
+        }
+
+        $data = Khachsan::orderBy('isActive', 'asc')->get();
+        return view('khachsan.index', ['data' => $data]);
     }
 }
