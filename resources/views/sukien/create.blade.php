@@ -37,6 +37,7 @@
                         </tr>
                         <tr>
                             <th>Ngày kết thúc</th>
+                            
                             <td><input type="date" name="NgayKetThuc" class="form-control"></td>
                         </tr>
                         <tr>
