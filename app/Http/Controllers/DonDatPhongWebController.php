@@ -146,7 +146,6 @@ class DonDatPhongWebController extends Controller
     {
         //
         $dondatphong = Dondatphong::findOrFail($id);
-        $submit = $request->input("submit");
 
         $isChecked = $request->input("isChecked");
         // if (!empty($dondatphong)) {
@@ -158,7 +157,7 @@ class DonDatPhongWebController extends Controller
         // }
         // return redirect('/adminKS/dondatdat/findbyKS/' . $dondatphong->UIDDatPhong)->with('success', 'Đơn đặt phòng đã được cập nhật');
         // $UIDKS = $request->input("UIDKS");
-        if ($isChecked == 2 && $dondatphong->isChecked != 2 && $submit) {
+        if ($isChecked == 2 && $dondatphong->isChecked != 2) {
             $UIDDatPhong = $dondatphong->UIDDatPhong;
             // $dondatphong = Dondatphong::findOrFail($UIDDatPhong);
             $Ngay = $dondatphong->NgayDatPhong;
@@ -237,7 +236,7 @@ class DonDatPhongWebController extends Controller
                     'HoTen' => $khachhang->HoTen,
                     'MaDDP' => $UIDDatPhong,
                     'GiaTien' => $dondatphong->tongtien,
-                    'TraTruoc' => $dondatphong->tongtien * 30 / 100,
+                    'TraTruoc' => $dondatphong->tienCoc,
                     'ConLai' =>  $dondatphong->tongtien * 70 / 100,
                     'ChiTietDonDatPhong' => $renderBodyChiTietDonDatPhong,
                 ];
@@ -307,8 +306,8 @@ class DonDatPhongWebController extends Controller
                     'HoTen' => $khachhang->HoTen,
                     'MaDDP' => $UIDDatPhong,
                     'GiaTien' => $dondatphong->tongtien,
-                    'TraTruoc' => $dondatphong->tongtien * 30 / 100,
-                    'ConLai' =>  $dondatphong->tongtien * 70 / 100,
+                    'TraTruoc' => $dondatphong->tienCoc,
+                    'ConLai' =>  $dondatphong->tongtien-$dondatphong->tienCoc,
                     'ChiTietDonDatPhong' => $renderBodyChiTietDonDatPhong,
                 ];
                 $EmailKH =  $dondatphong->EmailKH;

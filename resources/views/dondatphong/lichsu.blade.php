@@ -11,9 +11,9 @@
             <h6 class="m-0 font-weight-bold text-primary">Đơn đã đặt
                 <!-- <a href="{{url('/adminKS/dondatphong/create')}}" class="float-right btn-primary btn-sm">Thêm mới</a> -->
             </h6>
-            @if(session::has('message'))
+            {{-- @if(session::has('message'))
             <div class="alert alert-success">{{ session::get('message') }}</div>
-            @endif
+            @endif --}}
         </div>
         <div class="card-body">
             <div class="table-responsive">

@@ -57,9 +57,6 @@
                                             <img width="150" height="200" src="{{asset($img->src)}}" />
                                             @endif
                                             <p>
-                                                <!-- <button type="button" onclick="return confirm('Bạn có chắc muốn xóa hình này?')" class="btn btn-danger btn-sm delete-image" data-image-id="{{$img->src}}">
-                                                    <i class="fa fa-trash"></i>
-                                                </button> -->
                                                 <a class="btn btn-danger btn-sm delete-image" href="{{url('adminKS/delete').'/'.$img->src}}">
                                                     <i class="fa fa-trash"></i>
                                                 </a>

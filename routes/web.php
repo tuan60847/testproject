@@ -8,6 +8,7 @@ use App\Http\Controllers\ChuKhachSanWebContronller;
 use App\Http\Controllers\CTDDPWebController;
 use App\Http\Controllers\DiaDiemDuLichWebController;
 use App\Http\Controllers\DonDatPhongWebController;
+use App\Http\Controllers\KhachHangController;
 use App\Http\Controllers\KhachHangWebController;
 use App\Http\Controllers\KhachSanWebController;
 use App\Http\Controllers\LoaiPhongWebController;
@@ -130,9 +131,12 @@ Route::get('adminKS/delete/image/loaiphong/{src}', [LoaiPhongWebController::clas
 Route::get('admin/delete/image/sukien/{src}', [SuKienWebController::class, 'destroy_image']);
 Route::get('admin/delete/image/diadiemdulich/{src}', [DiaDiemDuLichWebController::class, 'destroy_image']);
 Route::get('admin/delete/image/thanhpho/{src}', [ThanhPhoWebWebController::class, 'destroy_image']);
+Route::get('adminKS/delete/image/khachsan/{src}', [KhachSanWebController::class, 'destroy_image']);
+
 //Tài khoản khách sạn
 Route::get('adminKS/khachsan/findbyKS/{UIDKS}', [KhachSanWebController::class, 'getks']);
 Route::get('adminKS/khachsan/findbyKS/{UIDKS}/show', [KhachSanWebController::class, 'showKS']);
 Route::get('adminKS/khachsan/findbyKS/{UIDKS}/edit', [KhachSanWebController::class, 'editKS']);
+Route::resource('adminKS/khachsan/findbyKS',KhachSanWebController::class);
 
 Route::get('linkvnpay/{UIDDDP}', [VnpayController::class, 'LinkVnPAy']);

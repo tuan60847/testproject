@@ -70,18 +70,18 @@ class LoaiPhongWebController extends Controller
         // {
         //     //
         //     $loaiphong = Loaiphong::where('UIDLoaiPhong', $UIDLoaiPhong)->get();
-        //     $this->validate($request, [        
-        //         'phongConLai' => 'required',  
+        //     $this->validate($request, [
+        //         'phongConLai' => 'required',
         //     ]);
         //     $phongConLai =$request->input("phongConLai");
         //     if (!empty($loaiphong)) {
 
         //         $loaiphong->phongConLai+=$phongConLai;
         //         if($loaiphong->phongConLai>0&&$loaiphong->phongConLai<$loaiphong->soLuongPhong){
-        //             return $loaiphong->save();  
+        //             return $loaiphong->save();
         //         }else{
         //             return response()->json(["message"=>"eror"],404);
-        //         }      
+        //         }
         //     } else {
         //         // handle the case where the image upload fails
         //         // e.g. return an error response or redirect back to the form with an error message
@@ -182,48 +182,6 @@ class LoaiPhongWebController extends Controller
             'soLuongPhong' => 'required',
             'isMayLanh' => 'required',
         ]);
-
-
-
-        // $TenLoaiPhong = $request->input("TenLoaiPhong");
-        // $UIDKS = $request->input("UIDKS");
-        // $Gia = $request->input("Gia");
-
-
-        // $soGiuong = $request->input("soGiuong");
-        // $soLuongPhong = $request->input("soLuongPhong");
-        // $isMayLanh = $request->input("isMayLanh") == false || $request->input("isMayLanh") == "false" || $request->input("isMayLanh") == null ? false : true;
-
-
-
-        // if (!empty($loaiphong)) {
-
-
-        //     $loaiphong->TenLoaiPhong = $TenLoaiPhong;
-        //     $loaiphong->Gia = floatval($Gia);
-        //     $loaiphong->UIDKS = $UIDKS;
-        //     $loaiphong->soGiuong = $soGiuong;
-        //     $number = $loaiphong->soLuongPhong - intval($soLuongPhong);
-        //     $loaiphong->soLuongPhong = intval($soLuongPhong);
-        //     $loaiphong->isMayLanh = $isMayLanh;
-        //     $currentDate = Carbon::now();
-        //     $currentDate->format('Y-m-d');
-
-        //     $phongConLais = Phongconlai::where('UIDLoaiPhong', $loaiphong->UIDLoaiPhong)->whereDate('Ngay', '>', $currentDate)
-        //         ->get();
-        //     foreach ($phongConLais as $phongConLai) {
-        //         $phongConLai->SoLuong -= $number;
-        //         $phongConLai->update();
-        //     }
-
-
-
-        //     return $loaiphong->update();
-        // } else {
-        //     // handle the case where the image upload fails
-        //     // e.g. return an error response or redirect back to the form with an error message
-        //     return response()->json(["message" => "eror"], 404);
-        // }
         $loaiphong = Loaiphong::find($id);
         $loaiphong->TenLoaiPhong = $request->TenLoaiPhong;
         $loaiphong->Gia = $request->Gia;
@@ -258,11 +216,11 @@ class LoaiPhongWebController extends Controller
         } else {
             return response()->json(["message" => "error"], 404);
         }
-       
+
     }
     public function destroy_image($src)
     {
-       
+
 
         $hinhanhk = Hinhanhloaiphong::findOrFail("image/loaiphong/" . $src);
 

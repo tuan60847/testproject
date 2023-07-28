@@ -9,7 +9,6 @@
     <div class="card shadow mb-4">
         <div class="card-header py-3">
             <h6 class="m-0 font-weight-bold text-primary">Khách sạn
-                <a @if(Session::has('cksData')) href="{{url('/adminKS/khachsan/findbyKS/'.Session::get('cksData')->ADMINKS.'/create')}}" @endif class="float-right btn-primary btn-sm">Thêm mới</a>
             </h6>
         </div>
         <div class="card-body">

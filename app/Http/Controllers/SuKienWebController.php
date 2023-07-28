@@ -53,7 +53,7 @@ class SuKienWebController extends Controller
         foreach ($request->file('image') as $img) {
             $imgPath = $img->store('sukien', 'public');
             $imgData = new Hinhanhsukien();
-            $imgData->maSuKien = $data->maSuKien;
+            $imgData->MaSuKien = $data->maSuKien;
             $imgData->src = 'image/' . $imgPath;
             $imgData->save();
         }
@@ -97,12 +97,11 @@ class SuKienWebController extends Controller
         $data->NgayKetThuc = $request->NgayKetThuc;
         $data->MaDDDL = $request->MaDDDL;
         $data->save();
-
         if ($request->hasFile('image')) {
             foreach ($request->file('image') as $img) {
                 $imgPath = $img->store('sukien', 'public');
                 $imgData = new Hinhanhsukien();
-                $imgData->maSuKien = $data->maSuKien;
+                $imgData->MaSuKien = $data->maSuKien;
                 $imgData->src = 'image/' .  $imgPath;
                 $imgData->save();
             }
@@ -115,7 +114,7 @@ class SuKienWebController extends Controller
      */
     public function destroy(string $id)
     {
-        Sukien::where('maSuKien', $id)->delete();
+        Sukien::where('MaSuKien', $id)->delete();
         return redirect('admin/sukien/')->with('success', 'Sự kiện đã được xóa');
     }
     public function destroy_image($src)

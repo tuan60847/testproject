@@ -15,6 +15,7 @@ use Exception;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\ClientException;
 use GuzzleHttp\Exception\RequestException;
+use Illuminate\Support\Facades\Storage;
 
 class KhachSanWebController extends Controller
 {
@@ -82,17 +83,26 @@ class KhachSanWebController extends Controller
     }
     public function update(Request $request, string $id)
     {
+        $this->validate($request, [
+
+            'TenKS' => 'required',
+            'DiaChi' => 'required',
+            // 'UIDKS' => 'required',
+            'Buffet' => 'required',
+            'Wifi' => 'required',
+            'MaDDDL' => 'required',
+        ]);
         $data = Khachsan::find($id);
         $data->TenKS = $request->TenKS;
         $data->DiaChi = $request->DiaChi;
         $data->Buffet = $request->Buffet;
         $data->Wifi = $request->Wifi;
-        $data->isActive = $request->isActive;
+       // $data->isActive = $request->isActive;
         $data->MaDDDL = $request->MaDDDL;
         $data->save();
 
         if ($request->hasFile('image')) {
-            foreach ($request->files('image') as $img) {
+            foreach ($request->file('image') as $img) {
                 $imgPath = $img->store('khachsan', 'public');
                 $imgData = new Hinhanhk();
                 $imgData->UIDKS = $data->UIDKS;
@@ -100,6 +110,7 @@ class KhachSanWebController extends Controller
                 $imgData->save();
             }
         }
+        return redirect('adminKS/khachsan/findbyKS/' . $id . '/edit')->with('success', 'Khách sạn đã được cập nhật');
     }
 
     public function TimKhachSan(Request $request)
@@ -268,5 +279,13 @@ class KhachSanWebController extends Controller
 
         $data = Khachsan::orderBy('isActive', 'asc')->get();
         return view('khachsan.index', ['data' => $data]);
+    }
+    public function destroy_image($src)
+    {
+        $hinhanhk = Hinhanhk::findOrFail("image/khachsan/" . $src);
+        Storage::disk('public')->delete($hinhanhk->src);
+        $hinhanhk->delete();
+        // return response(null, Response::HTTP_NO_CONTENT);
+        return redirect('/adminKS/khachsan/findbyKS/' . $hinhanhk->UIDKS . '/edit');
     }
 }
