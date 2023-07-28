@@ -145,6 +145,15 @@
 
     //Sự kiện
 
+
+    Route::get('sukien/{id}', [SuKienController::class,'show']);
+    Route::get('sukien/findbyMaDDL/{id}', [SuKienController::class,'findbyMaDDL']);
+    Route::post('sukien', [SuKienController::class,'store']);
+    Route::put('sukien/{id}', [SuKienController::class,'update']);
+    Route::resource('sukien', SuKienController::class);
+
+
+
     Route::get('diadiemdulich/{id}', [DiaDiemDuLichController::class, 'show']);
     Route::get('diadiemdulich/findbymatp/{id}', [DiaDiemDuLichController::class, 'findbyMaTP']);
     Route::post('timdiadiemdulich', [DiaDiemDuLichController::class, 'TimDiaDiemDuLich']);

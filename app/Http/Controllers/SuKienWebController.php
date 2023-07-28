@@ -46,7 +46,13 @@ class SuKienWebController extends Controller
         $data->TenSuKien = $request->TenSuKien;
         $data->Mota = $request->Mota;
         $data->NgayBatDau = $request->NgayBatDau;
-        $data->NgayKetThuc = $request->NgayKetThuc;
+        if ($request->NgayKetThuc == null) {
+            $data->NgayKetThuc = $data->NgayBatDau;
+        } else {
+            $data->NgayKetThuc = $request->NgayKetThuc;
+        }
+
+
         $data->MaDDDL = $request->MaDDDL;
         $data->save();
 
