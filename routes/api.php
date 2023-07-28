@@ -65,6 +65,7 @@
     Route::get('khachsan/{id}', [KhachSanController::class, 'show']);
     Route::get('khachsan/findbyMaDDDL/{id}', [KhachSanController::class, 'findbyMaDDDL']);
     Route::post('khachsan', [KhachSanController::class, 'store']);
+    Route::post('timkhachsan', [KhachSanController::class,'TimKhachSan']);
     Route::put('khachsan/{id}', [KhachSanController::class, 'update'])->middleware('auth:sanctum');
 
 

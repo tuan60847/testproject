@@ -57,7 +57,9 @@
                                     @elseif ($dondatphong->isChecked == 2)
                                     <option value="2" selected>Xác nhận của khách sạn</option>
                                     <option value="3">Check In</option>
+                                    @if($dondatphong->TienCoc==0)
                                     <option value="7">Hủy đơn đặt phòng</option>
+                                    @endif
                                     @elseif ($dondatphong->isChecked == 3)
                                     <option value="3" selected>Check In</option>
                                     <option value="5">Check out</option>
