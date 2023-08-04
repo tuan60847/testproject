@@ -139,6 +139,8 @@
     Route::get('hinhanhtp/UIDThanhPho/{MaTP}', [HinhAnhThanhPhoController::class, 'getImageByUIDThanhPho']);
     Route::resource('hinhanhtp', HinhAnhThanhPhoController::class);
 
+
+    
     Route::post('image/hinhanhdddl/upload', [HinhAnhDiaDiemDuLichController::class, 'imageStore']);
     Route::delete('hinhanhdddl/image/diadiemdulich/{src}', [HinhAnhDiaDiemDuLichController::class, 'destroy']);
     Route::get('hinhanhdddl/UIDDDDL/{MaDDDL}', [HinhAnhDiaDiemDuLichController::class, 'getImageByUIDDDDL']);

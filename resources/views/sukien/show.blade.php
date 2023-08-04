@@ -21,7 +21,7 @@
                         </tr>
                         <tr>
                             <th>Mô tả</th>
-                            <td>{{$data->MoTa}}</td>
+                            <td>{{$data->Mota}}</td>
                         </tr>
                         <tr>
                             <th>Ngày bắt đầu</th>
