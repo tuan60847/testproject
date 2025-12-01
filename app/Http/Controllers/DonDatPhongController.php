@@ -369,7 +369,7 @@ class DonDatPhongController extends Controller
             });
 
         }
-        return true;
+        return view('common');
     }
 
     public function CancelDonDatPhongByUser(Request $request)

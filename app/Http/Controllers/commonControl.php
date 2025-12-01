@@ -95,11 +95,17 @@ class commonControl extends Controller
             $varifyPassword = new VarifyPasswordController();
             $cipperPassword = $varifyPassword->hashPassWord($newpassword);
             $khachhang->Password = $cipperPassword;
-            return $khachhang->update();
+            $khachhang->update();
+            return view('common');
         } else {
             return response()->json(["message" => "eror"], 404);
         }
     }
+
+    // public function ResetPasswordUserGet($email, $newpassword)
+    // {
+    //     return view('common');
+    // }
 
     public function SendMailFogetPasswordCKS(string $EmailKH)
     {
@@ -136,7 +142,8 @@ class commonControl extends Controller
             $varifyPassword = new VarifyPasswordController();
             $cipperPassword = $varifyPassword->hashPassWord($newpassword);
             $chukhachsan->Password = $cipperPassword;
-            return $chukhachsan->update();
+            $chukhachsan->update();
+            return view('common');
         } else {
             return response()->json(["message" => "eror"], 404);
         }
